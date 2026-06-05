@@ -1,4 +1,4 @@
-import BlueprintGenerator from '@/components/BlueprintGenerator';
+import { BlueprintGenerator } from '@/components/BlueprintGenerator';
 import type { Metadata } from 'next';
 
 type Props = {
