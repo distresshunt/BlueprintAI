@@ -544,41 +544,42 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche }: { init
             onChange={(e) => setIdea(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder || "\u00A0"}
-            className="w-full h-32 bg-slate-900/50 border-2 border-slate-800 rounded-xl p-6 text-lg text-white placeholder:text-slate-700/80 focus:outline-none focus:border-cyan-500/50 transition-all resize-none shadow-2xl pl-12 sm:pl-6 pb-12"
+            className="w-full h-32 bg-slate-900/50 border-2 border-slate-800 rounded-xl p-6 text-lg text-white placeholder:text-slate-700/80 focus:outline-none focus:border-cyan-500/50 transition-all resize-none shadow-2xl pl-12 sm:pl-6 pb-20 sm:pb-16"
             disabled={loading}
           />
           <div className="absolute top-4 right-4 flex gap-2">
             <span className="text-[10px] bg-slate-800 px-2 py-1 rounded text-slate-400 font-mono tracking-tighter hidden sm:block">PRO ENGINE v4.2</span>
           </div>
-          <div className="absolute bottom-4 left-4 flex items-center gap-3">
+          <div className="absolute bottom-3 left-3 sm:left-4 flex items-center gap-2 sm:gap-4">
             <button
               onClick={startRecording}
               className={`p-2 rounded-lg transition-all ${isRecording ? 'text-red-500 bg-red-900/20 animate-pulse' : 'text-slate-500 hover:text-cyan-400 hover:bg-slate-800'}`}
               title="Use Voice Input"
             >
-              <Mic className="w-5 h-5" />
+              <Mic className="w-5 h-5 sm:w-5 sm:h-5" />
+            </button>
+            <button
+              onClick={() => setIsHowToPromptOpen(true)}
+              className="p-2 sm:px-3.5 sm:py-1.5 bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-slate-600 text-slate-300 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer backdrop-blur-sm shadow-lg"
+              title="How to Prompt"
+            >
+              <Info className="w-5 h-5 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">How to Prompt</span>
             </button>
             <AnimatePresence>
               {micError && (
-                <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className="text-red-400 text-xs font-mono bg-red-950/50 px-3 py-1.5 rounded-md border border-red-900/50">
+                <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className="text-red-400 text-xs font-mono bg-red-950/50 px-3 py-1.5 rounded-md border border-red-900/50 hidden sm:block">
                   {micError}
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
-          <div className="absolute bottom-3 right-4 flex items-center gap-2">
-            <button
-              onClick={() => setIsHowToPromptOpen(true)}
-              className="px-3.5 py-1.5 bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-slate-600 text-slate-300 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer backdrop-blur-sm shadow-lg"
-            >
-              <Info className="w-4 h-4" />
-              <span className="hidden sm:inline">How to Prompt</span>
-            </button>
+          <div className="absolute bottom-3 right-3 sm:right-4 flex items-center">
             <button
               onClick={openBrainstormModal}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 hover:from-cyan-500/20 hover:to-blue-500/20 border border-cyan-500/30 hover:border-cyan-500/60 text-cyan-400 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(6,182,212,0.1)] hover:shadow-[0_0_20px_rgba(6,182,212,0.25)] cursor-pointer"
+              className="px-2.5 py-1.5 sm:px-3.5 sm:py-1.5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 hover:from-cyan-500/20 hover:to-blue-500/20 border border-cyan-500/30 hover:border-cyan-500/60 text-cyan-400 text-xs sm:text-sm font-semibold rounded-lg transition-all flex items-center shadow-[0_0_15px_rgba(6,182,212,0.1)] hover:shadow-[0_0_20px_rgba(6,182,212,0.25)] cursor-pointer"
             >
-              <span>Need an idea? Brainstorm with AI 🧠</span>
+              <span><span className="hidden sm:inline">Need an idea? </span>Brainstorm with AI 🧠</span>
             </button>
           </div>
         </div>
