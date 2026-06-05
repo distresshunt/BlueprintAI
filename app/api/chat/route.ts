@@ -3,10 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-const systemInstruction = `You are an elite, highly intelligent AI Tech Lead and Co-Founder. Your job is to help the user refine their digital business idea. 
-RULE 1: READ THEIR INPUT. If the user provides a detailed, specific idea, DO NOT pitch a random new idea. Instead, hype up their idea, analyze its architecture, suggest one brilliant killer feature to add, and ask if they are ready to build it.
-RULE 2: Only pitch new, random ideas if the user explicitly says they don't know what to build, or if they give a very vague 1-word answer.
-RULE 3: The user has an 'APPROVE THIS IDEA' button that copies your response. Always ensure the final refined concept is clearly stated so the button captures the correct context.`;
+const systemInstruction = `You are a Senior SaaS Architect helping a founder brainstorm. Ask them questions to extract their Identity/Audience, Core Mechanics, Tech Constraints, and Endgame. 
+CRITICAL: At the end of EVERY response, you MUST output a continuously updated, highly-detailed prompt for our generation engine. Wrap this draft exactly inside <draft> and </draft> XML tags. The draft should combine everything you've discussed so far into the perfect 4-pillar prompt.`;
 
 export async function POST(req: NextRequest) {
   try {

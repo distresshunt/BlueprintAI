@@ -1,55 +1,29 @@
 import { MetadataRoute } from 'next';
-import fs from 'fs';
-import path from 'path';
+import pseoData from '@/data/pseo.json';
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const sitemapEntries: MetadataRoute.Sitemap = [
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = 'https://blueprintagent.dev';
+  
+  const routes: MetadataRoute.Sitemap = [
     {
-      url: 'https://blueprintagent.dev',
+      url: baseUrl,
       lastModified: new Date(),
       changeFrequency: 'daily',
-      priority: 1.0,
-    },
-    {
-      url: 'https://blueprintagent.dev/terms',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.3,
-    },
-    {
-      url: 'https://blueprintagent.dev/privacy',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.3,
-    },
-    {
-      url: 'https://blueprintagent.dev/refund',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.3,
+      priority: 1,
     },
   ];
 
-  try {
-    const dataPath = path.join(process.cwd(), 'data', 'pseo.json');
-    const fileContent = fs.readFileSync(dataPath, 'utf8');
-    const { models, niches } = JSON.parse(fileContent);
+  // Generate dynamic pSEO routes
+  pseoData.models.forEach((model) => {
+    pseoData.niches.forEach((niche) => {
+      routes.push({
+        url: `${baseUrl}/build/${model}/${niche}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.8,
+      });
+    });
+  });
 
-    if (Array.isArray(models) && Array.isArray(niches)) {
-      for (const model of models) {
-        for (const niche of niches) {
-          sitemapEntries.push({
-            url: `https://blueprintagent.dev/build/${model}/${niche}`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.8,
-          });
-        }
-      }
-    }
-  } catch (err) {
-    console.error('Error reading sitemap data:', err);
-  }
-
-  return sitemapEntries;
+  return routes;
 }
