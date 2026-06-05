@@ -1,0 +1,4 @@
+{
+  "models": ["saas", "marketplace", "chrome-extension", "ai-wrapper", "newsletter", "directory"],
+  "niches": ["plumbers", "dentists", "real-estate-agents", "dog-groomers", "accountants", "roofers", "personal-trainers", "freelance-writers", "hvac-technicians", "event-planners"]
+}
