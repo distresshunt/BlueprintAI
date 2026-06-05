@@ -876,8 +876,12 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche }: { init
                 <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
                   BlueprintAI is powered by an elite System Architecture prompt. To get the most lucrative, production-ready blueprint, you shouldn't just type a 5-word idea. You need to feed the engine context.
                 </p>
+                <p className="text-slate-300 text-sm sm:text-base leading-relaxed bg-cyan-950/30 p-4 rounded-lg border border-cyan-900/50">
+                  <strong className="text-pink-400 font-bold">Don't want to write it yourself?</strong><br />
+                  Click the pink <em>Brainstorm with AI</em> button on the main dashboard. You can casually discuss your vision with your AI Co-Founder, and it will dynamically ghostwrite the perfect architectural prompt for you in real-time.
+                </p>
                 <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-semibold text-cyan-400">
-                  For the absolute best results, structure your idea using the "4 Pillars":
+                  Otherwise, if you prefer to write it manually, structure your idea using the "4 Pillars":
                 </p>
 
                 <div className="space-y-6">
