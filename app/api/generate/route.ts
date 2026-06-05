@@ -1,5 +1,5 @@
-export const runtime = 'edge';
-import { GoogleGenAI } from "@google/genai";
+export const maxDuration = 60;
+import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -118,6 +118,11 @@ Whenever you recommend or mention a specific tool, framework, IDE, or platform (
           contents: prompt,
           config: {
             systemInstruction: dynamicSystemInstruction,
+            safetySettings: [
+              { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+              { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
+              { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE }
+            ]
           },
         });
         break;

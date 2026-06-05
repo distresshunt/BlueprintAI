@@ -432,11 +432,15 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche }: { init
         body: JSON.stringify({ prompt: promptToUse, aiBuilder: pivotAiBuilder, techLevel: pivotTechLevel }),
       });
       
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to generate blueprint');
+      const textResponse = await response.text();
+      let data;
+      try {
+        data = JSON.parse(textResponse);
+      } catch (e) {
+        // If it's an HTML error page (like a 504 Timeout), show a clean error message, not a parsing error.
+        throw new Error(`Server Error (${response.status}): The request timed out or the server crashed. Check Netlify logs.`);
       }
+      if (!response.ok) throw new Error(data.error || 'Failed to generate blueprint');
       
       setBlueprint(data.text);
       localStorage.setItem('blueprintData', data.text);
