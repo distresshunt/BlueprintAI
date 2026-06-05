@@ -618,7 +618,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche }: { init
           </SignInButton>
         ) : (
           <button
-            onClick={generateBlueprint}
+            onClick={() => generateBlueprint()}
             disabled={loading || (!idea?.trim() && !placeholder?.trim())}
             className="w-full h-14 bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-800 disabled:text-slate-500 disabled:shadow-none text-black font-bold text-lg rounded-xl flex items-center justify-center gap-3 transition-colors shadow-[0_0_30px_-5px_rgba(34,211,238,0.4)] group overflow-hidden relative cursor-pointer disabled:cursor-not-allowed"
           >
