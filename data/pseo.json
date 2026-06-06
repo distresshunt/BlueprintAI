@@ -1,6 +1,11 @@
 {
-  "models": ["saas", "chrome-extension", "ai-wrapper", "marketplace"],
+  "models": ["saas", "chrome-extension", "ai-wrapper", "marketplace", "vst-plugin", "daw-script", "audio-tool"],
   "niches": [
+    "music-producers",
+    "audio-engineers",
+    "beatmakers",
+    "mixing-engineers",
+    "podcasters",
     "ai-powered-transcription-for-legal-professionals",
     "api-integration-services-for-retailers",
     "automated-booking-systems-for-salons",

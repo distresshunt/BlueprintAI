@@ -296,6 +296,8 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche }: { init
   };
 
   const defaultIdeas = [
+    "An AI-powered REAPER script that automatically EQs muddy vocals in real-time...",
+    "A subscription-based VST plugin marketplace for indie beatmakers...",
     "A dispatch dashboard for mobile mechanics...",
     "An AI wrapper that generates personalized wedding speeches...",
     "A Chrome extension that auto-fills government grant applications...",
@@ -541,6 +543,11 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche }: { init
           <h1 className="text-3xl sm:text-4xl font-black font-sans tracking-tight mt-4 mb-2 text-center sm:text-left">
             Build a <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{pSeoModel}</span> for <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{pSeoNiche}</span>
           </h1>
+        )}
+        {!pSeoModel && !pSeoNiche && (
+          <p className="text-slate-400 text-sm font-semibold tracking-wide ml-1">
+            Describe your digital business idea... (SaaS, AI Wrapper, DAW Plugin, Marketplace)
+          </p>
         )}
         <div className="relative group">
           <textarea
