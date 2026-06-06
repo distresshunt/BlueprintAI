@@ -105,7 +105,7 @@ const coFounderGreetings = [
   "Let's find your gold mine. Do you want to build a high-ticket B2B SaaS, a local directory, a Chrome extension, or an AI Wrapper? Give me a hint about your skills, and I'll do the heavy lifting."
 ];
 
-export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche }: { initialIdea?: string; pSeoModel?: string; pSeoNiche?: string }) {
+export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialId }: { initialIdea?: string; pSeoModel?: string; pSeoNiche?: string; initialId?: string }) {
   const { userId, isSignedIn } = useAuth();
   const [idea, setIdea] = useState(initialIdea || (pSeoModel && pSeoNiche ? `I want to build a ${pSeoModel} for ${pSeoNiche}.` : ''));
   const [aiBuilder, setAiBuilder] = useState('Decide for me ✨');
@@ -118,6 +118,33 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche }: { init
   const [isRecording, setIsRecording] = useState(false);
   const [micError, setMicError] = useState('');
   
+  const [isBrainstormTyping, setIsBrainstormTyping] = useState(false);
+  const [liveDraft, setLiveDraft] = useState('');
+  
+  useEffect(() => {
+    if (initialId) {
+      const fetchBlueprint = async () => {
+        try {
+          const { data, error } = await supabase
+            .from('blueprints')
+            .select('blueprint_markdown, idea_prompt, is_unlocked')
+            .eq('id', initialId)
+            .single();
+          if (data) {
+            setIdea(data.idea_prompt);
+            setBlueprint(data.blueprint_markdown);
+            if (data.is_unlocked) {
+              setBypassPaywall(true);
+            }
+          }
+        } catch (err) {
+          console.error("Failed to load blueprint:", err);
+        }
+      };
+      fetchBlueprint();
+    }
+  }, [initialId]);
+
   const [techLevel, setTechLevel] = useState('No-Code');
   const [bypassPaywall, setBypassPaywall] = useState(false);
 

@@ -4,7 +4,10 @@ import { LegalFooter } from '@/components/LegalFooter';
 import { HypePoll } from '@/components/HypePoll';
 import { Testimonials } from '@/components/Testimonials';
 import { SignInButton, SignUpButton, UserButton, Show } from '@clerk/nextjs';
-export default async function Home() {
+import Link from 'next/link';
+export default async function Home(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const searchParams = await props.searchParams;
+  const id = searchParams?.id as string | undefined;
   
   return (
     <div className="flex flex-col min-h-screen bg-[#050507] text-slate-300 font-sans overflow-hidden">
@@ -23,6 +26,9 @@ export default async function Home() {
           </div>
           <div className="flex items-center gap-3">
             <Show when="signed-in">
+              <Link href="/dashboard" className="text-xs uppercase tracking-widest font-sans font-semibold bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded transition-colors text-white border border-white/10 hidden sm:flex items-center gap-2">
+                My Blueprints
+              </Link>
               <UserButton />
             </Show>
             <Show when="signed-out">
@@ -52,7 +58,7 @@ export default async function Home() {
           </header>
 
           <div className="w-full">
-            <BlueprintGenerator />
+            <BlueprintGenerator initialId={id} />
             <Testimonials />
             <HypePoll />
           </div>

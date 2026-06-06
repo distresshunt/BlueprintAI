@@ -1,26 +1,59 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Send, Bot, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { CodeBlock } from '@/components/CodeBlock';
+import { useSearchParams } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 
-export default function PremiumVaultPage() {
+function VaultContent() {
   const [blueprintData, setBlueprintData] = useState<string>('');
+  const [isLocked, setIsLocked] = useState<boolean>(false);
   const [chatMessage, setChatMessage] = useState('');
   const [chatHistory, setChatHistory] = useState<{role: 'user' | 'ai', content: string}[]>([
     { role: 'ai', content: "Welcome to the Premium Vault! I'm your AI Co-Founder. Let me know if you need help executing any phase of your blueprint." }
   ]);
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
 
   useEffect(() => {
-    const data = localStorage.getItem('blueprintData');
-    if (data) {
-      setBlueprintData(data);
-    } else {
-      setBlueprintData('# No Blueprint Found\nPlease generate a blueprint from the home page.');
+    async function loadData() {
+      if (id) {
+        try {
+          const { data, error } = await supabase
+            .from('blueprints')
+            .select('blueprint_markdown, is_unlocked')
+            .eq('id', id)
+            .single();
+            
+          if (data) {
+            if (data.is_unlocked === false) {
+              setIsLocked(true);
+            } else {
+              setIsLocked(false);
+            }
+            if (data.blueprint_markdown) {
+              setBlueprintData(data.blueprint_markdown);
+            }
+            return;
+          }
+        } catch (e) {
+          console.error("Failed to load from Supabase:", e);
+        }
+      }
+      
+      const localData = localStorage.getItem('blueprintData');
+      if (localData) {
+        setBlueprintData(localData);
+      } else {
+        setBlueprintData('# No Blueprint Found\nPlease generate a blueprint from the home page.');
+      }
     }
-  }, []);
+    
+    loadData();
+  }, [id]);
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +62,6 @@ export default function PremiumVaultPage() {
     setChatHistory(prev => [...prev, { role: 'user', content: chatMessage }]);
     setChatMessage('');
     
-    // Mock response
     setTimeout(() => {
       setChatHistory(prev => [...prev, { role: 'ai', content: "I'm analyzing your blueprint context. Let's tackle that together. What specific phase are you looking at?" }]);
     }, 1000);
@@ -43,7 +75,7 @@ export default function PremiumVaultPage() {
           <CheckCircle className="text-emerald-400 w-6 h-6 shrink-0" />
           <h1 className="text-emerald-400 font-bold text-lg md:text-xl tracking-tight">Payment Successful. Your Blueprint is unlocked.</h1>
         </div>
-        <Link href="/" className="text-xs md:text-sm text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-widest font-mono shrink-0">
+        <Link href="/dashboard" className="text-xs md:text-sm text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-widest font-mono shrink-0">
           &larr; Back to Dashboard
         </Link>
       </header>
@@ -115,5 +147,13 @@ export default function PremiumVaultPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function PremiumVaultPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#050507] text-slate-300 flex items-center justify-center">Loading vault...</div>}>
+      <VaultContent />
+    </Suspense>
   );
 }
