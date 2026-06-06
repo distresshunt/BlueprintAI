@@ -44,14 +44,14 @@ export default async function Home(props: { searchParams: Promise<{ [key: string
       </header>
 
       {/* Main Workspace */}
-      <main className="flex-1 p-4 sm:p-8 flex flex-col gap-8 overflow-y-auto">
-        <div className="max-w-4xl mx-auto w-full flex flex-col items-center mt-4 sm:mt-8">
+      <main className="flex-1 p-4 sm:p-4 flex flex-col gap-4 overflow-y-auto">
+        <div className="max-w-4xl mx-auto w-full flex flex-col items-center mt-0">
           
-          <header className="mb-8 space-y-4 text-center flex flex-col items-center">
+          <header className="mb-4 space-y-2 text-center flex flex-col items-center">
             <h1 className="text-4xl sm:text-5xl font-light tracking-tighter text-white">
               Blueprint<span className="font-bold italic text-cyan-400">AI</span>
             </h1>
-            <p className="text-slate-500 max-w-2xl mx-auto text-sm sm:text-lg leading-relaxed">
+            <p className="text-slate-500 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
               SYSTEM ONLINE. INITIALIZE MV_PROTOCOL. <br className="hidden sm:block" />
               Transform raw concepts into actionable 5-phase indie hacker launch plans.
             </p>
