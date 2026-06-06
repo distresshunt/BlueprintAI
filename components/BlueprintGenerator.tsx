@@ -545,7 +545,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
           </h1>
         )}
         {!pSeoModel && !pSeoNiche && (
-          <span className="font-mono text-[10px] uppercase tracking-widest text-cyan-500/70 mb-2 block ml-1">> INPUT_ARCHITECTURE_PARAMETERS_</span>
+          <span className="font-mono text-[10px] uppercase tracking-widest text-cyan-500/70 mb-2 block ml-1">&gt; INPUT_ARCHITECTURE_PARAMETERS_</span>
         )}
         <div className="relative group bg-slate-900/50 border-2 border-slate-800 focus-within:border-cyan-500/50 rounded-xl shadow-2xl transition-all w-full flex flex-col overflow-hidden">
           <textarea
