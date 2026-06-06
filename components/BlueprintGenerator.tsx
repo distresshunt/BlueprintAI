@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Terminal, Send, Loader2, Zap, ChevronDown, ChevronRight, Info, Lock, Check, Copy, CheckCheck, Mic, X, Bot, Sparkles } from 'lucide-react';
 import { useAuth, SignInButton } from '@clerk/nextjs';
 import { supabase } from '@/lib/supabase';
+import { CodeBlock } from './CodeBlock';
 
 const ExpandableBlockquote = ({ children }: any) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,33 +38,7 @@ const ExpandableBlockquote = ({ children }: any) => {
   );
 };
 
-const PreBlock = ({ children, ...props }: any) => {
-  const [isCopied, setIsCopied] = useState(false);
-  
-  const textContext = children?.props?.children;
 
-  const handleCopy = () => {
-    if (typeof textContext === 'string') {
-      navigator.clipboard.writeText(textContext.replace(/\n$/, ''));
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
-    }
-  };
-
-  return (
-    <div className="relative group">
-      <button
-        onClick={handleCopy}
-        className="absolute top-2 right-2 p-1.5 bg-slate-800 rounded border border-slate-700 text-slate-400 hover:text-white transition-all opacity-0 group-hover:opacity-100 z-10"
-      >
-        {isCopied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
-      </button>
-      <pre {...props}>
-        {children}
-      </pre>
-    </div>
-  );
-};
 
 const startupIdeas: Record<string, { idea: string; text: string }[]> = {
   saas: [
@@ -726,7 +701,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche }: { init
               prose-pre:bg-slate-950 prose-pre:border prose-pre:border-slate-800 relative
               prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline hover:prose-a:text-cyan-300 transition-colors"
             >
-              <ReactMarkdown components={{ blockquote: ExpandableBlockquote, pre: PreBlock }}>{free}</ReactMarkdown>
+              <ReactMarkdown components={{ blockquote: ExpandableBlockquote, pre: CodeBlock }}>{free}</ReactMarkdown>
             </div>
 
             {cursorRules && (
@@ -827,7 +802,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche }: { init
                   prose-strong:text-cyan-400 prose-strong:uppercase prose-strong:font-sans prose-strong:text-xs prose-strong:tracking-widest
                   prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline hover:prose-a:text-cyan-300 transition-colors`}
                 >
-                  <ReactMarkdown components={{ blockquote: ExpandableBlockquote, pre: PreBlock }}>{premium}</ReactMarkdown>
+                  <ReactMarkdown components={{ blockquote: ExpandableBlockquote, pre: CodeBlock }}>{premium}</ReactMarkdown>
                 </div>
                 
                 {!bypassPaywall && (
@@ -1025,7 +1000,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche }: { init
                       >
                         {msg.sender === 'ai' ? (
                           <div className="prose prose-invert prose-cyan max-w-none text-xs sm:text-sm prose-p:my-1 prose-strong:text-cyan-400">
-                            <ReactMarkdown>{msg.text}</ReactMarkdown>
+                            <ReactMarkdown components={{ pre: CodeBlock }}>{msg.text}</ReactMarkdown>
                           </div>
                         ) : (
                           <p>{msg.text}</p>

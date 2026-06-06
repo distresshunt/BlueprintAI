@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Send, Bot, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
+import { CodeBlock } from '@/components/CodeBlock';
 
 export default function PremiumVaultPage() {
   const [blueprintData, setBlueprintData] = useState<string>('');
@@ -54,7 +55,7 @@ export default function PremiumVaultPage() {
           <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 md:p-10 shadow-2xl backdrop-blur-xl">
             <h2 className="text-2xl font-bold text-white mb-6 uppercase tracking-widest font-mono border-b border-slate-800 pb-4">Your MVP Blueprint</h2>
             <div className="prose prose-invert prose-cyan max-w-none prose-p:text-slate-400 prose-headings:text-slate-200">
-              <ReactMarkdown>{blueprintData}</ReactMarkdown>
+              <ReactMarkdown components={{ pre: CodeBlock }}>{blueprintData}</ReactMarkdown>
             </div>
           </div>
         </div>
