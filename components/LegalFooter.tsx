@@ -19,6 +19,9 @@ export function LegalFooter() {
         <Link href="/refund" className="hover:text-cyan-400 transition-colors">
           Refund Policy
         </Link>
+        <Link href="/sitemap.xml" className="hover:text-cyan-400 transition-colors">
+          Sitemap
+        </Link>
       </div>
     </footer>
   );
