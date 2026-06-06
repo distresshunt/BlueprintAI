@@ -553,7 +553,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
             onChange={(e) => setIdea(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={idea.length > 0 ? '' : (placeholder || "\u00A0")}
-            className="w-full h-40 bg-transparent p-6 text-lg text-white placeholder:text-slate-700/80 focus:outline-none resize-none pb-20 sm:pb-16"
+            className="w-full h-40 bg-transparent p-6 pb-24 text-lg text-white placeholder:text-slate-700/80 focus:outline-none resize-none overflow-y-auto"
             disabled={loading}
           />
           <div className="absolute top-4 right-4 flex gap-2 pointer-events-none">
