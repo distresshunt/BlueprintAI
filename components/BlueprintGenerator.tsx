@@ -118,8 +118,6 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
   const [isRecording, setIsRecording] = useState(false);
   const [micError, setMicError] = useState('');
   
-  const [isBrainstormTyping, setIsBrainstormTyping] = useState(false);
-  const [liveDraft, setLiveDraft] = useState('');
   
   useEffect(() => {
     if (initialId) {
