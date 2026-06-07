@@ -1,0 +1,45 @@
+# BlueprintAI - Senior Tech Lead Directives
+# Target IDE: Google Antigravity / Cline / Cursor
+
+[PROJECT_CONTEXT]
+Project Name: BlueprintAI (blueprintagent.dev)
+Description: A B2B Meta-SaaS that architects MVP launch plans, A2A configuration files (.cursorrules), and monetization strategies for Indie Hackers. 
+Deployment: Hosted on Render (Node.js runtime). DNS routed through Cloudflare.
+
+[TECH_STACK]
+- Framework: Next.js 15+ (App Router strictly enforced)
+- Core React: React 19 (Client & Server Components)
+- Styling: Tailwind CSS v4 + Shadcn/UI primitives
+- Authentication: Clerk (`@clerk/nextjs`)
+- Database: Supabase (PostgreSQL via `@supabase/supabase-js`)
+- AI Engine: Google Gemini 3.1 Pro (`@google/generative-ai`)
+- Payments/MoR: Gumroad (Via URL redirects to `/premium-vault`)
+- Markdown: `react-markdown` with `remark-gfm` for interactive checklists
+
+[STRICT_CODING_STANDARDS]
+1. ANTI-LAZINESS PROTOCOL: NEVER use `// TODO: implement logic` or `// ... rest of code`. You must write 100% complete, production-ready, functional code in every single response.
+2. TYPESAFE FIRST: Define explicit TypeScript interfaces for all Supabase database rows, API request bodies, and component props. The use of `any` is strictly prohibited.
+3. RENDER COMPLIANCE: Do NOT use `export const runtime = 'edge'` in API routes interacting with Clerk or Supabase, as it causes 500 errors in our Node environment. Use `export const maxDuration = 60` for long-running Gemini API requests.
+4. JSX SAFETY: Always properly escape special characters in JSX (e.g., use `&gt;` instead of `>`) to prevent Webpack build crashes.
+5. MEMORY LEAK PREVENTION: Any `useEffect` utilizing `setInterval` or `setTimeout` (like our typewriter or marquee animations) MUST include a `clearTimeout` or `clearInterval` cleanup function in the return statement.
+
+[DATABASE_SCHEMA_REFERENCE]
+Target Table: `blueprints`
+- `id` (uuid, primary key)
+- `user_id` (text, matches Clerk auth.userId, NOT NULL)
+- `idea_prompt` (text, NOT NULL)
+- `blueprint_markdown` (text, NOT NULL)
+- `is_unlocked` (boolean, default false)
+- `created_at` (timestamptz, default now())
+
+[UI_UX_AESTHETICS]
+1. Vibe: High-end, cyberpunk, dark-mode hacker terminal. 
+2. Colors: Use `bg-zinc-950` for primary backgrounds, `text-zinc-50` for primary text. Use `cyan-400` and `cyan-500` for primary accents, glowing buttons, and terminal text.
+3. Overlays & Modals: Utilize heavy glassmorphism (`backdrop-blur-md bg-zinc-900/50`) for modals and the dynamic paywall hook over locked content.
+4. Mobile Responsiveness: All text areas and absolute-positioned elements must include heavy padding (e.g., `pb-24`) to prevent Z-index collisions on mobile viewports.
+
+[API_&_INTEGRATION_RULES]
+1. Gemini Fallbacks: All calls to the Gemini API MUST be wrapped in a `try/catch`. If the API fails or times out, return a valid JSON object: `NextResponse.json({ error: "Message" }, { status: 500 })`. NEVER allow an HTML error page to crash the frontend JSON parser.
+2. Database Saves: Blueprints must be saved to Supabase immediately after generation via the `/api/generate` route. Do not rely exclusively on `localStorage`.
+3. Gumroad Handoff: Pricing buttons route to Gumroad with the `?wanted=true` parameter. Successful payments redirect to `/premium-vault`.
+4. Affiliate Links: Whenever generating markdown output that recommends a tool (Supabase, Clerk, Vercel), append `?via=blueprintai` to the URL.
