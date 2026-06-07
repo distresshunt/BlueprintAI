@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { motion, AnimatePresence } from 'motion/react';
 import { Terminal, Send, Loader2, Zap, ChevronDown, ChevronRight, Info, Lock, Check, Copy, CheckCheck, Mic, X, Bot, Sparkles } from 'lucide-react';
 import { useAuth, SignInButton } from '@clerk/nextjs';
@@ -828,7 +829,27 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                   prose-strong:text-cyan-400 prose-strong:uppercase prose-strong:font-sans prose-strong:text-xs prose-strong:tracking-widest
                   prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline hover:prose-a:text-cyan-300 transition-colors`}
                 >
-                  <ReactMarkdown components={{ blockquote: ExpandableBlockquote, pre: CodeBlock }}>{premium}</ReactMarkdown>
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm]}
+                    components={{ 
+                      blockquote: ExpandableBlockquote, 
+                      pre: CodeBlock,
+                      input: ({ node, checked, ...props }: any) => {
+                        if (props.type === 'checkbox') {
+                          return (
+                            <input 
+                              type="checkbox" 
+                              defaultChecked={checked}
+                              className="w-4 h-4 text-cyan-500 rounded border-slate-700 bg-slate-800 focus:ring-cyan-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1" 
+                            />
+                          );
+                        }
+                        return <input {...props} />;
+                      }
+                    }}
+                  >
+                    {premium}
+                  </ReactMarkdown>
                 </div>
                 
                 {!bypassPaywall && (
@@ -1026,7 +1047,26 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                       >
                         {msg.sender === 'ai' ? (
                           <div className="prose prose-invert prose-cyan max-w-none text-xs sm:text-sm prose-p:my-1 prose-strong:text-cyan-400">
-                            <ReactMarkdown components={{ pre: CodeBlock }}>{msg.text}</ReactMarkdown>
+                            <ReactMarkdown 
+                              remarkPlugins={[remarkGfm]}
+                              components={{ 
+                                pre: CodeBlock,
+                                input: ({ node, checked, ...props }: any) => {
+                                  if (props.type === 'checkbox') {
+                                    return (
+                                      <input 
+                                        type="checkbox" 
+                                        defaultChecked={checked}
+                                        className="w-4 h-4 text-cyan-500 rounded border-slate-700 bg-slate-800 focus:ring-cyan-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1" 
+                                      />
+                                    );
+                                  }
+                                  return <input {...props} />;
+                                }
+                              }}
+                            >
+                              {msg.text}
+                            </ReactMarkdown>
                           </div>
                         ) : (
                           <p>{msg.text}</p>

@@ -35,6 +35,9 @@ Instruct the AI to generate a strict, highly detailed configuration file for AI 
 When generating Phase 5, you MUST explicitly instruct the user to MANUALLY create the specific rules file (e.g., `.cursorrules`, `.windsurfrules`, or `.clinerules`) in their root directory AND save it BEFORE doing anything else. Frame this as a mandatory 'Pre-Flight Checklist' to ensure the AI doesn't hallucinate.
 Output this Phase 5 section as a markdown code block starting with \`\`\`a2a
 
+**Phase 6: The Implementation Checklist**
+You MUST generate a step-by-step technical execution plan formatted strictly as a GitHub-flavored Markdown task list (using `- [ ] ` syntax). Break down the build into 5 to 10 actionable micro-steps.
+
 ---
 
 **The Developer Prompt**
@@ -114,7 +117,7 @@ Whenever you generate a Markdown link for a specific service, you MUST append ou
 - For Supabase: \`?via=blueprintai\`
 - For Clerk: \`?via=blueprintai\`
 - For Vercel: \`?via=blueprintai\`
-Example: \`[Supabase](https://supabase.com/?via=blueprintai)\`. Apply this to all recommended tools.\`;
+Example: \`[Supabase](https://supabase.com/?via=blueprintai)\`. Apply this to all recommended tools.`;
 
     let response;
     let retries = 3;
