@@ -1,7 +1,7 @@
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { Zap, Lock, Unlock, ArrowLeft, LayoutDashboard } from 'lucide-react';
+import { Zap, Lock, Unlock, ArrowLeft, LayoutDashboard, FolderOpen } from 'lucide-react';
 import Link from 'next/link';
 import { LegalFooter } from '@/components/LegalFooter';
 import { UserButton } from '@clerk/nextjs';
@@ -60,17 +60,20 @@ export default async function DashboardPage() {
             Failed to load blueprints.
           </div>
         ) : !blueprints || blueprints.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 px-4 bg-slate-900/20 border border-slate-800/50 rounded-2xl shadow-inner backdrop-blur-sm">
-            <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mb-6 shadow-xl border border-slate-700/50">
-              <Zap className="w-8 h-8 text-slate-600" />
+          <div className="flex flex-col items-center justify-center py-24 px-4 bg-slate-900/40 border border-slate-800/60 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] backdrop-blur-xl relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-transparent opacity-50" />
+            <div className="w-20 h-20 bg-slate-900 rounded-3xl flex items-center justify-center mb-8 shadow-2xl border border-slate-700/50 relative z-10">
+              <FolderOpen className="w-10 h-10 text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]" />
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">Empty Vault</h3>
-            <p className="text-slate-400 mb-8 text-center max-w-sm">You haven't architected any blueprints yet.</p>
+            <h3 className="text-3xl font-black text-white mb-4 tracking-tight relative z-10">Your Vault is Empty.</h3>
+            <p className="text-slate-400 mb-10 text-center max-w-xl leading-relaxed relative z-10 text-lg">
+              This is your personal storage matrix. When you generate a new SaaS architecture, it will be securely saved here so you can access your .cursorrules files, Tech Stacks, and monetization strategies from any device at any time.
+            </p>
             <Link 
               href="/" 
-              className="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-bold uppercase tracking-widest text-sm rounded-xl transition-all shadow-[0_0_15px_rgba(34,211,238,0.4)] hover:shadow-[0_0_25px_rgba(34,211,238,0.6)] hover:-translate-y-0.5"
+              className="px-10 py-4 bg-cyan-500 hover:bg-cyan-400 text-black font-bold uppercase tracking-[0.2em] text-sm rounded-xl transition-all shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] hover:-translate-y-1 relative z-10"
             >
-              Start Building
+              Architect a Blueprint ⚡️
             </Link>
           </div>
         ) : (
