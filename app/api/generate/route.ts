@@ -32,12 +32,13 @@ Explain how they will eventually automate the app once they hit $500/month in re
 Instruct the AI to generate a strict, highly detailed configuration file for AI IDEs. This file must include:
 - The exact project architecture and dummy data schema.
 - "Anti-Laziness Directives": Strict rules forcing the local AI to never use placeholder code, to always implement robust error handling, and to verify UI states step-by-step.
+When generating Phase 5, you MUST explicitly instruct the user to MANUALLY create the specific rules file (e.g., `.cursorrules`, `.windsurfrules`, or `.clinerules`) in their root directory AND save it BEFORE doing anything else. Frame this as a mandatory 'Pre-Flight Checklist' to ensure the AI doesn't hallucinate.
 Output this Phase 5 section as a markdown code block starting with \`\`\`a2a
 
 ---
 
 **The Developer Prompt**
-The exact prompt to feed into Cursor/AI to build the app.
+The exact prompt to feed into Cursor/AI to build the app. The final Developer Prompt (which the user copies into their IDE) MUST begin with a strict verification command. The very first sentence of the generated Developer Prompt should be: 'Before you write any code, verify that you have read and understood the strict architectural guidelines inside the [INSERT FILE NAME] file located in the root directory. Do not proceed until you confirm compliance with those rules.' Followed by the rest of the build instructions.
 
 **The Stripe Legal Pack**
 Standard Terms of Service & Refund Policy for the app.
