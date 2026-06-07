@@ -447,19 +447,6 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
       
       setBlueprint(data.text);
       localStorage.setItem('blueprintData', data.text);
-
-      if (userId && !isPivot) {
-        try {
-          await supabase.from('blueprints').insert({
-            user_id: userId,
-            idea_prompt: promptToUse,
-            blueprint_markdown: data.text,
-            is_unlocked: false
-          });
-        } catch (dbErr) {
-          console.error("Supabase Save Error:", dbErr);
-        }
-      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {

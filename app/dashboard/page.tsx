@@ -22,6 +22,10 @@ export default async function DashboardPage() {
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
+  if (error) {
+    console.error("Supabase Error: ", error.message);
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-[#050507] text-slate-300 font-sans">
       <header className="h-16 border-b border-slate-800 flex items-center justify-between px-4 sm:px-8 bg-[#0a0a0f] shrink-0">
@@ -56,11 +60,17 @@ export default async function DashboardPage() {
             Failed to load blueprints.
           </div>
         ) : !blueprints || blueprints.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-12 bg-slate-900/30 border border-slate-800 rounded-xl">
-            <Zap className="w-12 h-12 text-slate-700 mb-4" />
-            <p className="text-slate-400">You haven't architected any blueprints yet.</p>
-            <Link href="/" className="mt-4 text-cyan-400 hover:text-cyan-300 font-semibold underline underline-offset-4">
-              Create your first one
+          <div className="flex flex-col items-center justify-center py-20 px-4 bg-slate-900/20 border border-slate-800/50 rounded-2xl shadow-inner backdrop-blur-sm">
+            <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mb-6 shadow-xl border border-slate-700/50">
+              <Zap className="w-8 h-8 text-slate-600" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">Empty Vault</h3>
+            <p className="text-slate-400 mb-8 text-center max-w-sm">You haven't architected any blueprints yet.</p>
+            <Link 
+              href="/" 
+              className="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-bold uppercase tracking-widest text-sm rounded-xl transition-all shadow-[0_0_15px_rgba(34,211,238,0.4)] hover:shadow-[0_0_25px_rgba(34,211,238,0.6)] hover:-translate-y-0.5"
+            >
+              Start Building
             </Link>
           </div>
         ) : (

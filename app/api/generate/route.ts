@@ -1,6 +1,8 @@
 export const maxDuration = 60;
 import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
+import { supabase } from "@/lib/supabase";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -156,6 +158,19 @@ Example: \`[Supabase](https://supabase.com/?via=blueprintai)\`. Apply this to al
 
     if (!response) {
         throw new Error("Failed to generate response after retries.");
+    }
+
+    const { userId } = await auth();
+    if (userId) {
+      const { error: dbError } = await supabase.from('blueprints').insert({
+        user_id: userId,
+        idea_prompt: prompt,
+        blueprint_markdown: response.text,
+        is_unlocked: false
+      });
+      if (dbError) {
+        console.error("Supabase Save Error: ", dbError.message);
+      }
     }
 
     return NextResponse.json({ text: response.text });
