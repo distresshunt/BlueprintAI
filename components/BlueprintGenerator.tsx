@@ -1106,10 +1106,38 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                       <span>🤖</span>
                     </button>
                     <button
-                      onClick={() => handlePillClick('govtech', 'B2G Gov-tech 🏛️')}
+                      onClick={() => handlePillClick('chrome-extension', 'Chrome Extension 🧩')}
                       className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 text-xs rounded-lg transition-all cursor-pointer flex items-center gap-1.5"
                     >
-                      <span>B2G Gov-tech</span>
+                      <span>Chrome Extension</span>
+                      <span>🧩</span>
+                    </button>
+                    <button
+                      onClick={() => handlePillClick('daw-plugin', 'DAW Plugin 🎛️')}
+                      className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 text-xs rounded-lg transition-all cursor-pointer flex items-center gap-1.5"
+                    >
+                      <span>DAW Plugin</span>
+                      <span>🎛️</span>
+                    </button>
+                    <button
+                      onClick={() => handlePillClick('newsletter', 'Paid Newsletter 📧')}
+                      className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 text-xs rounded-lg transition-all cursor-pointer flex items-center gap-1.5"
+                    >
+                      <span>Paid Newsletter</span>
+                      <span>📧</span>
+                    </button>
+                    <button
+                      onClick={() => handlePillClick('directory', 'Niche Directory 🗂️')}
+                      className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 text-xs rounded-lg transition-all cursor-pointer flex items-center gap-1.5"
+                    >
+                      <span>Niche Directory</span>
+                      <span>🗂️</span>
+                    </button>
+                    <button
+                      onClick={() => handlePillClick('govtech', 'B2G Gov-Tech 🏛️')}
+                      className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 text-slate-300 text-xs rounded-lg transition-all cursor-pointer flex items-center gap-1.5"
+                    >
+                      <span>B2G Gov-Tech</span>
                       <span>🏛️</span>
                     </button>
                   </div>
