@@ -466,25 +466,24 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
     let premium = '';
     let cursorRules = '';
 
-    const parts = text.split(/\n---\n/);
-    if (parts.length > 1) {
-      free = parts[0];
-      premium = parts.slice(1).join('\n---\n');
+    const cursorRulesMatch = text.match(/```a2a\n([\s\S]*?)```/) || text.match(/```cursorrules\n([\s\S]*?)```/);
+    if (cursorRulesMatch) {
+      cursorRules = cursorRulesMatch[1].trim();
+      text = text.replace(/```(a2a|cursorrules)\n[\s\S]*?```/, '');
+    }
+
+    if (bypassPaywall) {
+      free = text;
+      premium = '';
     } else {
-      const fallbackIndex = text.indexOf('**The Developer Prompt**');
-      if (fallbackIndex !== -1) {
-        free = text.slice(0, fallbackIndex);
-        premium = text.slice(fallbackIndex);
+      const splitIndex = text.search(/(?:\*\*|## |### )?Phase 2/i);
+      if (splitIndex !== -1) {
+        free = text.slice(0, splitIndex);
+        premium = text.slice(splitIndex);
       } else {
         free = text;
         premium = '';
       }
-    }
-
-    const cursorRulesMatch = free.match(/```a2a\n([\s\S]*?)```/) || free.match(/```cursorrules\n([\s\S]*?)```/);
-    if (cursorRulesMatch) {
-      cursorRules = cursorRulesMatch[1].trim();
-      free = free.replace(/```(a2a|cursorrules)\n[\s\S]*?```/, '');
     }
 
     return { free, premium, cursorRules };
