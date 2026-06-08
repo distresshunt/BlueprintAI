@@ -3,6 +3,7 @@ import { Target, Zap } from 'lucide-react';
 import { LegalFooter } from '@/components/LegalFooter';
 import { HypePoll } from '@/components/HypePoll';
 import { Testimonials } from '@/components/Testimonials';
+import { PortfolioShowcase } from '@/components/PortfolioShowcase';
 import { SignInButton, SignUpButton, UserButton, Show } from '@clerk/nextjs';
 import Link from 'next/link';
 export default async function Home(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
@@ -64,6 +65,8 @@ export default async function Home(props: { searchParams: Promise<{ [key: string
           </div>
         </div>
       </main>
+
+      <PortfolioShowcase />
 
       {/* Footer Bar */}
       <LegalFooter />

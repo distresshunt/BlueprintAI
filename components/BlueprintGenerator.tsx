@@ -634,15 +634,6 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
           </div>
         )}
 
-        {!isSignedIn ? (
-          <SignInButton mode="modal">
-            <button
-              className="w-full h-14 bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-lg rounded-xl flex items-center justify-center gap-3 transition-colors shadow-[0_0_30px_-5px_rgba(34,211,238,0.4)] relative cursor-pointer"
-            >
-              <span className="uppercase tracking-wider relative z-10">SIGN IN TO GENERATE LAUNCH BLUEPRINT</span>
-            </button>
-          </SignInButton>
-        ) : (
           <button
             onClick={() => generateBlueprint()}
             disabled={loading || (!idea?.trim() && !placeholder?.trim())}
@@ -660,7 +651,6 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               </>
             )}
           </button>
-        )}
       </div>
 
       {/* Error State */}
