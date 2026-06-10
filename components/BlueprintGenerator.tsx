@@ -435,18 +435,46 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
         body: JSON.stringify({ prompt: promptToUse, aiBuilder: pivotAiBuilder, techLevel: pivotTechLevel }),
       });
       
-      const textResponse = await response.text();
-      let data;
-      try {
-        data = JSON.parse(textResponse);
-      } catch (e) {
-        // If it's an HTML error page (like a 504 Timeout), show a clean error message, not a parsing error.
-        throw new Error(`Server Error (${response.status}): The request timed out or the server crashed. Check Netlify logs.`);
+      if (!response.ok) {
+        let errStr = `Server Error (${response.status})`;
+        try {
+           const errData = await response.json();
+           if (errData.error) errStr = errData.error;
+        } catch(e) {}
+        throw new Error(errStr);
       }
-      if (!response.ok) throw new Error(data.error || 'Failed to generate blueprint');
       
-      setBlueprint(data.text);
-      localStorage.setItem('blueprintData', data.text);
+      if (!response.body) throw new Error('No response body');
+      
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+      let fullText = '';
+      
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value, { stream: true });
+        if (chunkValue) {
+          fullText += chunkValue;
+          setBlueprint(fullText);
+        }
+      }
+      
+      localStorage.setItem('blueprintData', fullText);
+      
+      if (userId) {
+        try {
+          await supabase.from('blueprints').insert({
+            user_id: userId,
+            idea_prompt: promptToUse,
+            blueprint_markdown: fullText,
+            is_unlocked: false
+          });
+        } catch (dbErr) {
+          console.error("Failed to save to Supabase", dbErr);
+        }
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {

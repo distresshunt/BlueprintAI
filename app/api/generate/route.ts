@@ -123,12 +123,12 @@ Whenever you generate a Markdown link for a specific service, you MUST append ou
 - For Vercel: \`?via=blueprintai\`
 Example: \`[Supabase](https://supabase.com/?via=blueprintai)\`. Apply this to all recommended tools.`;
 
-    let response;
+    let responseStream;
     let retries = 3;
     
     while (retries > 0) {
       try {
-        response = await ai.models.generateContent({
+        responseStream = await ai.models.generateContentStream({
           model: "gemini-3.5-flash",
           contents: prompt,
           config: {
@@ -158,24 +158,31 @@ Example: \`[Supabase](https://supabase.com/?via=blueprintai)\`. Apply this to al
       }
     }
 
-    if (!response) {
-        throw new Error("Failed to generate response after retries.");
+    if (!responseStream) {
+        throw new Error("Failed to generate response stream after retries.");
     }
 
-    const { userId } = await auth();
-    if (userId) {
-      const { error: dbError } = await supabase.from('blueprints').insert({
-        user_id: userId,
-        idea_prompt: prompt,
-        blueprint_markdown: response.text,
-        is_unlocked: false
-      });
-      if (dbError) {
-        console.error("Supabase Save Error: ", dbError.message);
+    const readableStream = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of responseStream) {
+             if (chunk.text) {
+               controller.enqueue(chunk.text);
+             }
+          }
+          controller.close();
+        } catch (err) {
+          controller.error(err);
+        }
       }
-    }
+    });
 
-    return NextResponse.json({ text: response.text });
+    return new Response(readableStream, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-cache',
+      }
+    });
   } catch (error) {
     console.error("API error:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error";

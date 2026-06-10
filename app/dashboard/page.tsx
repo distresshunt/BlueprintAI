@@ -56,9 +56,7 @@ export default async function DashboardPage() {
         </div>
 
         {error ? (
-          <div className="p-4 bg-red-900/20 border border-red-500/30 text-red-400 rounded-xl">
-            Failed to load blueprints.
-          </div>
+          <div className="text-red-500">Failed to load blueprints: {error.message || JSON.stringify(error) || "Unknown Error"}</div>
         ) : !blueprints || blueprints.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 px-4 bg-slate-900/40 border border-slate-800/60 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] backdrop-blur-xl relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-transparent opacity-50" />
