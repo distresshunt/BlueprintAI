@@ -22,6 +22,26 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <ClerkProvider>
       <html lang="en" className={`dark ${spaceGrotesk.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+        <head>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "SoftwareApplication",
+                "name": "BlueprintAI",
+                "applicationCategory": "DeveloperApplication",
+                "operatingSystem": "Web",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "29.00",
+                  "priceCurrency": "USD"
+                },
+                "description": "An AI Tech Lead that generates 5-phase SaaS launch blueprints and .cursorrules architecture files for developers and indie hackers."
+              })
+            }}
+          />
+        </head>
         <body className="bg-zinc-950 text-zinc-50 min-h-screen antialiased" suppressHydrationWarning>
           <LiveCounterBanner />
           {children}

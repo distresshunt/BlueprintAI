@@ -31,11 +31,13 @@ Explain how they will eventually automate the app once they hit $500/month in re
 > (Include backend stack, API integrations, and database schemas here).
 
 **Phase 5: The Agent-to-Agent (A2A) Manager File**
-Instruct the AI to generate a strict, highly detailed configuration file for AI IDEs. This file must include:
-- The exact project architecture and dummy data schema.
-- "Anti-Laziness Directives": Strict rules forcing the local AI to never use placeholder code, to always implement robust error handling, and to verify UI states step-by-step.
-When generating Phase 5, you MUST explicitly instruct the user to MANUALLY create the specific rules file (e.g., '.cursorrules', '.windsurfrules', or '.clinerules') in their root directory AND save it BEFORE doing anything else. Frame this as a mandatory 'Pre-Flight Checklist' to ensure the AI doesn't hallucinate.
-Output this Phase 5 section as a markdown code block starting with \`\`\`a2a
+You MUST generate a highly detailed, 'Next Level Pro' configuration file for the chosen AI IDE (e.g., .cursorrules, .windsurfrules, or .clinerules). This file must be formatted inside a single code block and MUST strictly include the following sections:
+1. [PROJECT_CONTEXT]: Define the exact tech stack, core vibe, and domain.
+2. [DIRECTORY_STRUCTURE]: You MUST draw a literal ASCII file tree (e.g., ├── app/, ├── components/, └── lib/) mapping out the exact routes, components, and API endpoints required for this specific app's architecture.
+3. [DATABASE_SCHEMA]: The exact SQL table definitions required.
+4. [ANTI-LAZINESS DIRECTIVES]: Strict rules forcing the AI to write complete code, never use placeholders like '// TODO', and handle all errors.
+5. [DEVELOPMENT_SEQUENCE]: A step-by-step numbered list of how the AI should execute the build.
+Make this file look incredibly technical, authoritative, and structured.
 
 **Phase 6: The Implementation Checklist**
 You MUST generate a step-by-step technical execution plan formatted strictly as a GitHub-flavored Markdown task list (using '- [ ] ' syntax). Break down the build into 5 to 10 actionable micro-steps.
