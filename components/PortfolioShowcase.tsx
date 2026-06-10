@@ -1,28 +1,6 @@
 import { ArrowRight, ExternalLink } from 'lucide-react';
 
-const portfolioItems = [
-  {
-    name: 'Tenant Shield',
-    description: 'Legal-Tech SaaS',
-    gradient: 'from-blue-500/20 to-purple-500/20',
-    border: 'group-hover:border-blue-500/50',
-    shadow: 'group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]'
-  },
-  {
-    name: 'CanadianForms',
-    description: 'pSEO Directory',
-    gradient: 'from-emerald-500/20 to-teal-500/20',
-    border: 'group-hover:border-emerald-500/50',
-    shadow: 'group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]'
-  },
-  {
-    name: 'DistressHunt',
-    description: 'Real Estate Data Platform',
-    gradient: 'from-orange-500/20 to-red-500/20',
-    border: 'group-hover:border-orange-500/50',
-    shadow: 'group-hover:shadow-[0_0_30px_rgba(249,115,22,0.3)]'
-  }
-];
+
 
 export function PortfolioShowcase() {
   return (
@@ -39,28 +17,9 @@ export function PortfolioShowcase() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {portfolioItems.map((item, i) => (
-            <div 
-              key={i}
-              className={`group relative bg-slate-900/50 border border-slate-800 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-2 cursor-pointer overflow-hidden ${item.border} ${item.shadow}`}
-            >
-              <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-              
-              <div className="relative z-10 flex flex-col h-full">
-                <div className="w-12 h-12 bg-slate-800 rounded-xl mb-6 flex items-center justify-center border border-slate-700 shadow-inner group-hover:scale-110 transition-transform">
-                  <div className="w-6 h-6 bg-slate-600 rounded-md" />
-                </div>
-                
-                <h3 className="text-2xl font-bold text-white mb-2">{item.name}</h3>
-                <p className="text-slate-400 mb-8 flex-1">{item.description}</p>
-                
-                <div className="flex items-center text-cyan-400 text-sm font-bold uppercase tracking-widest gap-2 group-hover:gap-3 transition-all">
-                  Visit Site <ExternalLink className="w-4 h-4" />
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="backdrop-blur-md bg-zinc-900/50 border border-zinc-800 p-12 text-center rounded-2xl mb-12">
+          <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Community Showcase Dropping Soon.</h3>
+          <p className="text-slate-400 text-lg">Submit your BlueprintAI projects to be featured here.</p>
         </div>
 
         <div className="flex justify-center">
