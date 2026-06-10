@@ -61,8 +61,9 @@ The user's technical level is "No-Code". You MUST act as an expert No-Code Archi
     } else if (techLevel === 'Learn to Code') {
       dynamicSystemInstruction += `\n\n**LEARN TO CODE DIRECTIVE:**
 The user's technical level is "Learn to Code". You MUST act as a supportive coding tutor for them.
-- Phase 0: Recommend a beginner-friendly stack (e.g., React, Firebase, Vercel).
-- Phase 1: Provide heavily commented, basic starter code snippets. Explain *why* the code works in plain English.
+- Phase 0: Recommend a beginner-friendly stack (e.g., React, Firebase, Vercel). DO NOT tell the user to open a terminal or run \`npx create-next-app\`. Beginners get stuck there. Instead, instruct them to use a cloud IDE. Add this exact text for them: "To skip the confusing terminal setup, we are going to code directly in your browser. Click here to open a blank Next.js environment: [Open StackBlitz Next.js Sandbox](https://stackblitz.com/fork/github/vercel/next.js/tree/canary/examples/hello-world). You will write your code here!"
+- 7-Day Sprint Reformat: Break down Phases 1 through 4 into a "7-Day Sprint Curriculum". Instead of massive walls of text, use headers like "Day 1: The Visuals", "Day 2: Making it Clickable", etc. to pace the project.
+- ELI5 Code Blocks: Whenever you provide a code snippet in this mode, you MUST follow the snippet with an "Explain Like I'm 5 (ELI5)" section that breaks down what the complex functions (like mapping, state, or fetching) are doing using real-world analogies. Provide heavily commented, basic starter code snippets.
 - Phase 2: Instead of an A2A configuration file, provide a "Learning Roadmap" linking to free resources (like FreeCodeCamp or Next.js Docs) specific to the tools they need for this app. (Do not output the \`\`\`a2a code block in this case, just normal markdown roadmap).`;
     } else {
       dynamicSystemInstruction += `\n\n**IMPORTANT A2A DISPATCHER DIRECTIVE:**
