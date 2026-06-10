@@ -342,26 +342,27 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    const currentIdea = ideas[ideaIndex];
+    let timeout: NodeJS.Timeout;
+    const currentText = ideas[ideaIndex];
 
-    if (!isDeleting && placeholder === currentIdea) {
-      // ONLY pause when the string is fully typed so the user can read it
-      timer = setTimeout(() => setIsDeleting(true), 3500);
-    } else if (isDeleting && placeholder === "") {
-      // DO NOT PAUSE when empty. Instantly pick the next idea and start typing.
-      setIsDeleting(false);
-      setIdeaIndex((prevIndex) => (prevIndex + 1) % ideas.length);
+    if (isDeleting) {
+      timeout = setTimeout(() => {
+        setPlaceholder(currentText.substring(0, placeholder.length - 1));
+        if (placeholder.length <= 1) {
+          setIsDeleting(false);
+          setIdeaIndex((prev) => (prev + 1) % ideas.length);
+        }
+      }, 30); // Fast delete
     } else {
-      // Type or delete character
-      const typingSpeed = isDeleting ? 40 : 85; // Deletes twice as fast as it types
-      timer = setTimeout(() => {
-        const nextLength = isDeleting ? placeholder.length - 1 : placeholder.length + 1;
-        setPlaceholder(currentIdea.substring(0, nextLength));
-      }, typingSpeed);
+      if (placeholder.length === currentText.length) {
+        timeout = setTimeout(() => setIsDeleting(true), 4000); // Long 4-second pause to read
+      } else {
+        timeout = setTimeout(() => {
+          setPlaceholder(currentText.substring(0, placeholder.length + 1));
+        }, 80); // Smooth, natural typing speed
+      }
     }
-
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timeout);
   }, [placeholder, isDeleting, ideaIndex]);
 
   const startRecording = () => {
@@ -504,7 +505,8 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
       free = text;
       premium = '';
     } else {
-      const splitIndex = text.search(/(?:\*\*|## |### )?Phase 2/i);
+      const match = text.match(/(?:\n|^)(?:#|\*)*\s*Phase 2/i);
+      const splitIndex = match ? match.index : -1;
       if (splitIndex !== -1) {
         free = text.slice(0, splitIndex);
         premium = text.slice(splitIndex);
