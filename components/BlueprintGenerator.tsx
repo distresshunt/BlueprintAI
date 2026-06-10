@@ -106,9 +106,9 @@ const coFounderGreetings = [
   "Let's find your gold mine. Do you want to build a high-ticket B2B SaaS, a local directory, a Chrome extension, or an AI Wrapper? Give me a hint about your skills, and I'll do the heavy lifting."
 ];
 
-export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialId }: { initialIdea?: string; pSeoModel?: string; pSeoNiche?: string; initialId?: string }) {
+export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialId, learnSkill, learnNiche }: { initialIdea?: string; pSeoModel?: string; pSeoNiche?: string; initialId?: string; learnSkill?: string; learnNiche?: string }) {
   const { userId, isSignedIn } = useAuth();
-  const [idea, setIdea] = useState(initialIdea || (pSeoModel && pSeoNiche ? `I want to build a ${pSeoModel} for ${pSeoNiche}.` : ''));
+  const [idea, setIdea] = useState(initialIdea || (learnSkill && learnNiche ? `I want to learn ${learnSkill} from scratch by building a real software business for ${learnNiche}.` : (pSeoModel && pSeoNiche ? `I want to build a ${pSeoModel} for ${pSeoNiche}.` : '')));
   const [aiBuilder, setAiBuilder] = useState('Decide for me ✨');
   const [blueprint, setBlueprint] = useState('');
   const [loading, setLoading] = useState(false);
@@ -144,7 +144,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
     }
   }, [initialId]);
 
-  const [techLevel, setTechLevel] = useState('No-Code');
+  const [techLevel, setTechLevel] = useState(learnSkill && learnNiche ? 'Learn to Code' : 'No-Code');
   const [bypassPaywall, setBypassPaywall] = useState(false);
 
   const [isBrainstormOpen, setIsBrainstormOpen] = useState(false);
@@ -326,7 +326,11 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
     "A dashboard tracking distressed properties for real estate flippers..."
   ];
 
-  const ideas = (pSeoModel && pSeoNiche) ? [
+  const ideas = (learnSkill && learnNiche) ? [
+    `I want to learn ${learnSkill} by building a CRM for ${learnNiche}...`,
+    `I want to master ${learnSkill} by developing an AI tool for ${learnNiche}...`,
+    `I want to learn ${learnSkill} from scratch while building a directory for ${learnNiche}...`
+  ] : (pSeoModel && pSeoNiche) ? [
     `A ${pSeoModel} for ${pSeoNiche} that scrapes local municipal data to automate compliance paperwork...`,
     `An AI-powered ${pSeoModel} that connects ${pSeoNiche} to high-net-worth clients via automated LinkedIn outreach...`,
     `A white-labeled ${pSeoModel} allowing ${pSeoNiche} to launch their own branded client portals in one click...`,
@@ -556,12 +560,16 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
           </div>
         </div>
 
-        {pSeoModel && pSeoNiche && (
+        {learnSkill && learnNiche ? (
+          <h1 className="text-3xl sm:text-4xl font-black font-sans tracking-tight mt-4 mb-2 text-center sm:text-left">
+            Learn <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{learnSkill}</span> by building a digital business for <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{learnNiche}</span>
+          </h1>
+        ) : pSeoModel && pSeoNiche ? (
           <h1 className="text-3xl sm:text-4xl font-black font-sans tracking-tight mt-4 mb-2 text-center sm:text-left">
             Build a <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{pSeoModel}</span> for <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{pSeoNiche}</span>
           </h1>
-        )}
-        {!pSeoModel && !pSeoNiche && (
+        ) : null}
+        {!pSeoModel && !pSeoNiche && !learnSkill && !learnNiche && (
           <span className="font-mono text-[10px] uppercase tracking-widest text-cyan-500/70 mb-2 block ml-1">&gt; INPUT_ARCHITECTURE_PARAMETERS_</span>
         )}
         <div className="relative group bg-slate-900/50 border-2 border-slate-800 focus-within:border-cyan-500/50 rounded-xl shadow-2xl transition-all w-full flex flex-col overflow-hidden">
