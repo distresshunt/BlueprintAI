@@ -347,14 +347,14 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
 
     if (!isDeleting && placeholder === currentIdea) {
       // ONLY pause when the string is fully typed so the user can read it
-      timer = setTimeout(() => setIsDeleting(true), 2000);
+      timer = setTimeout(() => setIsDeleting(true), 3500);
     } else if (isDeleting && placeholder === "") {
       // DO NOT PAUSE when empty. Instantly pick the next idea and start typing.
       setIsDeleting(false);
       setIdeaIndex((prevIndex) => (prevIndex + 1) % ideas.length);
     } else {
       // Type or delete character
-      const typingSpeed = isDeleting ? 25 : 50; // Deletes twice as fast as it types
+      const typingSpeed = isDeleting ? 40 : 85; // Deletes twice as fast as it types
       timer = setTimeout(() => {
         const nextLength = isDeleting ? placeholder.length - 1 : placeholder.length + 1;
         setPlaceholder(currentIdea.substring(0, nextLength));
