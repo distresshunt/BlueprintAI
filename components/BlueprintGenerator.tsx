@@ -742,7 +742,18 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               prose-pre:bg-slate-950 prose-pre:border prose-pre:border-slate-800 relative
               prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline hover:prose-a:text-cyan-300 transition-colors"
             >
-              <ReactMarkdown components={{ blockquote: ExpandableBlockquote, pre: CodeBlock }}>{free}</ReactMarkdown>
+              <ReactMarkdown components={{ 
+                blockquote: ExpandableBlockquote, 
+                pre: CodeBlock,
+                a: ({ node, ...props }: any) => (
+                  <a
+                    {...props}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-cyan-400 hover:text-cyan-300 underline font-medium"
+                  />
+                )
+              }}>{free}</ReactMarkdown>
             </div>
 
             {cursorRules && (
@@ -848,6 +859,14 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                     components={{ 
                       blockquote: ExpandableBlockquote, 
                       pre: CodeBlock,
+                      a: ({ node, ...props }: any) => (
+                        <a
+                          {...props}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-cyan-400 hover:text-cyan-300 underline font-medium"
+                        />
+                      ),
                       input: ({ node, checked, ...props }: any) => {
                         if (props.type === 'checkbox') {
                           return (
@@ -1065,6 +1084,14 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                               remarkPlugins={[remarkGfm]}
                               components={{ 
                                 pre: CodeBlock,
+                                a: ({ node, ...props }: any) => (
+                                  <a
+                                    {...props}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-cyan-400 hover:text-cyan-300 underline font-medium"
+                                  />
+                                ),
                                 input: ({ node, checked, ...props }: any) => {
                                   if (props.type === 'checkbox') {
                                     return (

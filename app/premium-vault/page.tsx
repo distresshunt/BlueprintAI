@@ -210,6 +210,14 @@ function VaultContent() {
                 remarkPlugins={[remarkGfm]}
                 components={{ 
                   pre: CodeBlock,
+                  a: ({ node, ...props }: any) => (
+                    <a
+                      {...props}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-400 hover:text-cyan-300 underline font-medium"
+                    />
+                  ),
                   input: ({ node, checked, ...props }: any) => {
                     if (props.type === 'checkbox') {
                       return (
