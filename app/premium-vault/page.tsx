@@ -230,6 +230,29 @@ function VaultContent() {
         </Link>
       </header>
 
+      {/* A2A Sync Key */}
+      {id && (
+        <div className="mb-8 p-4 bg-[#0D0D0D] border border-zinc-800 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl">
+          <div className="flex items-center gap-3">
+            <Terminal className="w-5 h-5 text-cyan-400 shrink-0" />
+            <div>
+              <h3 className="font-bold text-white text-sm tracking-tight">A2A Sync Key</h3>
+              <p className="text-xs text-zinc-500">Paste this ID into your local BlueprintAI CLI to sync directly with your IDE.</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-lg p-2 max-w-full overflow-hidden">
+            <code className="text-cyan-400 font-mono text-xs truncate select-all">{id}</code>
+            <button 
+              onClick={() => navigator.clipboard.writeText(id)}
+              className="text-zinc-400 hover:text-white transition-colors shrink-0 p-1"
+              title="Copy Sync ID"
+            >
+              <Copy className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         
         {/* Left Column: Markdown Blueprint */}
