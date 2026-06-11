@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState, Suspense, useRef } from 'react';
+import { useEffect, useState, Suspense, useRef, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Send, Bot, CheckCircle, Mic } from 'lucide-react';
+import { Send, Bot, CheckCircle, Mic, Terminal, ChevronUp, ChevronDown, Copy } from 'lucide-react';
 import Link from 'next/link';
 import { CodeBlock } from '@/components/CodeBlock';
 import { useSearchParams } from 'next/navigation';
@@ -18,6 +18,37 @@ function VaultContent() {
   ]);
   const [isRecording, setIsRecording] = useState(false);
   const [micError, setMicError] = useState('');
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+
+  const cliCommands = useMemo(() => {
+    if (!blueprintData) return [];
+    
+    const commands: string[] = [];
+    // Extract block commands
+    const regex = /```(?:bash|sh|shell)([\s\S]*?)```/gi;
+    let match;
+    while ((match = regex.exec(blueprintData)) !== null) {
+      const block = match[1].trim();
+      const lines = block.split('\n');
+      for (const line of lines) {
+        if (line.trim() && !line.trim().startsWith('#')) {
+          commands.push(line.trim());
+        }
+      }
+    }
+    
+    // Extract inline commands starting with npx, npm, yarn, pnpm
+    const inlineRegex = /`([^`]+)`/g;
+    let inlineMatch;
+    while ((inlineMatch = inlineRegex.exec(blueprintData)) !== null) {
+      const code = inlineMatch[1].trim();
+      if (/^(npm|npx|yarn|pnpm)\s/.test(code)) {
+        commands.push(code);
+      }
+    }
+    
+    return [...new Set(commands)];
+  }, [blueprintData]);
   
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
@@ -235,6 +266,42 @@ function VaultContent() {
                 {blueprintData}
               </ReactMarkdown>
             </div>
+          </div>
+          
+          {/* Terminal Drawer */}
+          <div className="fixed bottom-0 left-4 md:left-8 lg:w-[calc((100vw-4rem)*0.66)] lg:max-w-[calc(80rem*0.66)] right-4 lg:right-auto bg-[#0D0D0D] border-t border-zinc-800 rounded-t-xl z-40 transition-all duration-300 flex flex-col shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+            {/* Toggle Tab */}
+            <button 
+              onClick={() => setIsTerminalOpen(!isTerminalOpen)}
+              className="bg-zinc-900 hover:bg-zinc-800 border-t border-x border-zinc-800 rounded-t-lg px-4 py-2 flex items-center gap-2 self-start ml-4 md:ml-8 -mt-[37px] text-xs font-mono text-zinc-400 transition-colors"
+            >
+              <Terminal className="w-3 h-3 text-green-400" />
+              &gt;_ TERMINAL
+              {isTerminalOpen ? <ChevronDown className="w-3 h-3" /> : <ChevronUp className="w-3 h-3" />}
+            </button>
+            
+            {/* Expanded Content */}
+            {isTerminalOpen && (
+              <div className="p-4 h-48 overflow-y-auto font-mono text-sm relative">
+                <button 
+                  onClick={() => navigator.clipboard.writeText(cliCommands.join('\n'))}
+                  className="absolute top-4 right-4 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-3 py-1 rounded text-xs flex items-center gap-2 transition-colors"
+                >
+                  <Copy className="w-3 h-3" />
+                  Copy All
+                </button>
+                {cliCommands.length === 0 ? (
+                  <div className="text-zinc-600 mt-2">~ % No setup commands detected in blueprint.</div>
+                ) : (
+                  cliCommands.map((cmd, idx) => (
+                    <div key={idx} className="flex gap-3 mt-1">
+                      <span className="text-zinc-600 select-none shrink-0">~ %</span>
+                      <span className="text-green-400 break-all">{cmd}</span>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
           </div>
         </div>
 
