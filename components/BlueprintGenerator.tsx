@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { motion, AnimatePresence } from 'motion/react';
-import { Terminal, Send, Loader2, Zap, ChevronDown, ChevronRight, Info, Lock, Check, Copy, CheckCheck, Mic, X, Bot, Sparkles } from 'lucide-react';
+import { Terminal, Send, Loader2, Zap, ChevronDown, ChevronRight, Info, Lock, Check, Copy, CheckCheck, Mic, X, Bot, Sparkles, CheckCircle2 } from 'lucide-react';
 import { useAuth, SignInButton } from '@clerk/nextjs';
 import { supabase } from '@/lib/supabase';
 import { CodeBlock } from './CodeBlock';
@@ -437,7 +437,11 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: promptToUse, aiBuilder: pivotAiBuilder, techLevel: pivotTechLevel }),
+        body: JSON.stringify({ 
+          prompt: promptToUse, 
+          aiBuilder: pivotTechLevel === 'No-Code' ? 'None' : pivotAiBuilder, 
+          techLevel: pivotTechLevel 
+        }),
       });
       
       if (!response.ok) {
@@ -791,16 +795,24 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                       
                       <ul className="space-y-4 mb-8 flex-1">
                         <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <Check className="w-5 h-5 text-cyan-500 shrink-0" />
-                          <span>Unlocks Developer Prompts</span>
+                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                          <span>Instant .cursorrules & .clinerules Files</span>
                         </li>
                         <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <Check className="w-5 h-5 text-cyan-500 shrink-0" />
-                          <span>Stripe Legal Pack</span>
+                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                          <span>Copy & Paste AI Developer Prompts</span>
                         </li>
                         <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <Check className="w-5 h-5 text-cyan-500 shrink-0" />
-                          <span>Cold Email Templates</span>
+                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                          <span>Stripe-Ready Legal Compliance Pack</span>
+                        </li>
+                        <li className="flex items-start gap-3 text-slate-300 text-sm">
+                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                          <span>The 'First 10 Customers' GTM Script</span>
+                        </li>
+                        <li className="flex items-start gap-3 text-slate-300 text-sm">
+                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                          <span>Database Schemas & RLS Policies</span>
                         </li>
                       </ul>
                       
@@ -811,7 +823,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
 
                     {/* Right Card */}
                     <div className="border-2 border-cyan-500 bg-slate-900/90 rounded-2xl p-6 sm:p-8 flex flex-col relative shadow-[0_0_30px_rgba(34,211,238,0.2)] backdrop-blur-xl">
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-cyan-500 text-black text-[10px] sm:text-xs font-bold uppercase tracking-widest px-4 py-1 rounded-full whitespace-nowrap">
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-cyan-500 text-black text-[10px] sm:text-xs font-bold uppercase tracking-widest px-4 py-1 rounded-full whitespace-nowrap shadow-[0_0_15px_rgba(34,211,238,0.8)]">
                         Most Popular
                       </div>
                       <h3 className="text-xl font-bold text-white font-sans uppercase tracking-tight">The Founder Tier</h3>
@@ -819,20 +831,28 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                       
                       <ul className="space-y-4 mb-8 flex-1">
                         <li className="flex items-start gap-3 font-semibold text-white text-sm">
-                          <Check className="w-5 h-5 text-cyan-500 shrink-0" />
+                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
                           <span>Everything in Hustler, PLUS:</span>
                         </li>
                         <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <Check className="w-5 h-5 text-cyan-500 shrink-0" />
-                          <span>AI Co-Founder Debug Chat</span>
+                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                          <span>24/7 Context-Aware AI Tech Lead (Chat)</span>
                         </li>
                         <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <Check className="w-5 h-5 text-cyan-500 shrink-0" />
-                          <span>Weekly Competitor Radar</span>
+                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                          <span>Live 'Vision' Debugging (Paste Screenshots)</span>
                         </li>
                         <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <Check className="w-5 h-5 text-cyan-500 shrink-0" />
-                          <span>Programmatic SEO Keyword Drops</span>
+                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                          <span>Unlimited Blueprint Generations</span>
+                        </li>
+                        <li className="flex items-start gap-3 text-slate-300 text-sm">
+                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                          <span>Auto-Save to Secure Cloud Vault</span>
+                        </li>
+                        <li className="flex items-start gap-3 text-slate-300 text-sm">
+                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                          <span>CI/CD Pipelines & Architecture Diagrams</span>
                         </li>
                       </ul>
                       

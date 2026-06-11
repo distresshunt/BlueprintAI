@@ -25,7 +25,13 @@ Explain exactly how the founder can manually fulfill the promise for the first 1
 **Phase 5: The Scale (Automating the Future)**
 Explain how they will eventually automate the app once they hit $500/month in revenue.
 
-**Phase 6: The Implementation Checklist**
+**Phase 6: The Developer Boilerplate Pack**
+You MUST generate 3 essential, copy-pasteable files for the developer, tailored specifically to their app idea:
+1. `schema.sql`: A complete PostgreSQL database schema including advanced, airtight Row Level Security (RLS) policies for Supabase.
+2. `deploy.yml`: A GitHub Actions CI/CD pipeline file for automated type-checking and deployment.
+3. Architecture Diagram: A `mermaid` code block mapping out the data flow between the frontend, backend, and external APIs (Stripe, LLMs, etc.).
+
+**Phase 7: The Implementation Checklist**
 You MUST generate a step-by-step technical execution plan formatted strictly as a GitHub-flavored Markdown task list (using '- [ ] ' syntax). Break down the build into 5 to 10 actionable micro-steps.
 
 ---
@@ -43,10 +49,15 @@ Tone: Ruthlessly practical, highly encouraging, zero corporate fluff. Note: The 
 
 export async function POST(req: NextRequest) {
   try {
-    const { prompt, aiBuilder = 'Decide for me ✨', techLevel = 'No-Code' } = await req.json();
+    let { prompt, aiBuilder = 'Decide for me ✨', techLevel = 'No-Code' } = await req.json();
 
     if (!prompt) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
+    }
+
+    if (techLevel === 'No-Code') {
+      aiBuilder = 'None';
+      prompt = `CRITICAL OVERRIDE: The user selected 'No-Code'. You MUST NOT recommend any code editors, IDEs (Cursor, Antigravity, Windsurf), or traditional coding frameworks (Next.js, React, Tailwind). Phase 0 MUST strictly recommend visual No-Code platforms (e.g., Bubble, FlutterFlow, Softr) and automation tools (Make, Zapier). Do NOT mention IDEs anywhere in this blueprint.\n\n${prompt}`;
     }
 
     let dynamicSystemInstruction = systemInstruction;
