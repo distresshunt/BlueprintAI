@@ -34,7 +34,7 @@ export default function DashboardPage() {
     async function fetchBlueprints() {
       if (!userId) return;
       setLoading(true);
-      const { data, fetchError } = await supabase
+      const { data, error: fetchError } = await supabase
         .from('blueprints')
         .select('*')
         .eq('user_id', userId)
