@@ -47,9 +47,9 @@ rl.question(chalk.yellow('⚡ Enter your BlueprintAI Sync ID: '), async (syncId)
       let errorMessage = 'Network error occurred.';
       try {
         const errorData = await response.json();
-        errorMessage = errorData.error || \`HTTP Error \${response.status}\`;
+        errorMessage = errorData.error || `HTTP Error ${response.status}`;
       } catch (e) {
-        errorMessage = \`HTTP Error \${response.status}\`;
+        errorMessage = `HTTP Error ${response.status}`;
       }
       spinner.fail(chalk.red(errorMessage));
       rl.close();
@@ -72,7 +72,7 @@ rl.question(chalk.yellow('⚡ Enter your BlueprintAI Sync ID: '), async (syncId)
     spinner.succeed(chalk.green('✔ A2A Configuration Locked. Your local AI is now synced with BlueprintAI.'));
     
   } catch (error) {
-    spinner.fail(chalk.red(\`Fatal Error: \${error.message}\`));
+    spinner.fail(chalk.red(`Fatal Error: ${error.message}`));
   } finally {
     rl.close();
   }
