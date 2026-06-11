@@ -27,9 +27,9 @@ Explain how they will eventually automate the app once they hit $500/month in re
 
 **Phase 6: The Developer Boilerplate Pack**
 You MUST generate 3 essential, copy-pasteable files for the developer, tailored specifically to their app idea:
-1. `schema.sql`: A complete PostgreSQL database schema including advanced, airtight Row Level Security (RLS) policies for Supabase.
-2. `deploy.yml`: A GitHub Actions CI/CD pipeline file for automated type-checking and deployment.
-3. Architecture Diagram: A `mermaid` code block mapping out the data flow between the frontend, backend, and external APIs (Stripe, LLMs, etc.).
+1. 'schema.sql': A complete PostgreSQL database schema including advanced, airtight Row Level Security (RLS) policies for Supabase.
+2. 'deploy.yml': A GitHub Actions CI/CD pipeline file for automated type-checking and deployment.
+3. Architecture Diagram: A 'mermaid' code block mapping out the data flow between the frontend, backend, and external APIs (Stripe, LLMs, etc.).
 
 **Phase 7: The Implementation Checklist**
 You MUST generate a step-by-step technical execution plan formatted strictly as a GitHub-flavored Markdown task list (using '- [ ] ' syntax). Break down the build into 5 to 10 actionable micro-steps.
