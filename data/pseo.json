@@ -6,7 +6,12 @@
     "marketplace",
     "vst-plugin",
     "daw-script",
-    "audio-tool"
+    "audio-tool",
+    "no-code-app",
+    "custom-software-without-coding",
+    "app-using-ai",
+    "automated-system",
+    "chatgpt-wrapper"
   ],
   "niches": [
     "saas-tech-automation-tools-niches",

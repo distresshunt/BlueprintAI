@@ -195,7 +195,7 @@ export default function DashboardPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredAndSortedBlueprints.map((bp) => {
                   const isUnlocked = bp.is_unlocked;
-                  const href = isUnlocked ? \`/premium-vault?id=\${bp.id}\` : \`/?id=\${bp.id}\`;
+                  const href = isUnlocked ? `/premium-vault?id=${bp.id}` : `/?id=${bp.id}`;
 
                   return (
                     <Link key={bp.id} href={href} className="group relative bg-slate-900/50 border border-slate-800 hover:border-cyan-500/50 rounded-xl p-6 transition-all hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] flex flex-col h-full overflow-hidden">
