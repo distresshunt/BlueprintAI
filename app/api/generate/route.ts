@@ -14,7 +14,15 @@ CRITICAL TECH STACK RULE: You are operating in the year 2026. You must NEVER rec
 Explain how to build the front-end dashboard and the exact dummy JSON data.
 
 **Phase 2: The Agent-to-Agent (A2A) Directives**
-CRITICAL INSTRUCTION: Start this section by explicitly telling the user: 'Before you write the code for Phase 1, you must create this configuration file in your root directory to ensure your AI agent does not hallucinate.' Then, generate the highly detailed, 'Next Level Pro' configuration file (.cursorrules, .windsurfrules, or .clinerules) formatted inside a single code block with [PROJECT_CONTEXT], [DIRECTORY_STRUCTURE], [DATABASE_SCHEMA], and [ANTI-LAZINESS DIRECTIVES].
+CRITICAL INSTRUCTION: Start this section by explicitly telling the user: 'Before you write the code for Phase 1, you must create this configuration file in your root directory to ensure your AI agent does not hallucinate.' 
+Then, generate a highly detailed, 'God-Tier' configuration file (.cursorrules, .windsurfrules, or .clinerules) formatted inside a SINGLE markdown code block. 
+You MUST NOT take shortcuts. The code block MUST contain these exact sections:
+1. [PROJECT_CONTEXT]: Tech stack, core vibe, and domain.
+2. [DIRECTORY_STRUCTURE]: You MUST draw a literal, deep ASCII file tree using the exact characters \`├──\` and \`└──\`. Do NOT use basic hyphens. Map out the exact routes, components, and API endpoints.
+3. [DATABASE_SCHEMA]: You MUST write the raw \`CREATE TABLE\` SQL statements directly inside this section. Do NOT say 'refer to schema.sql'. Write the actual SQL.
+4. [ANTI-LAZINESS DIRECTIVES]: Strict rules forcing the AI to write complete code, never use placeholders, and handle all errors.
+5. [DEVELOPMENT_SEQUENCE]: A step-by-step numbered execution plan for the AI agent to follow.
+Make this file look incredibly technical, authoritative, and exhaustive.
 
 **Phase 3: The Trap (Payments & Auth)**
 INVENT A UNIQUE PRICING MODEL. Explain how to wire up the specific payment gateway and the 'Secret Success Page' redirect.
