@@ -10,10 +10,10 @@ export function PortfolioShowcase() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight uppercase mb-4">
-            The BlueprintAI <span className="text-cyan-400">Ecosystem</span>
+            BUILT WITH <span className="text-cyan-400">BLUEPRINTAI</span>
           </h2>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-            Everything you need to build, launch, and scale.
+            Explore real, production-ready platforms architected using our AI Tech Lead.
           </p>
         </div>
 
