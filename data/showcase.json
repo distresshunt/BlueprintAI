@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "agent-hired",
+    "name": "AgentHired",
+    "tagline": "The premier marketplace to buy and sell custom .cursorrules and AI Agent configurations.",
+    "theme": "zinc-950 with purple-500 accents",
+    "mockup_image": "placeholder",
+    "gumroad_link": "https://distresshunter.gumroad.com/l/pbhwbn?wanted=true"
+  },
+  {
+    "slug": "launch-copy",
+    "name": "LaunchCopy AI",
+    "tagline": "Turn your SaaS blueprint into 30 days of viral Twitter threads, Product Hunt launches, and cold emails.",
+    "theme": "slate-900 with amber-500 accents",
+    "mockup_image": "placeholder",
+    "gumroad_link": "https://distresshunter.gumroad.com/l/vjowjj?wanted=true"
+  },
+  {
+    "slug": "schema-sync",
+    "name": "SchemaSync",
+    "tagline": "Instantly deploy your BlueprintAI database schemas and RLS policies directly to your Supabase project.",
+    "theme": "zinc-900 with emerald-400 accents",
+    "mockup_image": "placeholder",
+    "gumroad_link": "https://distresshunter.gumroad.com/l/vjowjj?wanted=true"
+  }
+]

@@ -1,6 +1,6 @@
 import { ArrowRight, ExternalLink } from 'lucide-react';
-
-
+import showcaseData from '@/data/showcase.json';
+import Link from 'next/link';
 
 export function PortfolioShowcase() {
   return (
@@ -10,16 +10,38 @@ export function PortfolioShowcase() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight uppercase mb-4">
-            Built with <span className="text-cyan-400">BlueprintAI</span>
+            The BlueprintAI <span className="text-cyan-400">Ecosystem</span>
           </h2>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-            Join hundreds of founders shipping production-ready apps using our architecture.
+            Everything you need to build, launch, and scale.
           </p>
         </div>
 
-        <div className="backdrop-blur-md bg-zinc-900/50 border border-zinc-800 p-12 text-center rounded-2xl mb-12">
-          <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Community Showcase Dropping Soon.</h3>
-          <p className="text-slate-400 text-lg">Submit your BlueprintAI projects to be featured here.</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          {showcaseData.map((app) => {
+            const isPurple = app.theme.includes('purple');
+            const isAmber = app.theme.includes('amber');
+            const isEmerald = app.theme.includes('emerald');
+            const accentBorder = isPurple ? 'group-hover:border-purple-500/50' : isAmber ? 'group-hover:border-amber-500/50' : isEmerald ? 'group-hover:border-emerald-400/50' : 'group-hover:border-blue-500/50';
+            const accentText = isPurple ? 'text-purple-400' : isAmber ? 'text-amber-400' : isEmerald ? 'text-emerald-400' : 'text-blue-400';
+
+            return (
+              <div key={app.slug} className={`group flex flex-col bg-slate-900/40 border border-slate-800/50 ${accentBorder} rounded-2xl p-8 transition-all hover:shadow-xl`}>
+                <h3 className="text-2xl font-bold text-white mb-3 flex items-center justify-between">
+                  {app.name}
+                </h3>
+                <p className="text-slate-400 text-sm mb-6 flex-1">
+                  {app.tagline}
+                </p>
+                <Link 
+                  href={`/showcase/${app.slug}`}
+                  className={`mt-auto inline-flex items-center gap-2 font-semibold text-sm ${accentText} hover:opacity-80 transition-opacity`}
+                >
+                  Visit App <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            );
+          })}
         </div>
 
         <div className="flex justify-center">
