@@ -8,6 +8,7 @@ import { Terminal, Send, Loader2, Zap, ChevronDown, ChevronRight, Info, Lock, Ch
 import { useAuth, SignInButton } from '@clerk/nextjs';
 import { supabase } from '@/lib/supabase';
 import { CodeBlock } from './CodeBlock';
+import { useSearchParams } from 'next/navigation';
 
 const ExpandableBlockquote = ({ children }: any) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -108,6 +109,10 @@ const coFounderGreetings = [
 
 export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialId, learnSkill, learnNiche }: { initialIdea?: string; pSeoModel?: string; pSeoNiche?: string; initialId?: string; learnSkill?: string; learnNiche?: string }) {
   const { userId, isSignedIn } = useAuth();
+  const searchParams = useSearchParams();
+  const urlId = searchParams.get('id');
+  const activeId = urlId || initialId;
+
   const [idea, setIdea] = useState(initialIdea || (learnSkill && learnNiche ? `I want to learn ${learnSkill} from scratch by building a real software business for ${learnNiche}.` : (pSeoModel && pSeoNiche ? `I want to build a ${pSeoModel} for ${pSeoNiche}.` : '')));
   const [aiBuilder, setAiBuilder] = useState('Decide for me ✨');
   const [blueprint, setBlueprint] = useState('');
@@ -121,13 +126,13 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
   
   
   useEffect(() => {
-    if (initialId) {
+    if (activeId) {
       const fetchBlueprint = async () => {
         try {
           const { data, error } = await supabase
             .from('blueprints')
             .select('blueprint_markdown, idea_prompt, is_unlocked')
-            .eq('id', initialId)
+            .eq('id', activeId)
             .single();
           if (data) {
             setIdea(data.idea_prompt);
@@ -142,7 +147,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
       };
       fetchBlueprint();
     }
-  }, [initialId]);
+  }, [activeId]);
 
   const [techLevel, setTechLevel] = useState(learnSkill && learnNiche ? 'Learn to Code' : 'No-Code');
   const [bypassPaywall, setBypassPaywall] = useState(false);
