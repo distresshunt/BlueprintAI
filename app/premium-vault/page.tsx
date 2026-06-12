@@ -8,10 +8,12 @@ import Link from 'next/link';
 import { CodeBlock } from '@/components/CodeBlock';
 import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { useAuth } from '@clerk/nextjs';
+import { useAuth, useUser } from '@clerk/nextjs';
 
 function VaultContent() {
   const { userId } = useAuth();
+  const { user } = useUser();
+  const isAdmin = user?.emailAddresses?.[0]?.emailAddress === 'exoscommand@gmail.com';
   const [blueprintData, setBlueprintData] = useState<string>('');
   const [isLocked, setIsLocked] = useState<boolean>(false);
   const [chatMessage, setChatMessage] = useState('');
@@ -76,7 +78,7 @@ function VaultContent() {
             .single();
             
           if (data) {
-            if (data.is_unlocked === false) {
+            if (data.is_unlocked === false && !isAdmin) {
               setIsLocked(true);
             } else {
               setIsLocked(false);
@@ -121,7 +123,7 @@ function VaultContent() {
     }
     
     loadData();
-  }, [id, userId]);
+  }, [id, userId, isAdmin]);
 
   // Dwell Time Tracking
   useEffect(() => {

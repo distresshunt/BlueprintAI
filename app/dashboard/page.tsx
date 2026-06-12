@@ -248,7 +248,7 @@ export default function DashboardPage() {
                         </div>
                       )}
 
-                      <div className="absolute top-4 right-4 z-30 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="absolute bottom-4 right-4 z-30 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button 
                           onClick={(e) => handleDelete(e, bp.id)}
                           className="p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 hover:text-red-400 transition-colors border border-red-500/20"

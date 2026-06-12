@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { motion, AnimatePresence } from 'motion/react';
 import { Terminal, Send, Loader2, Zap, ChevronDown, ChevronRight, Info, Lock, Check, Copy, CheckCheck, Mic, X, Bot, Sparkles, CheckCircle2 } from 'lucide-react';
-import { useAuth, SignInButton } from '@clerk/nextjs';
+import { useAuth, SignInButton, useUser } from '@clerk/nextjs';
 import { supabase } from '@/lib/supabase';
 import { CodeBlock } from './CodeBlock';
 import { useSearchParams } from 'next/navigation';
@@ -109,6 +109,8 @@ const coFounderGreetings = [
 
 export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialId, learnSkill, learnNiche }: { initialIdea?: string; pSeoModel?: string; pSeoNiche?: string; initialId?: string; learnSkill?: string; learnNiche?: string }) {
   const { userId, isSignedIn } = useAuth();
+  const { user } = useUser();
+  const isAdmin = user?.emailAddresses?.[0]?.emailAddress === 'exoscommand@gmail.com';
   const searchParams = useSearchParams();
   const urlId = searchParams.get('id');
   const activeId = urlId || initialId;
@@ -158,6 +160,12 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
       });
     }
   }, [userId]);
+
+  useEffect(() => {
+    if (isAdmin) {
+      setIsUnlocked(true);
+    }
+  }, [isAdmin]);
 
   const [techLevel, setTechLevel] = useState(learnSkill && learnNiche ? 'Learn to Code' : 'No-Code');
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -496,10 +504,10 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
             user_id: userId,
             idea_prompt: promptToUse,
             blueprint_markdown: fullText,
-            is_unlocked: isUserPro
+            is_unlocked: isUserPro || isAdmin
           });
           
-          if (isUserPro) {
+          if (isUserPro || isAdmin) {
             setIsUnlocked(true);
           }
         } catch (dbErr) {
