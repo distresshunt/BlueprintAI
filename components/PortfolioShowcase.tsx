@@ -17,7 +17,7 @@ export function PortfolioShowcase() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           {showcaseData.map((app) => {
             const isPurple = app.theme.includes('purple');
             const isAmber = app.theme.includes('amber');
