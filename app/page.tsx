@@ -54,7 +54,7 @@ export default async function Home(props: { searchParams: Promise<{ [key: string
             </h1>
             <p className="text-slate-500 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
               SYSTEM ONLINE. INITIALIZE MV_PROTOCOL. <br className="hidden sm:block" />
-              Transform raw concepts into actionable 5-phase indie hacker launch plans.
+              Transform raw concepts into actionable 6-Phase indie hacker launch plans.
             </p>
           </header>
 

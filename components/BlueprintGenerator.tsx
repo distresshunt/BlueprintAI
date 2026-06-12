@@ -138,7 +138,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
             setIdea(data.idea_prompt);
             setBlueprint(data.blueprint_markdown);
             if (data.is_unlocked) {
-              setBypassPaywall(true);
+              setIsUnlocked(true);
             }
           }
         } catch (err) {
@@ -149,8 +149,18 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
     }
   }, [activeId]);
 
+  useEffect(() => {
+    if (userId) {
+      supabase.from('profiles').select('is_pro').eq('user_id', userId).single().then(({ data }) => {
+        if (data?.is_pro) {
+          setIsUnlocked(true);
+        }
+      });
+    }
+  }, [userId]);
+
   const [techLevel, setTechLevel] = useState(learnSkill && learnNiche ? 'Learn to Code' : 'No-Code');
-  const [bypassPaywall, setBypassPaywall] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(false);
 
   const [isBrainstormOpen, setIsBrainstormOpen] = useState(false);
   const [brainstormMessages, setBrainstormMessages] = useState<any[]>([]);
@@ -479,12 +489,19 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
       
       if (userId) {
         try {
+          const { data: profile } = await supabase.from('profiles').select('is_pro').eq('user_id', userId).single();
+          const isUserPro = profile?.is_pro === true;
+
           await supabase.from('blueprints').insert({
             user_id: userId,
             idea_prompt: promptToUse,
             blueprint_markdown: fullText,
-            is_unlocked: false
+            is_unlocked: isUserPro
           });
+          
+          if (isUserPro) {
+            setIsUnlocked(true);
+          }
         } catch (dbErr) {
           console.error("Failed to save to Supabase", dbErr);
         }
@@ -514,7 +531,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
       text = text.replace(/```(a2a|cursorrules)\n[\s\S]*?```/, '');
     }
 
-    if (bypassPaywall) {
+    if (isUnlocked) {
       free = text;
       premium = '';
     } else {
@@ -790,7 +807,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
 
             {premium && (
               <div className="relative mt-12 rounded-xl group overflow-hidden">
-                {!bypassPaywall && (
+                {!isUnlocked && (
                   <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none p-4 pb-20">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-full max-w-4xl pointer-events-auto">
                     {/* Left Card */}
@@ -869,9 +886,9 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                 </div>
                 )}
                 
-                {!bypassPaywall && <div className="absolute inset-0 z-10 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-transparent"></div>}
+                {!isUnlocked && <div className="absolute inset-0 z-10 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-transparent"></div>}
                 
-                <div className={`prose prose-invert prose-cyan max-w-none p-4 ${!bypassPaywall ? 'blur-md select-none opacity-60 pointer-events-none' : ''}
+                <div className={`prose prose-invert prose-cyan max-w-none p-4 ${!isUnlocked ? 'blur-md select-none opacity-60 pointer-events-none' : ''}
                   prose-headings:font-sans prose-headings:font-bold prose-headings:tracking-tight 
                   prose-h2:border-l-4 prose-h2:border-cyan-500 prose-h2:pl-4 prose-h2:mb-4 prose-h2:text-2xl prose-h2:text-white
                   prose-p:text-slate-300 prose-p:font-serif prose-p:text-sm prose-p:leading-relaxed
@@ -910,10 +927,10 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                   </ReactMarkdown>
                 </div>
                 
-                {!bypassPaywall && (
+                {!isUnlocked && (
                   <div className="relative z-30 mt-2 pb-6 text-center">
                     <button 
-                      onClick={() => setBypassPaywall(true)}
+                      onClick={() => setIsUnlocked(true)}
                       className="text-[10px] text-slate-500 hover:text-slate-300 hover:underline transition-colors font-mono uppercase tracking-widest cursor-pointer pointer-events-auto"
                     >
                       Bypass Paywall (Admin Mode)
@@ -1044,10 +1061,10 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                 </div>
                 <div className="flex-1 p-4 sm:p-6 relative">
                   <textarea 
-                    className="w-full h-full bg-slate-900/50 border border-cyan-500/30 rounded-xl p-4 text-sm leading-relaxed text-cyan-50 font-mono resize-none focus:outline-none focus:border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.05)] transition-colors"
+                    className="w-full h-full min-h-[300px] bg-slate-900/50 border border-cyan-500/30 rounded-xl p-4 text-sm leading-relaxed text-cyan-50 font-mono resize-y focus:outline-none focus:border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.05)] transition-colors"
                     value={liveDraft}
                     onChange={(e) => setLiveDraft(e.target.value)}
-                    placeholder="Chat with your AI Co-Founder to engineer the perfect 4-pillar prompt..."
+                    placeholder="Chat with your AI Co-Founder to engineer the perfect 6-Pillar prompt..."
                   />
                 </div>
                 <div className="p-4 sm:p-6 border-t border-slate-800 bg-slate-950/60">

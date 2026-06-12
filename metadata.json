@@ -1,6 +1,6 @@
 {
   "name": "BlueprintAI",
-  "description": "Generate a 4-phase SaaS product MVP blueprint from your idea, customized for indie hackers.",
+  "description": "Generate a 6-Phase SaaS product MVP blueprint from your idea, customized for indie hackers.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

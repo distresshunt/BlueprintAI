@@ -15,7 +15,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: 'BlueprintAI',
-  description: 'Generate a 4-phase SaaS product MVP blueprint from your idea.',
+  description: 'Generate a 6-Phase SaaS product MVP blueprint from your idea.',
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
@@ -37,7 +37,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
                   "price": "29.00",
                   "priceCurrency": "USD"
                 },
-                "description": "An AI Tech Lead that generates 5-phase SaaS launch blueprints and .cursorrules architecture files for developers and indie hackers."
+                "description": "An AI Tech Lead that generates 6-Phase SaaS launch blueprints and .cursorrules architecture files for developers and indie hackers."
               })
             }}
           />

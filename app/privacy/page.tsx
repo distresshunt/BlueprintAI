@@ -62,7 +62,7 @@ export default function PrivacyPage() {
                 We use the information we collect to operate, maintain, and improve our services, including to:
               </p>
               <ul className="list-disc pl-5 mt-2 space-y-1 text-slate-400">
-                <li>Generate and customize 4-phase launch blueprints and developer prompts.</li>
+                <li>Generate and customize 6-Phase launch blueprints and developer prompts.</li>
                 <li>Manage user subscriptions and facilitate secure Stripe billing.</li>
                 <li>Analyze system performance, prevent abuse, and safeguard platform security.</li>
                 <li>Communicate critical product updates, system alerts, or billing information.</li>

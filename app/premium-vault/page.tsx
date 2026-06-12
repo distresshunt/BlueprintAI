@@ -86,11 +86,18 @@ function VaultContent() {
             }
             
             if (userId) {
+              // Mark user as Pro
+              supabase
+                .from('profiles')
+                .upsert({ user_id: userId, is_pro: true })
+                .then(({ error: profileError }) => {
+                  if (profileError) console.error("Failed to mark as Pro:", profileError);
+                });
+
               // Optimistic Unlock in background
               supabase
                 .from('blueprints')
                 .update({ is_unlocked: true })
-                .eq('id', id)
                 .eq('user_id', userId)
                 .then(({ error: unlockError }) => {
                   if (unlockError) {

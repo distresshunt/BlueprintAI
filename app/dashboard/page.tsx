@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, UserButton } from '@clerk/nextjs';
 import { supabase } from '@/lib/supabase';
-import { Zap, Lock, Unlock, ArrowLeft, LayoutDashboard, FolderOpen, Trash2, Search } from 'lucide-react';
+import { Zap, Lock, Unlock, ArrowLeft, LayoutDashboard, FolderOpen, Trash2, Search, Copy } from 'lucide-react';
 import Link from 'next/link';
 import { LegalFooter } from '@/components/LegalFooter';
 
@@ -226,7 +226,29 @@ export default function DashboardPage() {
                         </h3>
                       </div>
 
-                      <div className="absolute bottom-4 right-4 z-30 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {isUnlocked && (
+                        <div className="mt-4 pt-4 border-t border-slate-800/50 flex flex-col gap-2 relative z-30" onClick={(e) => e.preventDefault()}>
+                          <div className="text-[10px] uppercase font-mono tracking-widest text-slate-500 flex items-center justify-between">
+                            <span>A2A Sync ID</span>
+                          </div>
+                          <div className="flex items-center justify-between bg-slate-950/80 border border-slate-800 rounded p-1.5 pl-3 group/copy hover:border-cyan-500/30 transition-colors">
+                            <code className="text-[10px] font-mono text-cyan-500/70 truncate mr-2">{bp.id}</code>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                navigator.clipboard.writeText(bp.id);
+                              }}
+                              className="p-1.5 bg-slate-900 hover:bg-slate-800 rounded text-slate-400 hover:text-cyan-400 transition-colors shrink-0 flex items-center gap-1.5 border border-slate-800"
+                              title="Copy CLI Key"
+                            >
+                              <Copy className="w-3.5 h-3.5" />
+                              <span className="text-[10px] font-mono uppercase">Copy Key</span>
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="absolute top-4 right-4 z-30 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button 
                           onClick={(e) => handleDelete(e, bp.id)}
                           className="p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 hover:text-red-400 transition-colors border border-red-500/20"
