@@ -26,10 +26,14 @@ export async function GET(request: Request) {
 
     const markdown = data.blueprint_markdown;
 
-    // Extract .clinerules or .cursorrules or .windsurfrules codeblock
-    const a2aRegex = /```(?:a2a|cursorrules|clinerules|windsurfrules)\n([\s\S]*?)```/i;
-    const a2aMatch = markdown.match(a2aRegex);
-    let agent_directives = a2aMatch ? a2aMatch[1].trim() : 'No A2A directives found in this blueprint.';
+    // Extract Agent-to-Agent Rules via [PROJECT_CONTEXT]
+    const rulesMatch = markdown.match(/```(?:markdown|text)?\s*([\s\S]*?\[PROJECT_CONTEXT\][\s\S]*?)\s*```/i);
+    let agent_directives = rulesMatch ? rulesMatch[1].trim() : null;
+
+    if (!agent_directives) {
+      const fallbackMatch = markdown.match(/(\[PROJECT_CONTEXT\][\s\S]*?)\s*```/i);
+      agent_directives = fallbackMatch ? fallbackMatch[1].trim() : 'No A2A directives found in this blueprint.';
+    }
 
     // Extract Phase 0 (Tech Stack)
     const phase0Regex = /\*\*Phase 0.*?\*\*\n([\s\S]*?)(?=\*\*Phase 1|\*\*Phase 2)/i;

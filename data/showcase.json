@@ -3,7 +3,7 @@
     "slug": "agent-hired",
     "name": "AgentHired",
     "tagline": "The premier marketplace to buy and sell custom .cursorrules and AI Agent configurations.",
-    "theme": "zinc-950 border-purple-500/30 text-purple-400 text-shadow-purple",
+    "theme": "zinc-950 border-purple-500/30 text-purple-400",
     "one_time_link": "https://distresshunter.gumroad.com/l/vjowjj?wanted=true",
     "sub_link": "https://distresshunter.gumroad.com/l/pbhwbn?wanted=true"
   },
@@ -11,7 +11,7 @@
     "slug": "launch-copy",
     "name": "LaunchCopy AI",
     "tagline": "Turn your SaaS blueprint into 30 days of viral Twitter threads, Product Hunt launches, and cold emails.",
-    "theme": "slate-900 border-amber-500/30 text-amber-400 text-shadow-amber",
+    "theme": "slate-900 border-amber-500/30 text-amber-400",
     "one_time_link": "https://distresshunter.gumroad.com/l/vjowjj?wanted=true",
     "sub_link": "https://distresshunter.gumroad.com/l/pbhwbn?wanted=true"
   },
@@ -19,7 +19,7 @@
     "slug": "schema-sync",
     "name": "SchemaSync",
     "tagline": "Instantly deploy your BlueprintAI database schemas and RLS policies directly to your Supabase project.",
-    "theme": "zinc-900 border-emerald-400/30 text-emerald-400 text-shadow-emerald",
+    "theme": "zinc-900 border-emerald-400/30 text-emerald-400",
     "one_time_link": "https://distresshunter.gumroad.com/l/vjowjj?wanted=true",
     "sub_link": "https://distresshunter.gumroad.com/l/pbhwbn?wanted=true"
   },
@@ -27,7 +27,7 @@
     "slug": "clout-finder",
     "name": "CloutFinder",
     "tagline": "AI-powered search engine for DTC brands to locate high-converting, hyper-niche micro-influencers.",
-    "theme": "zinc-950 border-blue-500/30 text-blue-400 text-shadow-blue",
+    "theme": "zinc-950 border-blue-500/30 text-blue-400",
     "one_time_link": "https://distresshunter.gumroad.com/l/vjowjj?wanted=true",
     "sub_link": "https://distresshunter.gumroad.com/l/pbhwbn?wanted=true"
   }
