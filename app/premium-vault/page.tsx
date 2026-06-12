@@ -8,8 +8,10 @@ import Link from 'next/link';
 import { CodeBlock } from '@/components/CodeBlock';
 import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@clerk/nextjs';
 
 function VaultContent() {
+  const { userId } = useAuth();
   const [blueprintData, setBlueprintData] = useState<string>('');
   const [isLocked, setIsLocked] = useState<boolean>(false);
   const [chatMessage, setChatMessage] = useState('');
@@ -82,6 +84,20 @@ function VaultContent() {
             if (data.blueprint_markdown) {
               setBlueprintData(data.blueprint_markdown);
             }
+            
+            if (userId) {
+              // Optimistic Unlock in background
+              supabase
+                .from('blueprints')
+                .update({ is_unlocked: true })
+                .eq('id', id)
+                .eq('user_id', userId)
+                .then(({ error: unlockError }) => {
+                  if (unlockError) {
+                    console.error("Silent unlock failed:", unlockError);
+                  }
+                });
+            }
             return;
           }
         } catch (e) {
@@ -98,7 +114,7 @@ function VaultContent() {
     }
     
     loadData();
-  }, [id]);
+  }, [id, userId]);
 
   // Dwell Time Tracking
   useEffect(() => {
