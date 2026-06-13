@@ -627,6 +627,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
             placeholder={idea.length > 0 ? '' : (placeholder || "\u00A0")}
             className="w-full h-40 min-h-[120px] max-h-[600px] bg-transparent p-6 pb-24 text-lg text-zinc-100 placeholder:text-zinc-500 focus:outline-none resize-y overflow-y-auto"
             disabled={loading}
+            aria-label="Business idea input"
           />
           <div className="absolute top-4 right-4 flex gap-2 pointer-events-none">
             <span className="text-[10px] bg-slate-800/80 px-2 py-1 rounded text-slate-400 font-mono tracking-tighter hidden sm:block backdrop-blur-sm">PRO ENGINE v4.2</span>
@@ -638,11 +639,13 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                 onClick={startRecording}
                 className={`p-2 rounded-lg transition-all ${isRecording ? 'text-red-500 bg-red-900/20 animate-pulse' : 'text-slate-400 hover:text-cyan-400 hover:bg-slate-800'}`}
                 title="Use Voice Input"
+                aria-label="Start voice typing"
               >
                 <Mic className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setIsHowToPromptOpen(true)}
+                aria-label="View prompt instructions"
                 className="px-3 py-1.5 bg-slate-800/80 hover:bg-slate-700 border border-slate-700/50 text-slate-300 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 shadow-sm backdrop-blur-sm"
                 title="How to Prompt"
               >

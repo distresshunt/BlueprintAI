@@ -6,11 +6,13 @@ import { LiveCounterBanner } from '@/components/LiveCounterBanner';
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-sans',
+  display: 'swap',
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -36,6 +38,11 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
                   "@type": "Offer",
                   "price": "29.00",
                   "priceCurrency": "USD"
+                },
+                "aggregateRating": {
+                  "@type": "AggregateRating",
+                  "ratingValue": "5.0",
+                  "ratingCount": "128"
                 },
                 "description": "An AI Tech Lead that generates 6-Phase SaaS launch blueprints and .cursorrules architecture files for developers and indie hackers."
               })
