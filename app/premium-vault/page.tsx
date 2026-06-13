@@ -23,6 +23,67 @@ function VaultContent() {
   const [isRecording, setIsRecording] = useState(false);
   const [micError, setMicError] = useState('');
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+  const [isGithubLoading, setIsGithubLoading] = useState(false);
+  const [githubRepoUrl, setGithubRepoUrl] = useState('');
+  const [githubError, setGithubError] = useState('');
+
+  const githubAccount = user?.externalAccounts?.find(a => (a.provider as string) === 'oauth_github');
+  const githubUsername = githubAccount?.username || githubAccount?.emailAddress;
+
+  const connectGitHub = async () => {
+    try {
+      const res = await user?.createExternalAccount({ strategy: 'oauth_github', redirectUrl: window.location.href });
+      if (res?.verification?.externalVerificationRedirectURL) {
+        window.location.href = res.verification.externalVerificationRedirectURL.href;
+      }
+    } catch (err: any) {
+      setGithubError(err.message || 'Failed to connect GitHub');
+    }
+  };
+
+  const initializeGithubRepo = async () => {
+    setIsGithubLoading(true);
+    setGithubError('');
+    setGithubRepoUrl('');
+
+    try {
+      const appNameMatch = blueprintData.match(/#\s+(.+)/);
+      const appName = appNameMatch ? appNameMatch[1] : 'blueprint-app';
+
+      let clinerules = '';
+      const clrMatch = blueprintData.match(/```(?:markdown|text|)[ \t]*(?:\n|\r\n)([\s\S]*?\[PROJECT_CONTEXT\][\s\S]*?)```/i);
+      if (clrMatch) {
+         clinerules = clrMatch[1].trim();
+      }
+
+      let schema = '';
+      const sqlMatch = blueprintData.match(/```sql([\s\S]*?)```/i);
+      if (sqlMatch) {
+        schema = sqlMatch[1].trim();
+      }
+
+      const res = await fetch('/api/github-init', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          appName,
+          clinerules,
+          schema
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to initialize repo');
+      }
+
+      setGithubRepoUrl(data.url);
+    } catch (err: any) {
+      setGithubError(err.message);
+    } finally {
+      setIsGithubLoading(false);
+    }
+  };
 
   const cliCommands = useMemo(() => {
     if (!blueprintData) return [];
@@ -277,6 +338,63 @@ function VaultContent() {
           </div>
         </div>
       )}
+
+      {/* GitHub Integration */}
+      <div className="mb-8 p-6 bg-slate-900/50 backdrop-blur-md border border-zinc-800 rounded-xl shadow-2xl flex flex-col gap-4">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
+            <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="font-bold text-white text-base tracking-tight">GitHub 1-Click Repo Initializer</h3>
+            <p className="text-xs text-zinc-400">Instantly deploy your generated architecture (.clinerules and schema.sql) to a new private repository.</p>
+          </div>
+        </div>
+        
+        {githubRepoUrl ? (
+          <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
+            <p className="text-emerald-400 font-semibold mb-2">✅ Repository initialized successfully!</p>
+            <a href={githubRepoUrl} target="_blank" rel="noopener noreferrer" className="text-emerald-300 underline text-sm hover:text-emerald-200">
+              {githubRepoUrl}
+            </a>
+          </div>
+        ) : !githubAccount ? (
+          <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+            <div>
+              <p className="text-sm text-zinc-300 font-medium">Connect your GitHub Account</p>
+              <p className="text-xs text-zinc-500">Securely link your account via Clerk to enable 1-Click deployments.</p>
+            </div>
+            <button
+              onClick={connectGitHub}
+              className="bg-zinc-800 hover:bg-zinc-700 text-white font-semibold py-2 px-6 rounded-lg transition-all shrink-0 border border-zinc-700 hover:border-zinc-500"
+            >
+              Connect GitHub
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-4 bg-cyan-950/20 rounded-lg border border-cyan-900/50">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-700">
+                <img src={githubAccount.imageUrl} alt="GitHub Avatar" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <p className="text-sm text-zinc-300 font-medium">Connected as <span className="text-white font-bold">{githubUsername}</span></p>
+                <p className="text-xs text-zinc-500">Ready for 1-Click Deployment.</p>
+              </div>
+            </div>
+            <button
+              onClick={initializeGithubRepo}
+              disabled={isGithubLoading}
+              className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2.5 px-6 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] whitespace-nowrap"
+            >
+              {isGithubLoading ? 'Creating repository and injecting files...' : '🚀 1-Click Deploy to GitHub'}
+            </button>
+          </div>
+        )}
+        {githubError && <p className="text-xs text-red-400 mt-1">{githubError}</p>}
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         
