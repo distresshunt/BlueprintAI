@@ -15,12 +15,16 @@ export async function POST(req: NextRequest) {
     }
 
     const client = await clerkClient();
+    console.log("Attempting to fetch GitHub token for user:", userId);
     const { data } = await client.users.getUserOauthAccessToken(userId, 'oauth_github');
     const token = data[0]?.token;
 
     if (!token) {
+      console.error("❌ Failed to retrieve GitHub token. Did the user link their account?");
       return NextResponse.json({ error: 'GitHub account not linked. Please connect your GitHub account.' }, { status: 401 });
     }
+    
+    console.log("✅ GitHub Token retrieved successfully!");
 
     const sanitizedName = appName.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'blueprint-app';
 

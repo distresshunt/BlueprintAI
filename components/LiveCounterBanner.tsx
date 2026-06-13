@@ -20,7 +20,7 @@ export function LiveCounterBanner() {
 
     fetchCount();
 
-    const isBot = /bot|googlebot|crawler|spider|robot|crawling|Lighthouse/i.test(navigator.userAgent);
+    const isBot = /bot|googlebot|crawler|spider|robot|crawling|Lighthouse|Chrome-Lighthouse|HeadlessChrome/i.test(navigator.userAgent);
     if (isBot) {
       return; // Skip WebSocket connection entirely for performance bots
     }
