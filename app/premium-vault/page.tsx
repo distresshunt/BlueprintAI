@@ -275,16 +275,37 @@ function VaultContent() {
     recognition.start();
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatMessage.trim()) return;
     
-    setChatHistory(prev => [...prev, { role: 'user', content: chatMessage }]);
+    const userMsg = chatMessage.trim();
+    const updatedHistory = [...chatHistory, { role: 'user', content: userMsg }];
+    // @ts-ignore
+    setChatHistory(updatedHistory);
     setChatMessage('');
     
-    setTimeout(() => {
-      setChatHistory(prev => [...prev, { role: 'ai', content: "I'm analyzing your blueprint context. Let's tackle that together. What specific phase are you looking at?" }]);
-    }, 1000);
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: updatedHistory.map(m => ({
+            sender: m.role,
+            text: m.content
+          }))
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data.text) {
+        setChatHistory(prev => [...prev, { role: 'ai', content: data.text }]);
+      } else {
+        throw new Error(data.error || 'Failed to fetch response');
+      }
+    } catch (error) {
+      console.error(error);
+      setChatHistory(prev => [...prev, { role: 'ai', content: "I'm having trouble connecting to my neural net right now." }]);
+    }
   };
 
   return (
@@ -521,7 +542,44 @@ function VaultContent() {
                       ? 'bg-cyan-500 text-black font-medium' 
                       : 'bg-slate-800 text-slate-300 border border-slate-700'
                   }`}>
-                    {msg.content}
+                    {msg.content.startsWith('[FILE_DOWNLOAD:') ? (
+                      (() => {
+                        const lines = msg.content.split('\n');
+                        const firstLine = lines[0];
+                        const filenameMatch = firstLine.match(/\[FILE_DOWNLOAD:\s*(.*?)\]/);
+                        const filename = filenameMatch ? filenameMatch[1].trim() : 'download.txt';
+                        const content = lines.slice(1).join('\n');
+                        return (
+                          <div className="flex flex-col gap-2">
+                            <p className="text-xs text-emerald-400 font-mono tracking-widest uppercase">Generated File:</p>
+                            <button
+                              onClick={() => {
+                                const blob = new Blob([content], { type: 'text/plain' });
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = filename;
+                                a.click();
+                                URL.revokeObjectURL(url);
+                              }}
+                              className="bg-cyan-500/20 border border-cyan-500/50 hover:bg-cyan-500 hover:text-black text-cyan-400 font-bold py-2 px-4 rounded-lg transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center justify-center gap-2"
+                            >
+                              <span>⬇️</span> Download {filename}
+                            </button>
+                          </div>
+                        );
+                      })()
+                    ) : (
+                      <ReactMarkdown 
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          pre: CodeBlock,
+                          a: ({ node, ...props }: any) => <a {...props} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline" />
+                        }}
+                      >
+                        {msg.content}
+                      </ReactMarkdown>
+                    )}
                   </div>
                 </div>
               ))}
