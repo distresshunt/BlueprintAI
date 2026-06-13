@@ -9,11 +9,13 @@ import { CodeBlock } from '@/components/CodeBlock';
 import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useAuth, useUser } from '@clerk/nextjs';
+import { Sandpack } from '@codesandbox/sandpack-react';
 
 function VaultContent() {
   const { userId } = useAuth();
   const { user } = useUser();
   const isAdmin = user?.emailAddresses?.[0]?.emailAddress === 'exoscommand@gmail.com';
+  const [activeTab, setActiveTab] = useState<'blueprint' | 'workspace'>('blueprint');
   const [blueprintData, setBlueprintData] = useState<string>('');
   const [isLocked, setIsLocked] = useState<boolean>(false);
   const [chatMessage, setChatMessage] = useState('');
@@ -382,40 +384,80 @@ function VaultContent() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         
-        {/* Left Column: Markdown Blueprint */}
+        {/* Left Column: Markdown Blueprint / Sandpack Workspace */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 md:p-10 shadow-2xl backdrop-blur-xl">
-            <h2 className="text-2xl font-bold text-white mb-6 uppercase tracking-widest font-mono border-b border-slate-800 pb-4">Your MVP Blueprint</h2>
-            <div className="prose prose-invert prose-cyan max-w-none prose-p:text-slate-400 prose-headings:text-slate-200">
-              <ReactMarkdown 
-                remarkPlugins={[remarkGfm]}
-                components={{ 
-                  pre: CodeBlock,
-                  a: ({ node, ...props }: any) => (
-                    <a
-                      {...props}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-cyan-400 hover:text-cyan-300 underline font-medium"
-                    />
-                  ),
-                  input: ({ node, checked, ...props }: any) => {
-                    if (props.type === 'checkbox') {
-                      return (
-                        <input 
-                          type="checkbox" 
-                          defaultChecked={checked}
-                          className="w-4 h-4 text-cyan-500 rounded border-slate-700 bg-slate-800 focus:ring-cyan-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1" 
-                        />
-                      );
+          <div className="flex items-center gap-2 mb-4">
+            <button
+              onClick={() => setActiveTab('blueprint')}
+              className={`px-4 py-2 rounded-t-lg font-bold text-sm uppercase tracking-widest transition-colors ${
+                activeTab === 'blueprint' 
+                  ? 'bg-slate-900 text-cyan-400 border-t border-x border-slate-800' 
+                  : 'bg-transparent text-slate-500 hover:text-slate-300'
+              }`}
+            >
+              Architecture Blueprint
+            </button>
+            <button
+              onClick={() => setActiveTab('workspace')}
+              className={`px-4 py-2 rounded-t-lg font-bold text-sm uppercase tracking-widest transition-colors ${
+                activeTab === 'workspace' 
+                  ? 'bg-slate-900 text-cyan-400 border-t border-x border-slate-800' 
+                  : 'bg-transparent text-slate-500 hover:text-slate-300'
+              }`}
+            >
+              Live Code Workspace
+            </button>
+          </div>
+
+          <div className="bg-slate-900/50 border border-slate-800 rounded-2xl rounded-tl-none p-6 md:p-10 shadow-2xl backdrop-blur-xl min-h-[600px]">
+            {activeTab === 'blueprint' ? (
+              <div className="prose prose-invert prose-cyan max-w-none prose-p:text-slate-400 prose-headings:text-slate-200">
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={{ 
+                    pre: CodeBlock,
+                    a: ({ node, ...props }: any) => (
+                      <a
+                        {...props}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-cyan-400 hover:text-cyan-300 underline font-medium"
+                      />
+                    ),
+                    input: ({ node, checked, ...props }: any) => {
+                      if (props.type === 'checkbox') {
+                        return (
+                          <input 
+                            type="checkbox" 
+                            defaultChecked={checked}
+                            className="w-4 h-4 text-cyan-500 rounded border-slate-700 bg-slate-800 focus:ring-cyan-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1" 
+                          />
+                        );
+                      }
+                      return <input {...props} />;
                     }
-                    return <input {...props} />;
+                  }}
+                >
+                  {blueprintData}
+                </ReactMarkdown>
+              </div>
+            ) : (
+              <Sandpack
+                template="nextjs"
+                theme="dark"
+                options={{
+                  showNavigator: true,
+                  showTabs: true,
+                  editorHeight: 600,
+                  classes: {
+                    "sp-wrapper": "custom-sandpack-wrapper rounded-xl border border-zinc-800 shadow-2xl",
                   }
                 }}
-              >
-                {blueprintData}
-              </ReactMarkdown>
-            </div>
+                files={{
+                  "/app/page.tsx": `export default function Home() {\n  return (\n    <main className="min-h-screen bg-zinc-950 text-white flex items-center justify-center p-24">\n      <h1 className="text-4xl font-bold text-cyan-400">BlueprintAI Workspace Initialized</h1>\n    </main>\n  );\n}`,
+                }}
+              />
+            )}
           </div>
           
           {/* Terminal Drawer */}
