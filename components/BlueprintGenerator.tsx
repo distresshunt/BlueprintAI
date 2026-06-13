@@ -432,8 +432,21 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
     recognition.start();
   };
 
-  const generateBlueprint = async (isPivot = false, pivotTechLevel = techLevel, pivotAiBuilder = aiBuilder) => {
-    const promptToUse = idea.trim() || placeholder.trim();
+  const ideaRef = useRef(idea);
+  const placeholderRef = useRef(placeholder);
+  const techLevelRef = useRef(techLevel);
+  const aiBuilderRef = useRef(aiBuilder);
+
+  useEffect(() => { ideaRef.current = idea; }, [idea]);
+  useEffect(() => { placeholderRef.current = placeholder; }, [placeholder]);
+  useEffect(() => { techLevelRef.current = techLevel; }, [techLevel]);
+  useEffect(() => { aiBuilderRef.current = aiBuilder; }, [aiBuilder]);
+
+  const generateBlueprint = async (isPivot = false, pivotTechLevel?: string, pivotAiBuilder?: string) => {
+    const finalTechLevel = pivotTechLevel || techLevelRef.current;
+    const finalAiBuilder = pivotAiBuilder || aiBuilderRef.current;
+    
+    const promptToUse = ideaRef.current.trim() || placeholderRef.current.trim();
     if (!promptToUse) return;
     
     setLoading(true);
@@ -441,14 +454,14 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
     
     if (isPivot) {
       setIsPivoting(true);
-      if (pivotTechLevel === 'No-Code') {
+      if (finalTechLevel === 'No-Code') {
         setLoadingMessage('Re-architecting for No-Code stack...');
-      } else if (pivotTechLevel === 'Learn to Code') {
+      } else if (finalTechLevel === 'Learn to Code') {
         setLoadingMessage('Simplifying architecture for learning...');
-      } else if (pivotAiBuilder === 'Antigravity') {
+      } else if (finalAiBuilder === 'Antigravity') {
         setLoadingMessage('Rewriting A2A rules for Antigravity...');
       } else {
-        setLoadingMessage(`Rewriting A2A rules for ${pivotAiBuilder}...`);
+        setLoadingMessage(`Rewriting A2A rules for ${finalAiBuilder}...`);
       }
     } else {
       setBlueprint('');
@@ -462,8 +475,8 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           prompt: promptToUse, 
-          aiBuilder: pivotTechLevel === 'No-Code' ? 'None' : pivotAiBuilder, 
-          techLevel: pivotTechLevel 
+          aiBuilder: finalTechLevel === 'No-Code' ? 'None' : finalAiBuilder, 
+          techLevel: finalTechLevel 
         }),
       });
       

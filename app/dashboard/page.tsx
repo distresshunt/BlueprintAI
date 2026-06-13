@@ -34,17 +34,23 @@ export default function DashboardPage() {
     async function fetchBlueprints() {
       if (!userId) return;
       setLoading(true);
-      const { data, error: fetchError } = await supabase
-        .from('blueprints')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+      
+      const [{ data: profile }, { data, error: fetchError }] = await Promise.all([
+        supabase.from('profiles').select('is_pro').eq('user_id', userId).single(),
+        supabase.from('blueprints').select('*').eq('user_id', userId).order('created_at', { ascending: false })
+      ]);
+      
+      const isPro = profile?.is_pro === true;
 
       if (fetchError) {
         console.error("Supabase Error: ", fetchError.message);
         setError(fetchError.message);
       } else {
-        setBlueprints(data || []);
+        const enhancedBlueprints = (data || []).map(bp => ({
+          ...bp,
+          is_unlocked: bp.is_unlocked || isPro
+        }));
+        setBlueprints(enhancedBlueprints);
       }
       setLoading(false);
     }
