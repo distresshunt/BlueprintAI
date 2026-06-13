@@ -8,10 +8,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { appName, clinerules, schema } = await req.json();
+    const { blueprintMarkdown } = await req.json();
 
-    if (!appName) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    if (!blueprintMarkdown) {
+      return NextResponse.json({ error: 'Missing blueprintMarkdown payload' }, { status: 400 });
+    }
+
+    const appNameMatch = blueprintMarkdown.match(/#\s+(.+)/);
+    const appName = appNameMatch ? appNameMatch[1].trim() : 'blueprint-app';
+
+    let clinerules = '';
+    const clrMatch = blueprintMarkdown.match(/```(?:markdown|text|)[ \t]*(?:\n|\r\n)([\s\S]*?\[PROJECT_CONTEXT\][\s\S]*?)```/i);
+    if (clrMatch) {
+       clinerules = clrMatch[1].trim();
+    }
+
+    let schema = '';
+    const sqlMatch = blueprintMarkdown.match(/```sql([\s\S]*?)```/i);
+    if (sqlMatch) {
+      schema = sqlMatch[1].trim();
     }
 
     const client = await clerkClient();

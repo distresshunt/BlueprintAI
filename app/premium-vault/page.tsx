@@ -41,43 +41,22 @@ function VaultContent() {
     }
   };
 
-  const initializeGithubRepo = async () => {
-    setIsGithubLoading(true);
-    setGithubError('');
-    setGithubRepoUrl('');
-
+  const handleGithubDeploy = async () => {
     try {
-      const appNameMatch = blueprintData.match(/#\s+(.+)/);
-      const appName = appNameMatch ? appNameMatch[1] : 'blueprint-app';
-
-      let clinerules = '';
-      const clrMatch = blueprintData.match(/```(?:markdown|text|)[ \t]*(?:\n|\r\n)([\s\S]*?\[PROJECT_CONTEXT\][\s\S]*?)```/i);
-      if (clrMatch) {
-         clinerules = clrMatch[1].trim();
-      }
-
-      let schema = '';
-      const sqlMatch = blueprintData.match(/```sql([\s\S]*?)```/i);
-      if (sqlMatch) {
-        schema = sqlMatch[1].trim();
-      }
-
+      setIsGithubLoading(true);
+      setGithubError('');
+      
       const res = await fetch('/api/github-init', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          appName,
-          clinerules,
-          schema
-        })
+        body: JSON.stringify({ blueprintMarkdown: blueprintData })
       });
-
+      
       const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to initialize repo');
-      }
-
+      if (!res.ok) throw new Error(data.error || 'Failed to deploy');
+      
       setGithubRepoUrl(data.url);
+      window.open(data.url, '_blank');
     } catch (err: any) {
       setGithubError(err.message);
     } finally {
@@ -117,6 +96,9 @@ function VaultContent() {
   
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
+  const sessionId = searchParams.get('session_id');
+  const isSuccess = searchParams.get('success') === 'true';
+  const showBanner = sessionId || isSuccess;
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const recognitionRef = useRef<any>(null);
@@ -306,15 +288,17 @@ function VaultContent() {
   return (
     <div className="min-h-screen bg-[#050507] text-slate-300 font-sans p-4 md:p-8">
       {/* Header */}
-      <header className="mb-8 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <CheckCircle className="text-emerald-400 w-6 h-6 shrink-0" />
-          <h1 className="text-emerald-400 font-bold text-lg md:text-xl tracking-tight">Payment Successful. Your Blueprint is unlocked.</h1>
-        </div>
-        <Link href="/dashboard" className="text-xs md:text-sm text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-widest font-mono shrink-0">
-          &larr; Back to Dashboard
-        </Link>
-      </header>
+      {showBanner && (
+        <header className="mb-8 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <CheckCircle className="text-emerald-400 w-6 h-6 shrink-0" />
+            <h1 className="text-emerald-400 font-bold text-lg md:text-xl tracking-tight">Payment Successful. Your Blueprint is unlocked.</h1>
+          </div>
+          <Link href="/dashboard" className="text-xs md:text-sm text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-widest font-mono shrink-0">
+            &larr; Back to Dashboard
+          </Link>
+        </header>
+      )}
 
       {/* A2A Sync Key */}
       {id && (
@@ -385,7 +369,7 @@ function VaultContent() {
               </div>
             </div>
             <button
-              onClick={initializeGithubRepo}
+              onClick={handleGithubDeploy}
               disabled={isGithubLoading}
               className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2.5 px-6 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] whitespace-nowrap"
             >
