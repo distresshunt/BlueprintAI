@@ -21,15 +21,28 @@ export function LiveCounterBanner() {
     fetchCount();
 
     // Realtime subscription
-    const channel = supabase
-      .channel('realtime-blueprints')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'blueprints' }, (payload) => {
-        setCount((prev) => prev + 1);
-      })
-      .subscribe();
+    let channel: any;
+    try {
+      channel = supabase
+        .channel('realtime-blueprints')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'blueprints' }, (payload) => {
+          setCount((prev) => prev + 1);
+        })
+        .subscribe((status, err) => {
+          if (err) {
+            // Silently catch WebSocket errors
+          }
+        });
+    } catch (err) {
+      // Silently catch setup errors
+    }
 
     return () => {
-      supabase.removeChannel(channel);
+      if (channel) {
+        try {
+          supabase.removeChannel(channel);
+        } catch (err) {}
+      }
     };
   }, []);
 
