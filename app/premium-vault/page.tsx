@@ -8,12 +8,13 @@ import Link from 'next/link';
 import { CodeBlock } from '@/components/CodeBlock';
 import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { useAuth, useUser } from '@clerk/nextjs';
+import { useAuth, useUser, useClerk } from '@clerk/nextjs';
 import { Sandpack } from '@codesandbox/sandpack-react';
 
 function VaultContent() {
   const { userId } = useAuth();
   const { user } = useUser();
+  const clerk = useClerk();
   const isAdmin = user?.emailAddresses?.[0]?.emailAddress === 'exoscommand@gmail.com';
   const [activeTab, setActiveTab] = useState<'blueprint' | 'workspace'>('blueprint');
   const [blueprintData, setBlueprintData] = useState<string>('');
@@ -27,26 +28,13 @@ function VaultContent() {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [isGithubLoading, setIsGithubLoading] = useState(false);
   const [githubRepoUrl, setGithubRepoUrl] = useState('');
-  const [githubError, setGithubError] = useState('');
 
   const githubAccount = user?.externalAccounts?.find(a => (a.provider as string) === 'oauth_github');
   const githubUsername = githubAccount?.username || githubAccount?.emailAddress;
 
-  const connectGitHub = async () => {
-    try {
-      const res = await user?.createExternalAccount({ strategy: 'oauth_github', redirectUrl: window.location.href });
-      if (res?.verification?.externalVerificationRedirectURL) {
-        window.location.href = res.verification.externalVerificationRedirectURL.href;
-      }
-    } catch (err: any) {
-      setGithubError(err.message || 'Failed to connect GitHub');
-    }
-  };
-
   const handleGithubDeploy = async () => {
     try {
       setIsGithubLoading(true);
-      setGithubError('');
       
       const res = await fetch('/api/github-init', {
         method: 'POST',
@@ -60,7 +48,8 @@ function VaultContent() {
       setGithubRepoUrl(data.url);
       window.open(data.url, '_blank');
     } catch (err: any) {
-      setGithubError(err.message);
+      console.error("Deploy failed:", err.message);
+      alert("Deploy failed: " + err.message);
     } finally {
       setIsGithubLoading(false);
     }
@@ -371,10 +360,10 @@ function VaultContent() {
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
             <div>
               <p className="text-sm text-zinc-300 font-medium">Connect your GitHub Account</p>
-              <p className="text-xs text-zinc-500">Securely link your account via Clerk to enable 1-Click deployments.</p>
+              <p className="text-xs text-zinc-500">Click to open your Account Settings, select 'Connected Accounts', and link your GitHub.</p>
             </div>
             <button
-              onClick={connectGitHub}
+              onClick={() => clerk.openUserProfile()}
               className="bg-zinc-800 hover:bg-zinc-700 text-white font-semibold py-2 px-6 rounded-lg transition-all shrink-0 border border-zinc-700 hover:border-zinc-500"
             >
               Connect GitHub
@@ -400,7 +389,6 @@ function VaultContent() {
             </button>
           </div>
         )}
-        {githubError && <p className="text-xs text-red-400 mt-1">{githubError}</p>}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
