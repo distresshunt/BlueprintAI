@@ -637,7 +637,7 @@ function VaultContent() {
             </button>
           </div>
 
-          <div className="bg-slate-900/50 border border-slate-800 rounded-2xl rounded-tl-none p-6 md:p-10 shadow-2xl backdrop-blur-xl min-h-[600px]">
+          <div className="p-6 md:p-10 min-h-[600px]">
             {activeTab === "blueprint" ? (
               <div className="flex flex-col gap-4">
                 {/* Mode Switcher UI */}
@@ -760,7 +760,7 @@ function VaultContent() {
                     </div>
                   )}
                   <div 
-                    className={`prose prose-invert prose-cyan max-w-none prose-p:text-slate-400 prose-headings:text-slate-200 transition-opacity duration-300 ${isRegenerating ? "opacity-50 pointer-events-none" : "opacity-100"}`}
+                    className={`prose prose-invert prose-cyan max-w-none prose-headings:font-bold prose-h1:text-cyan-400 prose-h2:text-zinc-200 prose-h3:text-cyan-500/80 prose-p:text-zinc-400 prose-p:leading-relaxed prose-li:text-zinc-400 prose-strong:text-zinc-300 bg-transparent transition-opacity duration-300 ${isRegenerating ? "opacity-50 pointer-events-none" : "opacity-100"}`}
                   onMouseUp={() => {
                     const selection = window.getSelection();
                     const text = selection?.toString().trim();

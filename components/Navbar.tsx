@@ -49,6 +49,9 @@ export function Navbar() {
                 <Plus className="w-4 h-4" /> <span className="hidden sm:inline">New Blueprint</span>
               </Link>
             )}
+            <Link href="/stack" className="text-xs uppercase tracking-widest font-sans font-semibold bg-cyan-500/10 hover:bg-cyan-500/20 px-3 py-1.5 rounded transition-colors text-cyan-400 border border-cyan-500/20 hidden sm:flex items-center gap-2">
+               Founder's Stack
+            </Link>
             <Link href="/dashboard" className="text-xs uppercase tracking-widest font-sans font-semibold bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded transition-colors text-white border border-white/10 hidden sm:flex items-center gap-2">
                My Blueprints
             </Link>

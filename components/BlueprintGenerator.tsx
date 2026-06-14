@@ -801,7 +801,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`w-full flex-1 bg-slate-900/30 border border-slate-800 rounded-2xl p-6 sm:p-8 overflow-hidden flex flex-col shadow-2xl relative transition-all duration-500 ${isPivoting ? 'opacity-50 pointer-events-none' : ''}`}
+            className={`w-full flex-1 p-6 sm:p-8 overflow-hidden flex flex-col relative transition-all duration-500 ${isPivoting ? 'opacity-50 pointer-events-none' : ''}`}
           >
             {isPivoting && (
               <div className="absolute inset-0 flex items-center justify-center z-50">
@@ -821,16 +821,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               </div>
             </div>
 
-            <div className="prose prose-invert prose-cyan max-w-none 
-              prose-headings:font-sans prose-headings:font-bold prose-headings:tracking-tight 
-              prose-h2:border-l-4 prose-h2:border-cyan-500 prose-h2:pl-4 prose-h2:mb-4 prose-h2:text-2xl prose-h2:text-white
-              prose-h3:text-white prose-h3:mt-8 prose-h3:text-lg prose-h3:font-semibold
-              prose-p:text-slate-300 prose-p:font-serif prose-p:text-sm prose-p:leading-relaxed
-              prose-li:text-slate-400 prose-li:font-mono prose-li:text-xs
-              prose-strong:text-cyan-400 prose-strong:uppercase prose-strong:font-sans prose-strong:text-xs prose-strong:tracking-widest
-              prose-code:text-cyan-200 prose-code:bg-white/5 border-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-              prose-pre:bg-slate-950 prose-pre:border prose-pre:border-slate-800 relative
-              prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline hover:prose-a:text-cyan-300 transition-colors"
+            <div className="prose prose-invert prose-cyan max-w-none prose-headings:font-bold prose-h1:text-cyan-400 prose-h2:text-zinc-200 prose-h3:text-cyan-500/80 prose-p:text-zinc-400 prose-p:leading-relaxed prose-li:text-zinc-400 prose-strong:text-zinc-300 bg-transparent"
               onCopy={handleCopyTrap}
             >
               <ReactMarkdown 

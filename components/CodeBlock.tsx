@@ -45,7 +45,7 @@ export const CodeBlock = ({ children, ...props }: any) => {
           {isCopied ? <Check className="text-emerald-400 w-4 h-4" /> : <Copy className="w-4 h-4" />}
         </button>
       </div>
-      <pre {...props}>
+      <pre className="bg-black border border-zinc-800 p-4 rounded-xl overflow-x-auto text-sm mt-0" {...props}>
         {children}
       </pre>
     </div>

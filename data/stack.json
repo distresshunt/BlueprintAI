@@ -1,0 +1,23 @@
+[
+  {
+    "category": "Payments & MoR",
+    "tools": [
+      { "name": "Stripe", "description": "The industry standard for developers.", "pros": "Maximum flexibility, lowest fees.", "cons": "Strict KYC, requires coding for complex logic.", "difficulty": "Hard", "url": "https://stripe.com" },
+      { "name": "Gumroad", "description": "Easiest way to sell digital products instantly.", "pros": "No ID required to launch, acts as Merchant of Record.", "cons": "High transaction fees.", "difficulty": "Easy", "url": "https://gumroad.com" }
+    ]
+  },
+  {
+    "category": "AI Coding Agents (IDEs)",
+    "tools": [
+      { "name": "Cursor", "description": "The most popular AI code editor.", "pros": "Familiar VS Code UI, amazing inline autocomplete.", "cons": "Can be overwhelming for non-coders.", "difficulty": "Medium", "url": "https://cursor.com" },
+      { "name": "Google Antigravity", "description": "Autonomous execution agent.", "pros": "Runs terminal commands, highly autonomous.", "cons": "Beta quirks, heavy resource usage.", "difficulty": "Hard", "url": "https://aistudio.google.com" }
+    ]
+  },
+  {
+    "category": "Databases & Auth",
+    "tools": [
+      { "name": "Supabase", "description": "Open source Firebase alternative.", "pros": "PostgreSQL power, built-in vector scaling.", "cons": "RLS policies have a learning curve.", "difficulty": "Medium", "url": "https://supabase.com" },
+      { "name": "Clerk", "description": "Drop-in authentication.", "pros": "Unbeatable Next.js integration, beautiful UI.", "cons": "Expensive at high scale.", "difficulty": "Easy", "url": "https://clerk.com" }
+    ]
+  }
+]
