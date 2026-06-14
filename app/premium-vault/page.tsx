@@ -624,8 +624,9 @@ function VaultContent() {
           <div className="bg-slate-900/50 border border-slate-800 rounded-2xl rounded-tl-none p-6 md:p-10 shadow-2xl backdrop-blur-xl min-h-[600px]">
             {activeTab === "blueprint" ? (
               <div className="flex flex-col gap-4">
-                {/* DVR Controls */}
-                <div className="flex items-center gap-4 bg-zinc-900/80 border border-zinc-800 rounded-lg px-4 py-3 backdrop-blur-md shadow-lg sticky top-0 z-10">
+                {/* DVR Controls & Chapter Bar */}
+                <div className="sticky top-0 z-40 bg-zinc-950/90 backdrop-blur-xl border-b border-zinc-800 pb-4 pt-4 mb-6 shadow-2xl -mx-6 px-6 md:-mx-10 md:px-10">
+                  <div className="flex items-center gap-4 bg-zinc-900/80 border border-zinc-800 rounded-lg px-4 py-3 shadow-lg">
                   <button onClick={() => { setDisplayedLength(0); setIsPlaying(false); setIsCompleted(false); }} className="text-zinc-400 hover:text-cyan-400 transition-colors cursor-pointer" title="Rewind to start">
                     <Rewind className="w-5 h-5" />
                   </button>
@@ -672,25 +673,32 @@ function VaultContent() {
                   >
                     {playbackSpeed}x
                   </button>
-                </div>
+                  </div>
 
-                <div className="flex flex-wrap gap-2 mt-1 px-2">
-                  {["Intro", "Phase 0", "Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5", "Phase 6"].map(phase => {
-                    const phaseIndex = phase === "Intro" ? 0 : blueprintData.indexOf(phase + ":");
-                    if (phase !== "Intro" && phaseIndex === -1) return null;
-                    return (
-                      <button
-                        key={phase}
-                        onClick={() => {
-                          setDisplayedLength(phaseIndex);
-                          setIsPlaying(false);
-                        }}
-                        className="text-[10px] font-mono font-bold px-2 py-1 bg-zinc-800/50 border border-zinc-700/50 rounded text-cyan-500/70 hover:bg-zinc-700 hover:text-cyan-400 transition-colors cursor-pointer uppercase tracking-wider"
-                      >
-                        {phase}
-                      </button>
-                    );
-                  })}
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {["Intro", "Phase 0", "Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5", "Phase 6"].map(phase => {
+                      const phaseIndex = phase === "Intro" ? 0 : blueprintData.indexOf(phase + ":");
+                      if (phase !== "Intro" && phaseIndex === -1) return null;
+                      return (
+                        <button
+                          key={phase}
+                          onClick={() => {
+                            setDisplayedLength(phaseIndex);
+                            setIsPlaying(false);
+                            setTimeout(() => {
+                              const mdContainer = document.querySelector(".prose");
+                              if (mdContainer) {
+                                mdContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                              }
+                            }, 100);
+                          }}
+                          className="text-[10px] font-mono font-bold px-2 py-1 bg-zinc-800/50 border border-zinc-700/50 rounded text-cyan-500/70 hover:bg-zinc-700 hover:text-cyan-400 transition-colors cursor-pointer uppercase tracking-wider"
+                        >
+                          {phase}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <div 
@@ -1008,22 +1016,50 @@ function VaultContent() {
                         );
                       })()
                     ) : (
-                      <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        components={{
-                          pre: CodeBlock,
-                          a: ({ node, ...props }: any) => (
-                            <a
-                              {...props}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-cyan-400 hover:underline"
-                            />
-                          ),
-                        }}
-                      >
-                        {msg.content}
-                      </ReactMarkdown>
+                      <>
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            pre: CodeBlock,
+                            a: ({ node, ...props }: any) => (
+                              <a
+                                {...props}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-cyan-400 hover:underline"
+                              />
+                            ),
+                          }}
+                        >
+                          {msg.content.replace("[RENDER_CONTROLS]", "")}
+                        </ReactMarkdown>
+                        {msg.content.includes("[RENDER_CONTROLS]") && (
+                          <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-slate-700/50">
+                            {["Intro", "Phase 0", "Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5", "Phase 6"].map(phase => {
+                              const phaseIndex = phase === "Intro" ? 0 : blueprintData.indexOf(phase + ":");
+                              if (phase !== "Intro" && phaseIndex === -1) return null;
+                              return (
+                                <button
+                                  key={phase}
+                                  onClick={() => {
+                                    setDisplayedLength(phaseIndex);
+                                    setIsPlaying(false);
+                                    setTimeout(() => {
+                                      const mdContainer = document.querySelector(".prose");
+                                      if (mdContainer) {
+                                         mdContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                      }
+                                    }, 100);
+                                  }}
+                                  className="text-[10px] font-mono font-bold px-2 py-1 bg-slate-900/50 border border-slate-700/50 rounded text-cyan-500/70 hover:bg-slate-800 hover:text-cyan-400 transition-colors cursor-pointer uppercase tracking-wider"
+                                >
+                                  {phase}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
