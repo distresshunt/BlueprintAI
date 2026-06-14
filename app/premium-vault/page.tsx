@@ -851,19 +851,18 @@ function VaultContent() {
                     A2A Sync Key
                   </h3>
                   <p className="text-xs text-zinc-500">
-                    Paste this ID into your local BlueprintAI CLI to sync directly
-                    with your IDE.
+                    Paste this command directly into your Cursor, Windsurf, or Antigravity terminal to automatically inject your architecture 'Skill'.
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-lg p-2 max-w-full overflow-hidden">
                 <code className="text-cyan-400 font-mono text-xs truncate select-all">
-                  {id}
+                  npx blueprintai-cli@latest init --id {id}
                 </code>
                 <button
-                  onClick={() => navigator.clipboard.writeText(id)}
+                  onClick={() => navigator.clipboard.writeText(`npx blueprintai-cli@latest init --id ${id}`)}
                   className="text-zinc-400 hover:text-white transition-colors shrink-0 p-1"
-                  title="Copy Sync ID"
+                  title="Copy Sync Command"
                 >
                   <Copy className="w-4 h-4" />
                 </button>
