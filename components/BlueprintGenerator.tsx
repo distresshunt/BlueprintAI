@@ -364,7 +364,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
     `An offline-first ${pSeoModel} that allows ${pSeoNiche} to track material yield and waste without an internet connection...`
   ] : defaultIdeas;
 
-  const inputRef = useRef<HTMLTextAreaElement>(null); // Attach this to the textarea/input!
+  const placeholderRef = useRef<HTMLSpanElement>(null); // Attach this to the fake placeholder span!
   const ideaIndex = useRef(0);
   const isDeleting = useRef(false);
   const currentText = useRef("");
@@ -382,8 +382,8 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
       }
 
       // DIRECT DOM UPDATE (Bypasses React Render Cycle)
-      if (inputRef.current) {
-        inputRef.current.placeholder = currentText.current || "\u00A0";
+      if (placeholderRef.current) {
+        placeholderRef.current.textContent = currentText.current || "\u00A0";
       }
 
       let speed = isDeleting.current ? 20 : 40; // Extremely fast and smooth
@@ -635,12 +635,14 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
           <span className="font-mono text-[10px] uppercase tracking-widest text-cyan-500/70 mb-2 block ml-1">&gt; INPUT_ARCHITECTURE_PARAMETERS_</span>
         )}
         <div className="relative group bg-slate-900/50 border-2 border-slate-800 focus-within:border-cyan-500/50 rounded-xl shadow-2xl transition-all w-full flex flex-col overflow-hidden">
+          <div className={`absolute top-0 left-0 w-full h-full p-6 pb-24 pointer-events-none text-zinc-500 overflow-hidden break-words whitespace-pre-wrap text-lg ${idea.length > 0 ? 'opacity-0' : 'opacity-100'}`} aria-hidden="true">
+            <span ref={placeholderRef}></span><span className="animate-pulse text-cyan-400 font-bold ml-0.5">|</span>
+          </div>
           <textarea
-            ref={inputRef}
             value={idea}
             onChange={(e) => setIdea(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full h-40 min-h-[120px] max-h-[600px] bg-transparent p-6 pb-24 text-lg text-zinc-100 placeholder:text-zinc-500 focus:outline-none resize-y overflow-y-auto"
+            className="w-full h-40 min-h-[120px] max-h-[600px] bg-transparent p-6 pb-24 text-lg text-zinc-100 focus:outline-none resize-y overflow-y-auto"
             disabled={loading}
             aria-label="Business idea input"
           />
