@@ -23,6 +23,7 @@ import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useAuth, useUser, useClerk } from "@clerk/nextjs";
 import { Sandpack } from "@codesandbox/sandpack-react";
+import { Navbar } from "@/components/Navbar";
 import { ResourceHub } from "@/components/ResourceHub";
 function VaultContent() {
   const { userId } = useAuth();
@@ -420,7 +421,10 @@ function VaultContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050507] text-slate-300 font-sans p-4 md:p-8">
+    <div className="flex flex-col min-h-screen bg-[#050507] text-slate-300 font-sans overflow-hidden">
+      <Navbar />
+      <main className="flex-1 p-4 sm:p-4 flex flex-col gap-4 overflow-y-auto">
+        <div className="max-w-7xl mx-auto w-full">
       {/* Header */}
       {showBanner && (
         <header className="mb-8 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-between">
@@ -861,7 +865,8 @@ function VaultContent() {
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

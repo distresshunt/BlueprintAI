@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { redirect } from "next/navigation";
+import { Navbar } from "@/components/Navbar";
 import { useAuth, UserButton } from '@clerk/nextjs';
 import { supabase } from '@/lib/supabase';
 import { Zap, Lock, Unlock, ArrowLeft, LayoutDashboard, FolderOpen, Trash2, Search, Copy } from 'lucide-react';
@@ -112,24 +113,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#050507] text-slate-300 font-sans">
-      <header className="h-16 border-b border-slate-800 flex items-center justify-between px-4 sm:px-8 bg-[#0a0a0f] shrink-0">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 bg-cyan-500 rounded flex items-center justify-center">
-              <Zap className="w-5 h-5 text-black" />
-            </div>
-            <span className="text-xl font-bold tracking-tighter text-white uppercase hidden sm:inline">
-              Blueprint<span className="text-cyan-400">AI</span>
-            </span>
-          </Link>
-        </div>
-        <div className="flex items-center gap-6">
-          <Link href="/" className="text-xs uppercase tracking-widest font-sans font-semibold bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded transition-colors text-white flex items-center gap-2">
-            <ArrowLeft className="w-4 h-4" /> <span className="hidden sm:inline">New Blueprint</span>
-          </Link>
-          <UserButton />
-        </div>
-      </header>
+      <Navbar />
 
       <main className="flex-1 p-4 sm:p-8 max-w-6xl mx-auto w-full">
         <div className="mb-8 border-b border-slate-800 pb-4">
