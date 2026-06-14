@@ -16,6 +16,7 @@ import {
   Play,
   Pause,
   FastForward,
+  Zap,
 } from "lucide-react";
 import Link from "next/link";
 import { CodeBlock } from "@/components/CodeBlock";
@@ -56,6 +57,8 @@ function VaultContent() {
   const [isGithubLoading, setIsGithubLoading] = useState(false);
   const [githubRepoUrl, setGithubRepoUrl] = useState("");
   const [sandboxCode, setSandboxCode] = useState<string>("");
+  const [highlightMenu, setHighlightMenu] = useState({ visible: false, x: 0, y: 0, text: '' });
+  const [isHighlightCopied, setIsHighlightCopied] = useState(false);
 
   const hasGithub =
     user?.externalAccounts?.some(
@@ -242,6 +245,15 @@ function VaultContent() {
     };
     window.addEventListener("update-sandbox", handleUpdateSandbox);
     return () => window.removeEventListener("update-sandbox", handleUpdateSandbox);
+  }, []);
+
+  useEffect(() => {
+    const handleGlobalClick = (e: MouseEvent) => {
+      if ((e.target as HTMLElement).closest('.highlight-menu')) return;
+      setHighlightMenu(prev => ({ ...prev, visible: false }));
+    };
+    window.addEventListener('mousedown', handleGlobalClick);
+    return () => window.removeEventListener('mousedown', handleGlobalClick);
   }, []);
 
   // Dwell Time Tracking
@@ -529,7 +541,24 @@ function VaultContent() {
                   </button>
                 </div>
 
-                <div className="prose prose-invert prose-cyan max-w-none prose-p:text-slate-400 prose-headings:text-slate-200">
+                <div 
+                  className="prose prose-invert prose-cyan max-w-none prose-p:text-slate-400 prose-headings:text-slate-200"
+                  onMouseUp={() => {
+                    const selection = window.getSelection();
+                    const text = selection?.toString().trim();
+                    if (text && selection && selection.rangeCount > 0) {
+                      const rect = selection.getRangeAt(0).getBoundingClientRect();
+                      setHighlightMenu({
+                        visible: true,
+                        x: rect.left + rect.width / 2,
+                        y: rect.top - 50,
+                        text
+                      });
+                    } else {
+                      setHighlightMenu(prev => ({ ...prev, visible: false }));
+                    }
+                  }}
+                >
                   <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
@@ -885,6 +914,53 @@ function VaultContent() {
           </div>
         </div>
         </div>
+        
+        {highlightMenu.visible && (
+          <div
+            className="highlight-menu fixed z-[100] flex items-center gap-1 bg-zinc-900 border border-zinc-700 shadow-2xl backdrop-blur-xl rounded-lg p-1.5 -translate-x-1/2 transition-all"
+            style={{ top: highlightMenu.y, left: highlightMenu.x }}
+          >
+            <button
+              onClick={() => {
+                setChatMessage("Can you explain this part: \n" + highlightMenu.text);
+                setHighlightMenu(prev => ({ ...prev, visible: false }));
+                // scroll to chat
+                chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="p-1.5 hover:bg-zinc-800 rounded text-cyan-400 transition-colors"
+              title="Ask AI"
+            >
+              <Bot className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => {
+                window.dispatchEvent(
+                  new CustomEvent('update-sandbox', { detail: { code: highlightMenu.text } })
+                );
+                alert("Code injected! Switch to the 'Live Code Workspace' tab to preview.");
+                setHighlightMenu(prev => ({ ...prev, visible: false }));
+              }}
+              className="p-1.5 hover:bg-zinc-800 rounded text-cyan-400 transition-colors"
+              title="To Workspace"
+            >
+              <Zap className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(highlightMenu.text);
+                setIsHighlightCopied(true);
+                setTimeout(() => {
+                  setIsHighlightCopied(false);
+                  setHighlightMenu(prev => ({ ...prev, visible: false }));
+                }, 1000);
+              }}
+              className="p-1.5 hover:bg-zinc-800 rounded text-zinc-400 transition-colors"
+              title="Copy"
+            >
+              {isHighlightCopied ? <CheckCircle className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+            </button>
+          </div>
+        )}
       </main>
     </div>
   );
