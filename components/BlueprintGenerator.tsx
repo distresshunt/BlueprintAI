@@ -170,6 +170,19 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
   const [techLevel, setTechLevel] = useState(learnSkill && learnNiche ? 'Learn to Code' : 'No-Code');
   const [isUnlocked, setIsUnlocked] = useState(false);
 
+  const handleCopyTrap = (e: React.ClipboardEvent) => {
+    if (!isUnlocked && !isAdmin) {
+      e.preventDefault();
+      const cheekyMessage = "🛑 Aha! Nice try. This Perfect Prompt is proprietary BlueprintAI architecture. Upgrade to Pro to copy and export our prompts: https://blueprintagent.dev";
+      
+      if (e.clipboardData) {
+        e.clipboardData.setData('text/plain', cheekyMessage);
+      }
+      
+      alert("🛑 Nice try! You need the Founder Tier to copy our proprietary prompts.");
+    }
+  };
+
   const [isBrainstormOpen, setIsBrainstormOpen] = useState(false);
   const [brainstormMessages, setBrainstormMessages] = useState<any[]>([]);
 
@@ -643,6 +656,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
             value={idea}
             onChange={(e) => setIdea(e.target.value)}
             onKeyDown={handleKeyDown}
+            onCopy={handleCopyTrap}
             className="w-full h-40 min-h-[120px] max-h-[600px] bg-transparent p-6 pb-24 text-lg text-zinc-100 focus:outline-none resize-y overflow-y-auto"
             disabled={loading}
             aria-label="Business idea input"
@@ -809,6 +823,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               prose-code:text-cyan-200 prose-code:bg-white/5 border-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
               prose-pre:bg-slate-950 prose-pre:border prose-pre:border-slate-800 relative
               prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline hover:prose-a:text-cyan-300 transition-colors"
+              onCopy={handleCopyTrap}
             >
               <ReactMarkdown 
                 remarkPlugins={[remarkGfm]}
@@ -1121,6 +1136,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                     className="w-full h-full min-h-[300px] bg-slate-900/50 border border-cyan-500/30 rounded-xl p-4 text-sm leading-relaxed text-cyan-50 font-mono resize-y focus:outline-none focus:border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.05)] transition-colors"
                     value={liveDraft}
                     onChange={(e) => setLiveDraft(e.target.value)}
+                    onCopy={handleCopyTrap}
                     placeholder="Chat with your AI Co-Founder to engineer the perfect 6-Pillar prompt..."
                   />
                 </div>
@@ -1313,6 +1329,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                     value={brainstormInput}
                     onChange={handleTextareaChange}
                     onKeyDown={handleTextareaKeyDown}
+                    onCopy={handleCopyTrap}
                     placeholder="Ask for custom ideas or refine details..."
                     className="resize-none min-h-[44px] max-h-[200px] overflow-y-auto w-full bg-transparent outline-none py-3 text-sm text-white placeholder:text-slate-600"
                     disabled={isBrainstormTyping}
