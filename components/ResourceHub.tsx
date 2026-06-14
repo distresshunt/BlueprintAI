@@ -54,7 +54,7 @@ export function ResourceHub({ blueprintMarkdown }: ResourceHubProps) {
         </div>
       </summary>
       <div className="p-5 pt-0 border-t border-zinc-800/50 bg-slate-900/20">
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
           {uniqueLinksList.map((link, idx) => (
             <a
               key={idx}
