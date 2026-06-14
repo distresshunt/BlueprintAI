@@ -170,13 +170,17 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
   const [techLevel, setTechLevel] = useState(learnSkill && learnNiche ? 'Learn to Code' : 'No-Code');
   const [isUnlocked, setIsUnlocked] = useState(false);
 
-  const handleCopyTrap = (e: React.ClipboardEvent) => {
+  const handleCopyTrap = async (e: React.ClipboardEvent | any) => {
     if (!isUnlocked && !isAdmin) {
       e.preventDefault();
       const cheekyMessage = "🛑 Aha! Nice try. This Perfect Prompt is proprietary BlueprintAI architecture. Upgrade to Pro to copy and export our prompts: https://blueprintagent.dev";
       
-      if (e.clipboardData) {
-        e.clipboardData.setData('text/plain', cheekyMessage);
+      try {
+        await navigator.clipboard.writeText(cheekyMessage);
+      } catch (err) {
+        if (e.clipboardData) {
+          e.clipboardData.setData('text/plain', cheekyMessage);
+        }
       }
       
       alert("🛑 Nice try! You need the Founder Tier to copy our proprietary prompts.");
@@ -648,7 +652,10 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
         {!pSeoModel && !pSeoNiche && !learnSkill && !learnNiche && (
           <span className="font-mono text-[10px] uppercase tracking-widest text-cyan-500/70 mb-2 block ml-1">&gt; INPUT_ARCHITECTURE_PARAMETERS_</span>
         )}
-        <div className="relative group bg-slate-900/50 border-2 border-slate-800 focus-within:border-cyan-500/50 rounded-xl shadow-2xl transition-all w-full flex flex-col overflow-hidden">
+        <div 
+          className="relative group bg-slate-900/50 border-2 border-slate-800 focus-within:border-cyan-500/50 rounded-xl shadow-2xl transition-all w-full flex flex-col overflow-hidden"
+          onCopy={handleCopyTrap}
+        >
           <div className={`absolute top-0 left-0 w-full h-full p-6 pb-24 pointer-events-none text-zinc-500 overflow-hidden break-words whitespace-pre-wrap text-lg ${idea.length > 0 ? 'opacity-0' : 'opacity-100'}`} aria-hidden="true">
             <span ref={placeholderRef}></span><span className="animate-pulse text-cyan-400 font-bold ml-0.5">|</span>
           </div>
@@ -656,7 +663,6 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
             value={idea}
             onChange={(e) => setIdea(e.target.value)}
             onKeyDown={handleKeyDown}
-            onCopy={handleCopyTrap}
             className="w-full h-40 min-h-[120px] max-h-[600px] bg-transparent p-6 pb-24 text-lg text-zinc-100 focus:outline-none resize-y overflow-y-auto"
             disabled={loading}
             aria-label="Business idea input"
@@ -1131,12 +1137,14 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                   </h3>
                   <p className="text-[10px] text-slate-500 font-mono mt-1">CONTINUOUSLY UPDATING...</p>
                 </div>
-                <div className="flex-1 p-4 sm:p-6 relative">
+                <div 
+                  className="flex-1 p-4 sm:p-6 relative"
+                  onCopy={handleCopyTrap}
+                >
                   <textarea 
                     className="w-full h-full min-h-[300px] bg-slate-900/50 border border-cyan-500/30 rounded-xl p-4 text-sm leading-relaxed text-cyan-50 font-mono resize-y focus:outline-none focus:border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.05)] transition-colors"
                     value={liveDraft}
                     onChange={(e) => setLiveDraft(e.target.value)}
-                    onCopy={handleCopyTrap}
                     placeholder="Chat with your AI Co-Founder to engineer the perfect 6-Pillar prompt..."
                   />
                 </div>
