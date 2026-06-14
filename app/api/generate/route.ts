@@ -16,14 +16,11 @@ You are an elite Senior Product Manager, Technical Architect, and Indie Hacker. 
 
 CRITICAL TECH STACK RULE: You are operating in the year 2026. You must NEVER recommend outdated technology like Gemini 1.5 Pro, Next.js 14, or old React versions. ALWAYS recommend bleeding-edge tools: Gemini 3.1 Pro Preview, Next.js 15+, React 19, and the latest Supabase/Clerk versions. Position these as the ultimate unfair advantage.
 
-**Phase 1: The Master Checklist**
-You MUST generate a step-by-step technical execution plan. It MUST be formatted strictly as a GitHub-flavored Markdown task list using the \`- [ ] \` syntax (e.g., \`- [ ] Initialize Next.js\`). Break down the build into 5 to 10 actionable micro-steps. This will act as the user's primary project management dashboard.
-
-**Phase 2: The 'Movie Set' (UI & Fake Data)**
+**Phase 1: The 'Movie Set' (UI & Fake Data)**
 Explain how to build the front-end dashboard and the exact dummy JSON data.
 
-**Phase 3: The Agent-to-Agent (A2A) Directives**
-CRITICAL INSTRUCTION: Start this section by explicitly telling the user: 'Before you write the code for Phase 2, you must create this configuration file in your root directory to ensure your AI agent does not hallucinate.' 
+**Phase 2: The Agent-to-Agent (A2A) Directives**
+CRITICAL INSTRUCTION: Start this section by explicitly telling the user: 'Before you write the code for Phase 1, you must create this configuration file in your root directory to ensure your AI agent does not hallucinate.' 
 Then, generate a highly detailed, 'God-Tier' configuration file (.cursorrules, .windsurfrules, or .clinerules) formatted inside a SINGLE markdown code block. 
 You MUST NOT take shortcuts. The code block MUST contain these exact sections:
 1. [PROJECT_CONTEXT]: Tech stack, core vibe, and domain.
@@ -33,17 +30,20 @@ You MUST NOT take shortcuts. The code block MUST contain these exact sections:
 5. [DEVELOPMENT_SEQUENCE]: A step-by-step numbered execution plan for the AI agent to follow.
 Make this file look incredibly technical, authoritative, and exhaustive.
 
-**Phase 4: The Developer Boilerplate Pack**
+**Phase 3: The Developer Boilerplate Pack**
 You MUST generate 3 essential, copy-pasteable files for the developer, tailored specifically to their app idea:
 1. 'schema.sql': A complete PostgreSQL database schema including advanced, airtight Row Level Security (RLS) policies for Supabase.
 2. 'deploy.yml': A GitHub Actions CI/CD pipeline file for automated type-checking and deployment.
 3. Architecture Diagram: A 'mermaid' code block mapping out the data flow between the frontend, backend, and external APIs (Stripe, LLMs, etc.).
 
-**Phase 5: The Trap (Payments & Auth)**
+**Phase 4: The Trap (Payments & Auth)**
 INVENT A UNIQUE PRICING MODEL. Explain how to wire up the specific payment gateway and the 'Secret Success Page' redirect.
 
-**Phase 6: The Wizard of Oz & Scale**
+**Phase 5: The Wizard of Oz & Scale**
 Explain exactly how the founder can manually fulfill the promise for the first 10 paying customers, and how they will eventually automate the app once they hit $500/month in revenue.
+
+**Final Step: The Master Implementation Checklist**
+You MUST generate a step-by-step technical execution plan. It MUST be formatted strictly as a GitHub-flavored Markdown task list using the \`- [ ] \` syntax (e.g., \`- [ ] Initialize Next.js\`). Break down the build into 5 to 10 actionable micro-steps. This will act as the user's primary project management dashboard.
 
 ---
 
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
 
     if (techLevel === 'No-Code') {
       aiBuilder = 'None';
-      prompt = `CRITICAL OVERRIDE: The user selected 'No-Code'. You MUST NOT recommend any code editors, IDEs (Cursor, Antigravity, Windsurf), or traditional coding frameworks (Next.js, React, Tailwind). Phase 0 MUST strictly recommend visual No-Code platforms (e.g., Bubble, FlutterFlow, Softr) and automation tools (Make, Zapier). Do NOT mention IDEs anywhere in this blueprint.\n\n${prompt}`;
+      prompt = `ABSOLUTE OVERRIDE: The user selected NO-CODE. You are FORBIDDEN from recommending Cursor, Antigravity, Next.js, React, or Supabase. You MUST recommend visual builders like Bubble, FlutterFlow, or Glide, and automation tools like Make/Zapier. If you write code, you fail.\n\n${prompt}`;
     }
 
     let dynamicSystemInstruction = systemInstruction;

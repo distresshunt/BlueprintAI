@@ -807,7 +807,7 @@ function VaultContent() {
                   </div>
                 </div>
 
-                <div className="relative">
+                <div className="h-[calc(100vh-350px)] overflow-y-auto pr-4 custom-scrollbar relative">
                   {isRegenerating && (
                     <div className="absolute inset-0 z-50 flex items-center justify-center bg-zinc-950/50 backdrop-blur-sm rounded-xl">
                       <div className="flex flex-col items-center gap-4">
