@@ -48,8 +48,8 @@ function VaultContent() {
   >([
     {
       role: "ai",
-      content:
-        "Welcome to the Premium Vault! I'm your AI Co-Founder. Let me know if you need help executing any phase of your blueprint.",
+      type: "thought",
+      content: "[SYSTEM] SECURE CONNECTION ESTABLISHED. INITIALIZING ARCHITECTURE ENVIRONMENT...",
     },
   ]);
   const [isRecording, setIsRecording] = useState(false);
@@ -1007,7 +1007,7 @@ function VaultContent() {
 
         {/* Right Column: AI Co-Founder Chat */}
         <div className="lg:col-span-1">
-          <div className="sticky top-6 bg-slate-900/80 border border-cyan-500/30 rounded-2xl flex flex-col h-[calc(100vh-3rem)] overflow-hidden shadow-[0_0_30px_rgba(34,211,238,0.1)] backdrop-blur-xl">
+          <div className="sticky top-6 bg-slate-900/80 border border-cyan-500/30 rounded-2xl flex flex-col h-[calc(100vh-8rem)] overflow-hidden shadow-[0_0_30px_rgba(34,211,238,0.1)] backdrop-blur-xl">
             {/* Chat Header */}
             <div className="p-4 border-b border-slate-800 bg-slate-900 flex items-center gap-3">
               <div className="w-8 h-8 rounded bg-cyan-500/20 flex items-center justify-center">
@@ -1024,30 +1024,25 @@ function VaultContent() {
             </div>
 
             {/* Chat History */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4">
               {chatHistory.map((msg, i) => (
                 <div
                   key={i}
                   className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                 >
-                  <div
-                    className={
-                      msg.type === "thought"
-                        ? "font-mono text-[10px] sm:text-xs text-zinc-500 bg-transparent border-l-2 border-zinc-800 pl-3 my-2 uppercase tracking-wide w-full"
-                        : `max-w-[85%] rounded-xl p-3 text-sm ${
-                            msg.role === "user"
-                              ? "bg-cyan-500 text-black font-medium"
-                              : "bg-slate-800 text-slate-300 border border-slate-700"
-                          }`
-                    }
-                  >
-                    {msg.type === "thought" && (
-                      <>
-                        {msg.content}
-                        <span className="inline-block w-1.5 h-3 ml-1 bg-zinc-500 animate-pulse"></span>
-                      </>
-                    )}
-                    {msg.type !== "thought" && msg.content.startsWith("[FILE_DOWNLOAD:") ? (
+                  {msg.type === "thought" ? (
+                    <div className="font-mono text-[10px] text-cyan-500/70 border-l-2 border-cyan-900 pl-3 my-2 uppercase tracking-wide">
+                      &gt; {msg.content}_
+                    </div>
+                  ) : (
+                    <div
+                      className={`max-w-[85%] rounded-xl p-3 text-sm ${
+                        msg.role === "user"
+                          ? "bg-cyan-500 text-black font-medium"
+                          : "bg-slate-800 text-slate-300 border border-slate-700"
+                      }`}
+                    >
+                      {msg.content.startsWith("[FILE_DOWNLOAD:") ? (
                       (() => {
                         const lines = msg.content.split("\n");
                         const firstLine = lines[0];
@@ -1128,17 +1123,11 @@ function VaultContent() {
                         )}
                       </>
                     )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               ))}
               <div ref={chatEndRef} />
-            </div>
-
-            {/* Live Context Status Bar */}
-            <div className="font-mono text-[10px] uppercase tracking-widest text-cyan-500/70 bg-zinc-950/80 px-3 py-1.5 border-t border-zinc-800/50 flex items-center gap-2">
-              <span className="text-cyan-500">&gt;</span> 
-              <span>SYSTEM CONTEXT: TRACKING {currentActivePhase}</span>
-              <span className="w-1.5 h-3 bg-cyan-500/70 animate-pulse"></span>
             </div>
             
             {/* Chat Input */}
