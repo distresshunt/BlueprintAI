@@ -209,23 +209,30 @@ function VaultContent() {
   }, [blueprintData]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isPlaying && blueprintData) {
-      interval = setInterval(() => {
-        setDisplayedLength((prev) => {
-          const next = prev + (50 * playbackSpeed);
-          if (next >= blueprintData.length) {
-            setIsPlaying(false);
-            setIsCompleted(true);
-            return blueprintData.length;
-          }
-          setIsCompleted(false);
-          return next;
-        });
-      }, 50);
-    }
+    if (!isPlaying || !blueprintData) return;
+
+    const interval = setInterval(() => {
+      setDisplayedLength((prev) => {
+        // Calculate exact characters to add per tick to prevent jumping
+        let charsToAdd = 3; // Default 1x speed (Fast human typing)
+        if (playbackSpeed === 0.5) charsToAdd = 1; // Slow reading
+        if (playbackSpeed === 2) charsToAdd = 15; // Skimming
+        
+        const nextLength = prev + charsToAdd;
+
+        if (nextLength >= blueprintData.length) {
+          clearInterval(interval);
+          setIsPlaying(false);
+          setIsCompleted(true);
+          return blueprintData.length;
+        }
+        setIsCompleted(false);
+        return nextLength;
+      });
+    }, 20); // 20ms tick rate for buttery smooth 50FPS animation
+
     return () => clearInterval(interval);
-  }, [isPlaying, blueprintData, playbackSpeed]);
+  }, [isPlaying, playbackSpeed, blueprintData]);
 
   useEffect(() => {
     const handleUpdateSandbox = (e: any) => {
