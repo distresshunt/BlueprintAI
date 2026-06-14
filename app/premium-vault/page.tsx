@@ -10,7 +10,7 @@ import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useAuth, useUser, useClerk } from '@clerk/nextjs';
 import { Sandpack } from '@codesandbox/sandpack-react';
-
+import { ResourceHub } from '@/components/ResourceHub';
 function VaultContent() {
   const { userId } = useAuth();
   const { user } = useUser();
@@ -422,6 +422,8 @@ function VaultContent() {
         
         {/* Left Column: Markdown Blueprint / Sandpack Workspace */}
         <div className="lg:col-span-2 space-y-6">
+          <ResourceHub blueprintMarkdown={blueprintData} />
+          
           <div className="flex items-center gap-2 mb-4">
             <button
               onClick={() => setActiveTab('blueprint')}
