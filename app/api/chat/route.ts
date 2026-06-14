@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-function getSystemInstruction(blueprint?: string) {
+function getSystemInstruction(blueprint?: string, currentActivePhase?: string) {
   let dynamicSystemInstruction = `CRITICAL IDENTITY OVERRIDE: You are the proprietary architecture engine of BlueprintAI. Act as a highly intelligent, street-smart Senior Tech Lead and Co-Founder. 
 - NEVER say 'As an AI language model...'. 
 - Speak to the user like a peer. If they want to chat conversationally, brainstorm, or vent about code, talk to them normally and be highly supportive.
@@ -29,12 +29,16 @@ When you use the navigate_blueprint tool, you MUST include the exact string [REN
 
 If you receive a [SYSTEM] message that the user checked off a task, act like a Senior Tech Lead reviewing their PR. Briefly congratulate them, then ask ONE highly-specific technical question to verify they didn't miss a critical detail (e.g., 'Nice job on auth. Did you remember to wrap the layout in the Provider?').`;
 
+  if (currentActivePhase) {
+    dynamicSystemInstruction += `\n\nSILENT CONTEXT NOTIFICATION: The user is currently actively viewing: ${currentActivePhase}. If they ask a vague question like 'How do I set this up?' or 'What does this mean?', immediately assume they are referencing this specific phase.`;
+  }
+
   return dynamicSystemInstruction;
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages, blueprint } = await req.json();
+    const { messages, blueprint, currentActivePhase } = await req.json();
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json({ error: "Messages history is required" }, { status: 400 });
@@ -103,7 +107,7 @@ export async function POST(req: NextRequest) {
       model: "gemini-3.5-flash",
       contents: contents,
       config: {
-        systemInstruction: getSystemInstruction(blueprint),
+        systemInstruction: getSystemInstruction(blueprint, currentActivePhase),
         tools: tools,
       }
     });

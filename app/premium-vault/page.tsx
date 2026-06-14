@@ -342,133 +342,27 @@ function VaultContent() {
 
 
   // Dwell Time Tracking
-  useEffect(() => {
-    const setupObserver = setTimeout(() => {
-      const elements = document.querySelectorAll(".prose strong");
-      const phaseElements = Array.from(elements).filter((el) =>
-        el.textContent?.startsWith("Phase"),
-      );
+  const currentActivePhase = useMemo(() => {
+    if (!blueprintData) return "INTRO";
+    const renderText = blueprintData.substring(0, displayedLength);
+    
+    const phases = [
+      { id: "Phase 6", name: "MASTER IMPLEMENTATION CHECKLIST" },
+      { id: "Phase 5", name: "WIZARD OF OZ & SCALE" },
+      { id: "Phase 4", name: "MONETIZATION" },
+      { id: "Phase 3", name: "DEVELOPER BOILERPLATE PACK" },
+      { id: "Phase 2", name: "A2A DIRECTIVES" },
+      { id: "Phase 1", name: "MOVIE SET & UI" },
+      { id: "Phase 0", name: "ARCHITECTURE" }
+    ];
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const phaseName = entry.target.textContent;
-              if (timeoutRef.current) clearTimeout(timeoutRef.current);
-              timeoutRef.current = setTimeout(() => {
-                setChatHistory((prev) => [
-                  ...prev,
-                  {
-                    role: "ai",
-                    content: `I notice you're reviewing ${phaseName}. Let me know if you need the exact Stripe API keys or specific code to proceed.`,
-                  },
-                ]);
-              }, 15000);
-            } else {
-              if (timeoutRef.current) clearTimeout(timeoutRef.current);
-            }
-          });
-        },
-        { threshold: 0.5 },
-      );
-
-      phaseElements.forEach((el) => observer.observe(el));
-
-      return () => {
-        observer.disconnect();
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      };
-    }, 1000);
-
-    return () => clearTimeout(setupObserver);
-  }, [blueprintData]);
-
-  // Predictive Thought Stream & Director's Commentary
-  const announcedPhases = useRef<Set<string>>(new Set());
-  const commentaryAnnounced = useRef<Set<string>>(new Set());
-  
-  useEffect(() => {
-    if (!blueprintData) return;
-
-    if (isNewGeneration && isPlaying) {
-      const phases = [
-        { id: "Phase 1", label: "Phase 1", message: "Drafting the 'Movie Set' UI and mock data schemas..." },
-        { id: "Phase 2", label: "Phase 2", message: "Locking in the strict Agent-to-Agent .clinerules..." },
-        { id: "Phase 3", label: "Phase 3", message: "Setting up the Stripe/Gumroad payment traps..." }
-      ];
-
-      phases.forEach(phase => {
-        const phaseIndex = blueprintData.indexOf(phase.label);
-        if (phaseIndex !== -1 && !announcedPhases.current.has(phase.id)) {
-          // If we are within 150 chars of the phase header
-          if (displayedLength >= phaseIndex - 150 && displayedLength < phaseIndex) {
-            announcedPhases.current.add(phase.id);
-            setChatHistory(prev => [
-              ...prev,
-              {
-                role: "ai",
-                content: phase.message,
-                isPredictive: true
-              }
-            ]);
-          }
-        }
-      });
-    } else if (!isNewGeneration && !isPlaying) {
-      // Director's Commentary for Playback mode
-      const commentaries = [
-        { id: "Phase 2", label: "Phase 2", message: "Reviewing the Agent-to-Agent directives? Let me know if you need help dropping the .clinerules into your workspace." },
-        { id: "Phase 3", label: "Phase 3", message: "Looking at the monetization trap. Do you have your payment links ready?" }
-      ];
-
-      commentaries.forEach(commentary => {
-        const phaseIndex = blueprintData.indexOf(commentary.label);
-        if (phaseIndex !== -1 && !commentaryAnnounced.current.has(commentary.id)) {
-          const nextPhaseNum = parseInt(commentary.id.split(' ')[1]) + 1;
-          const nextPhaseIndex = blueprintData.indexOf(`Phase ${nextPhaseNum}`);
-          
-          // Only drop commentary if we are paused directly inside this phase's text bounds
-          if (displayedLength >= phaseIndex && (nextPhaseIndex === -1 || displayedLength < nextPhaseIndex)) {
-            commentaryAnnounced.current.add(commentary.id);
-            setChatHistory(prev => [
-              ...prev,
-              {
-                role: "ai",
-                content: commentary.message,
-                isPredictive: true
-              }
-            ]);
-          }
-        }
-      });
-    }
-  }, [displayedLength, isPlaying, blueprintData, isNewGeneration]);
-
-  // Highlight Tracking
-  useEffect(() => {
-    const handleMouseUp = () => {
-      const selection = window.getSelection();
-      const text = selection?.toString().trim();
-      if (text && text.length > 10) {
-        // Find if we already asked about this exact snippet to prevent spam
-        const alreadyAsked = chatHistory.some((msg) =>
-          msg.content.includes(text.substring(0, 10)),
-        );
-        if (!alreadyAsked) {
-          setChatHistory((prev) => [
-            ...prev,
-            {
-              role: "ai",
-              content: `I see you highlighted: "${text.length > 50 ? text.substring(0, 50) + "..." : text}". Let me know if you want me to explain or code that specific part.`,
-            },
-          ]);
-        }
+    for (const phase of phases) {
+      if (renderText.includes(phase.id)) {
+        return `PHASE ${phase.id.split(' ')[1]} (${phase.name})`;
       }
-    };
-
-    document.addEventListener("mouseup", handleMouseUp);
-    return () => document.removeEventListener("mouseup", handleMouseUp);
-  }, [chatHistory]);
+    }
+    return "INTRO";
+  }, [blueprintData, displayedLength]);
 
   const toggleRecording = () => {
     if (isRecording && recognitionRef.current) {
@@ -608,6 +502,7 @@ function VaultContent() {
             text: m.content,
           })),
           blueprint: blueprintData,
+          currentActivePhase,
         }),
       });
       const data = await res.json();
@@ -1185,6 +1080,13 @@ function VaultContent() {
               <div ref={chatEndRef} />
             </div>
 
+            {/* Live Context Status Bar */}
+            <div className="font-mono text-[10px] uppercase tracking-widest text-cyan-500/70 bg-zinc-950/80 px-3 py-1.5 border-t border-zinc-800/50 flex items-center gap-2">
+              <span className="text-cyan-500">&gt;</span> 
+              <span>SYSTEM CONTEXT: TRACKING {currentActivePhase}</span>
+              <span className="w-1.5 h-3 bg-cyan-500/70 animate-pulse"></span>
+            </div>
+            
             {/* Chat Input */}
             <div className="p-4 border-t border-slate-800 bg-slate-900/50 flex flex-col gap-2">
               <form onSubmit={handleSendMessage} className="relative w-full">
