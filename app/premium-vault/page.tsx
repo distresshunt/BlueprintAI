@@ -487,18 +487,20 @@ function VaultContent() {
               </div>
             ) : (
               <Sandpack
-                template="nextjs"
+                template="react-ts"
                 theme="dark"
                 options={{
                   showNavigator: true,
                   showTabs: true,
                   editorHeight: 600,
+                  // @ts-ignore
+                  editorOptions: { wordWrap: "on" },
                   classes: {
-                    "sp-wrapper": "custom-sandpack-wrapper rounded-xl border border-zinc-800 shadow-2xl",
+                    "sp-wrapper": "custom-sandpack-wrapper w-full max-w-full overflow-hidden rounded-xl border border-zinc-800 shadow-2xl",
                   }
                 }}
                 files={{
-                  "/app/page.tsx": `export default function Home() {\n  return (\n    <main className="min-h-screen bg-zinc-950 text-white flex items-center justify-center p-24">\n      <h1 className="text-4xl font-bold text-cyan-400">BlueprintAI Workspace Initialized</h1>\n    </main>\n  );\n}`,
+                  "/App.tsx": `export default function App() {\n  return (\n    <div style={{ padding: '2rem', backgroundColor: '#09090b', color: 'white', minHeight: '100vh', fontFamily: 'sans-serif' }}>\n      <h1 style={{ color: '#22d3ee', fontSize: '2rem', fontWeight: 'bold' }}>BlueprintAI Workspace</h1>\n      <p style={{ marginTop: '1rem', color: '#a1a1aa' }}>Your live React environment is initialized. Paste your UI components here.</p>\n    </div>\n  );\n}`,
                 }}
               />
             )}
