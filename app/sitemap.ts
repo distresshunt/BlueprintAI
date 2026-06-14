@@ -6,17 +6,25 @@ const SITEMAP_LIMIT = 40000;
 const baseUrl = 'https://blueprintagent.dev';
 
 export async function generateSitemaps() {
+  if (!pseoData || !pseoData.models || !pseoData.niches) return [{ id: 0 }];
+
   const buildCombinations = pseoData.models.length * pseoData.niches.length;
   const learnCombinations = learnPseoData.skills.length * learnPseoData.niches.length;
   const totalCombinations = buildCombinations + learnCombinations;
   
   const totalSitemaps = Math.ceil(totalCombinations / SITEMAP_LIMIT);
   
+  if (totalSitemaps === 0 || isNaN(totalSitemaps)) {
+    console.log("Fallback triggered, totalSitemaps:", totalSitemaps);
+    return [{ id: 0 }];
+  }
+  
   const sitemaps = [];
   for (let i = 0; i < totalSitemaps; i++) {
     sitemaps.push({ id: i });
   }
   
+  console.log("Generated sitemaps:", sitemaps.length);
   return sitemaps;
 }
 

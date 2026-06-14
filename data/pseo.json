@@ -1,27 +1,17 @@
 {
   "models": [
     "saas",
+    "marketplace",
     "chrome-extension",
     "ai-wrapper",
-    "marketplace",
-    "vst-plugin",
-    "daw-script",
-    "audio-tool",
-    "no-code-app",
-    "custom-software-without-coding",
-    "app-using-ai",
-    "automated-system",
-    "chatgpt-wrapper",
+    "newsletter",
+    "directory",
     "make-an-app",
     "automated-booking-system",
     "chatgpt-tool",
     "uber-for",
     "management-software",
-    "side-hustle-app",
-    "directory-website",
-    "custom-software",
-    "ai-generator",
-    "client-portal"
+    "side-hustle-app"
   ],
   "niches": [
     "saas-tech-automation-tools-niches",
