@@ -19,6 +19,7 @@ import {
   Zap,
   Loader2,
   Sparkles,
+  Settings,
 } from "lucide-react";
 import Link from "next/link";
 import { CodeBlock } from "@/components/CodeBlock";
@@ -28,6 +29,7 @@ import { useAuth, useUser, useClerk } from "@clerk/nextjs";
 import { Sandpack } from "@codesandbox/sandpack-react";
 import { Navbar } from "@/components/Navbar";
 import { ResourceHub } from "@/components/ResourceHub";
+import { UserEnvSettings } from "@/components/UserEnvSettings";
 function VaultContent() {
   const { userId } = useAuth();
   const { user } = useUser();
@@ -66,6 +68,7 @@ function VaultContent() {
   const [techLevel, setTechLevel] = useState<string>("No-Code");
   const [aiBuilder, setAiBuilder] = useState<string>("Cursor");
   const [isRegenerating, setIsRegenerating] = useState<boolean>(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const router = useRouter();
 
   const hasGithub =
@@ -508,6 +511,14 @@ function VaultContent() {
     setChatMessage("");
 
     try {
+      let userKeys = {};
+      const storedKeys = localStorage.getItem('blueprint_user_keys');
+      if (storedKeys) {
+        try {
+          userKeys = JSON.parse(storedKeys);
+        } catch(e) {}
+      }
+
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -518,6 +529,7 @@ function VaultContent() {
           })),
           blueprint: blueprintData,
           currentActivePhase,
+          userKeys
         }),
       });
       const data = await res.json();
@@ -1009,18 +1021,27 @@ function VaultContent() {
         <div className="lg:col-span-1">
           <div className="sticky top-6 bg-slate-900/80 border border-cyan-500/30 rounded-2xl flex flex-col h-[calc(100vh-8rem)] overflow-hidden shadow-[0_0_30px_rgba(34,211,238,0.1)] backdrop-blur-xl">
             {/* Chat Header */}
-            <div className="p-4 border-b border-slate-800 bg-slate-900 flex items-center gap-3">
-              <div className="w-8 h-8 rounded bg-cyan-500/20 flex items-center justify-center">
-                <Bot className="w-5 h-5 text-cyan-400" />
+            <div className="p-4 border-b border-slate-800 bg-slate-900 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded bg-cyan-500/20 flex items-center justify-center">
+                  <Bot className="w-5 h-5 text-cyan-400" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white tracking-tight">
+                    AI Co-Founder
+                  </h3>
+                  <p className="text-[10px] uppercase font-mono tracking-widest text-emerald-400">
+                    Online & Ready
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-bold text-white tracking-tight">
-                  AI Co-Founder
-                </h3>
-                <p className="text-[10px] uppercase font-mono tracking-widest text-emerald-400">
-                  Online & Ready
-                </p>
-              </div>
+              <button 
+                onClick={() => setIsSettingsOpen(true)}
+                className="p-2 rounded-lg text-slate-400 hover:text-cyan-400 hover:bg-slate-800 transition-colors"
+                title="Local API Keys"
+              >
+                <Settings className="w-4 h-4" />
+              </button>
             </div>
 
             {/* Chat History */}
@@ -1216,6 +1237,7 @@ function VaultContent() {
           </div>
         )}
       </main>
+      <UserEnvSettings isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </div>
   );
 }

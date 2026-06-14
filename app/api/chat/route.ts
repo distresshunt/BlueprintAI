@@ -38,7 +38,7 @@ If you receive a [SYSTEM] message that the user checked off a task, act like a S
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages, blueprint, currentActivePhase } = await req.json();
+    const { messages, blueprint, currentActivePhase, userKeys } = await req.json();
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json({ error: "Messages history is required" }, { status: 400 });
@@ -98,6 +98,20 @@ export async function POST(req: NextRequest) {
               },
               required: ["target_phase"],
             },
+          },
+          {
+            name: "scrape_website",
+            description: "Scrapes a URL and returns clean markdown. Use this to analyze competitors or read live documentation.",
+            parameters: {
+              type: Type.OBJECT,
+              properties: {
+                url: {
+                  type: Type.STRING,
+                  description: "The URL of the website to scrape",
+                },
+              },
+              required: ["url"],
+            },
           }
         ]
       }
@@ -143,7 +157,72 @@ export async function POST(req: NextRequest) {
           model: "gemini-3.5-flash",
           contents: contents,
           config: {
-            systemInstruction: getSystemInstruction(blueprint),
+            systemInstruction: getSystemInstruction(blueprint, currentActivePhase),
+            tools: tools,
+          }
+        });
+      } else if (call.name === 'scrape_website') {
+        // @ts-ignore
+        const { url } = call.args;
+        
+        contents.push({
+          role: 'model',
+          parts: [{ functionCall: call }]
+        });
+        
+        if (!userKeys || !userKeys.firecrawlKey) {
+          contents.push({
+            role: 'user',
+            parts: [{
+              functionResponse: {
+                name: call.name,
+                response: { error: "Error: No Firecrawl key found. Tell the user to click the Settings gear in the chat to add their Firecrawl API key." }
+              }
+            }]
+          });
+        } else {
+          try {
+            const firecrawlRes = await fetch("https://api.firecrawl.dev/v1/scrape", {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${userKeys.firecrawlKey}`,
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ url, formats: ["markdown"] })
+            });
+            const firecrawlData = await firecrawlRes.json();
+            
+            contents.push({
+              role: 'user',
+              parts: [{
+                functionResponse: {
+                  name: call.name,
+                  response: { 
+                    success: firecrawlData.success,
+                    markdown: firecrawlData.data?.markdown || "Failed to extract markdown.",
+                    error: firecrawlData.error
+                  }
+                }
+              }]
+            });
+          } catch(e: any) {
+             contents.push({
+              role: 'user',
+              parts: [{
+                functionResponse: {
+                  name: call.name,
+                  response: { error: "Failed to reach Firecrawl API: " + e.message }
+                }
+              }]
+            });
+          }
+        }
+        
+        response = await ai.models.generateContent({
+          model: "gemini-3.5-flash",
+          contents: contents,
+          config: {
+            systemInstruction: getSystemInstruction(blueprint, currentActivePhase),
             tools: tools,
           }
         });
