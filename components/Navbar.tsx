@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Zap, Plus, ArrowLeft } from "lucide-react";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
 export function Navbar() {
+  const pathname = usePathname();
   return (
     <header className="h-16 border-b border-slate-800 flex items-center justify-between px-4 sm:px-8 bg-[#0a0a0f] shrink-0 sticky top-0 z-50">
       <div className="flex items-center gap-3">
@@ -33,18 +35,20 @@ export function Navbar() {
         </div>
         <div className="flex items-center gap-3">
           <Show when="signed-in">
-            <Link 
-              href="/" 
-              onClick={(e) => {
-                if (window.location.pathname === '/' && !window.location.search) {
-                  e.preventDefault();
-                  window.location.reload();
-                }
-              }}
-              className="px-4 py-2 text-sm font-semibold text-zinc-50 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" /> <span className="hidden sm:inline">New Blueprint</span>
-            </Link>
+            {pathname !== '/' && (
+              <Link 
+                href="/" 
+                onClick={(e) => {
+                  if (window.location.pathname === '/' && !window.location.search) {
+                    e.preventDefault();
+                    window.location.reload();
+                  }
+                }}
+                className="px-4 py-2 text-sm font-semibold text-zinc-50 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" /> <span className="hidden sm:inline">New Blueprint</span>
+              </Link>
+            )}
             <Link href="/dashboard" className="text-xs uppercase tracking-widest font-sans font-semibold bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded transition-colors text-white border border-white/10 hidden sm:flex items-center gap-2">
                My Blueprints
             </Link>

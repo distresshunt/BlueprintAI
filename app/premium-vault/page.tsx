@@ -55,6 +55,7 @@ function VaultContent() {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [isGithubLoading, setIsGithubLoading] = useState(false);
   const [githubRepoUrl, setGithubRepoUrl] = useState("");
+  const [sandboxCode, setSandboxCode] = useState<string>("");
 
   const hasGithub =
     user?.externalAccounts?.some(
@@ -225,6 +226,16 @@ function VaultContent() {
     }
     return () => clearInterval(interval);
   }, [isPlaying, blueprintData, playbackSpeed]);
+
+  useEffect(() => {
+    const handleUpdateSandbox = (e: any) => {
+      if (e.detail && e.detail.code) {
+        setSandboxCode(e.detail.code);
+      }
+    };
+    window.addEventListener("update-sandbox", handleUpdateSandbox);
+    return () => window.removeEventListener("update-sandbox", handleUpdateSandbox);
+  }, []);
 
   // Dwell Time Tracking
   useEffect(() => {
@@ -567,7 +578,7 @@ function VaultContent() {
                   },
                 }}
                 files={{
-                  "/App.tsx": `export default function App() {\n  return (\n    <div style={{ padding: '2rem', backgroundColor: '#09090b', color: 'white', minHeight: '100vh', fontFamily: 'sans-serif' }}>\n      <h1 style={{ color: '#22d3ee', fontSize: '2rem', fontWeight: 'bold' }}>BlueprintAI Workspace</h1>\n      <p style={{ marginTop: '1rem', color: '#a1a1aa' }}>Your live React environment is initialized. Paste your UI components here.</p>\n    </div>\n  );\n}`,
+                  "/App.tsx": sandboxCode || `export default function App() {\n  return (\n    <div style={{ padding: '2rem', backgroundColor: '#09090b', color: 'white', minHeight: '100vh', fontFamily: 'sans-serif' }}>\n      <h1 style={{ color: '#22d3ee', fontSize: '2rem', fontWeight: 'bold' }}>BlueprintAI Workspace</h1>\n      <p style={{ marginTop: '1rem', color: '#a1a1aa' }}>Your live React environment is initialized. Paste your UI components here.</p>\n    </div>\n  );\n}`,
                 }}
               />
             )}
