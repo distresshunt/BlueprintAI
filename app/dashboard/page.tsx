@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { useAuth, UserButton } from '@clerk/nextjs';
 import { supabase } from '@/lib/supabase';

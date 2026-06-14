@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Zap, Plus, ArrowLeft } from "lucide-react";
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
 export function Navbar() {
   return (
@@ -32,7 +32,7 @@ export function Navbar() {
           <span className="text-xs uppercase tracking-widest font-mono text-cyan-500/80">System Secure</span>
         </div>
         <div className="flex items-center gap-3">
-          <SignedIn>
+          <Show when="signed-in">
             <Link 
               href="/" 
               onClick={(e) => {
@@ -49,15 +49,15 @@ export function Navbar() {
                My Blueprints
             </Link>
             <UserButton />
-          </SignedIn>
-          <SignedOut>
+          </Show>
+          <Show when="signed-out">
             <SignInButton mode="modal">
               <button className="text-xs uppercase tracking-widest font-sans font-semibold bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded transition-colors text-white">Sign In</button>
             </SignInButton>
             <SignUpButton mode="modal">
               <button className="text-xs uppercase tracking-widest font-sans font-semibold bg-cyan-500 hover:bg-cyan-400 px-3 py-1.5 rounded transition-colors text-black">Sign Up</button>
             </SignUpButton>
-          </SignedOut>
+          </Show>
         </div>
       </div>
     </header>

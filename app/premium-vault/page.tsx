@@ -864,6 +864,7 @@ function VaultContent() {
               )}
             </div>
           </div>
+          </div>
         </div>
         </div>
       </main>
