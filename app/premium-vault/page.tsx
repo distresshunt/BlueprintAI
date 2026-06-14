@@ -221,7 +221,16 @@ function VaultContent() {
         if (playbackSpeed === 0.5) charsToAdd = 1; // Slow reading
         if (playbackSpeed === 2) charsToAdd = 15; // Skimming
         
-        const nextLength = prev + charsToAdd;
+        let nextLength = prev + charsToAdd;
+
+        const justTyped = blueprintData.substring(prev, nextLength);
+        if (justTyped.includes(']')) {
+          const bracketIndex = prev + justTyped.indexOf(']');
+          const parenEnd = blueprintData.indexOf(')', bracketIndex);
+          if (parenEnd !== -1 && blueprintData.substring(bracketIndex, parenEnd).includes('](')) {
+            nextLength = parenEnd + 1; // Instantly jump over the hidden URL string
+          }
+        }
 
         if (nextLength >= blueprintData.length) {
           clearInterval(interval);
@@ -450,6 +459,21 @@ function VaultContent() {
     }
   };
 
+  let renderText = blueprintData.substring(0, displayedLength);
+  const lastOpen = renderText.lastIndexOf('[');
+  const lastCloseParen = renderText.lastIndexOf(')');
+  const lastCloseBracket = renderText.lastIndexOf(']');
+
+  // If we are currently typing a link label (we have an open bracket but haven't finished the URL)
+  if (lastOpen > lastCloseParen && lastOpen > lastCloseBracket) {
+    const urlStart = blueprintData.indexOf('](', lastOpen);
+    const urlEnd = blueprintData.indexOf(')', urlStart);
+    if (urlStart !== -1 && urlEnd !== -1) {
+      // Silently append the URL syntax so the text types out as a live blue hyperlink!
+      renderText += blueprintData.substring(urlStart, urlEnd + 1);
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-[#050507] text-slate-300 font-sans overflow-hidden">
       <Navbar />
@@ -568,7 +592,8 @@ function VaultContent() {
                         {...props}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-cyan-400 hover:text-cyan-300 underline font-medium"
+                        className="relative z-50 pointer-events-auto text-cyan-400 hover:text-cyan-300 underline font-medium cursor-pointer"
+                        href={props.href}
                       />
                     ),
                     input: ({ node, checked, ...props }: any) => {
@@ -594,7 +619,7 @@ function VaultContent() {
                     },
                   }}
                 >
-                  {blueprintData.substring(0, displayedLength)}
+                  {renderText}
                 </ReactMarkdown>
               </div>
               </div>
