@@ -59,6 +59,7 @@ function VaultContent() {
   const [sandboxCode, setSandboxCode] = useState<string>("");
   const [highlightMenu, setHighlightMenu] = useState({ visible: false, x: 0, y: 0, text: '' });
   const [isHighlightCopied, setIsHighlightCopied] = useState(false);
+  const [isNewGeneration, setIsNewGeneration] = useState(false);
 
   const hasGithub =
     user?.externalAccounts?.some(
@@ -145,6 +146,7 @@ function VaultContent() {
   useEffect(() => {
     async function loadData() {
       if (id) {
+        setIsNewGeneration(false);
         try {
           const { data, error } = await supabase
             .from("blueprints")
@@ -193,6 +195,7 @@ function VaultContent() {
       const localData = localStorage.getItem("blueprintData");
       if (localData) {
         setBlueprintData(localData);
+        setIsNewGeneration(true);
       } else {
         setBlueprintData(
           "# No Blueprint Found\nPlease generate a blueprint from the home page.",
@@ -307,36 +310,66 @@ function VaultContent() {
     return () => clearTimeout(setupObserver);
   }, [blueprintData]);
 
-  // Predictive Thought Stream
+  // Predictive Thought Stream & Director's Commentary
   const announcedPhases = useRef<Set<string>>(new Set());
+  const commentaryAnnounced = useRef<Set<string>>(new Set());
   
   useEffect(() => {
-    if (!isPlaying || !blueprintData) return;
+    if (!blueprintData) return;
 
-    const phases = [
-      { id: "Phase 1", label: "Phase 1", message: "Drafting the 'Movie Set' UI and mock data schemas..." },
-      { id: "Phase 2", label: "Phase 2", message: "Locking in the strict Agent-to-Agent .clinerules..." },
-      { id: "Phase 3", label: "Phase 3", message: "Setting up the Stripe/Gumroad payment traps..." }
-    ];
+    if (isNewGeneration && isPlaying) {
+      const phases = [
+        { id: "Phase 1", label: "Phase 1", message: "Drafting the 'Movie Set' UI and mock data schemas..." },
+        { id: "Phase 2", label: "Phase 2", message: "Locking in the strict Agent-to-Agent .clinerules..." },
+        { id: "Phase 3", label: "Phase 3", message: "Setting up the Stripe/Gumroad payment traps..." }
+      ];
 
-    phases.forEach(phase => {
-      const phaseIndex = blueprintData.indexOf(phase.label);
-      if (phaseIndex !== -1 && !announcedPhases.current.has(phase.id)) {
-        // If we are within 150 chars of the phase header
-        if (displayedLength >= phaseIndex - 150 && displayedLength < phaseIndex) {
-          announcedPhases.current.add(phase.id);
-          setChatHistory(prev => [
-            ...prev,
-            {
-              role: "ai",
-              content: phase.message,
-              isPredictive: true
-            }
-          ]);
+      phases.forEach(phase => {
+        const phaseIndex = blueprintData.indexOf(phase.label);
+        if (phaseIndex !== -1 && !announcedPhases.current.has(phase.id)) {
+          // If we are within 150 chars of the phase header
+          if (displayedLength >= phaseIndex - 150 && displayedLength < phaseIndex) {
+            announcedPhases.current.add(phase.id);
+            setChatHistory(prev => [
+              ...prev,
+              {
+                role: "ai",
+                content: phase.message,
+                isPredictive: true
+              }
+            ]);
+          }
         }
-      }
-    });
-  }, [displayedLength, isPlaying, blueprintData]);
+      });
+    } else if (!isNewGeneration && !isPlaying) {
+      // Director's Commentary for Playback mode
+      const commentaries = [
+        { id: "Phase 2", label: "Phase 2", message: "Reviewing the Agent-to-Agent directives? Let me know if you need help dropping the .clinerules into your workspace." },
+        { id: "Phase 3", label: "Phase 3", message: "Looking at the monetization trap. Do you have your payment links ready?" }
+      ];
+
+      commentaries.forEach(commentary => {
+        const phaseIndex = blueprintData.indexOf(commentary.label);
+        if (phaseIndex !== -1 && !commentaryAnnounced.current.has(commentary.id)) {
+          const nextPhaseNum = parseInt(commentary.id.split(' ')[1]) + 1;
+          const nextPhaseIndex = blueprintData.indexOf(`Phase ${nextPhaseNum}`);
+          
+          // Only drop commentary if we are paused directly inside this phase's text bounds
+          if (displayedLength >= phaseIndex && (nextPhaseIndex === -1 || displayedLength < nextPhaseIndex)) {
+            commentaryAnnounced.current.add(commentary.id);
+            setChatHistory(prev => [
+              ...prev,
+              {
+                role: "ai",
+                content: commentary.message,
+                isPredictive: true
+              }
+            ]);
+          }
+        }
+      });
+    }
+  }, [displayedLength, isPlaying, blueprintData, isNewGeneration]);
 
   // Highlight Tracking
   useEffect(() => {
