@@ -455,6 +455,36 @@ function VaultContent() {
     recognition.start();
   };
 
+  const handleChatResponse = (data: any) => {
+    if (data.text) {
+      if (data.text.startsWith("[ACTION: NAVIGATE TO")) {
+        const firstLineEnd = data.text.indexOf("\n");
+        const actionLine = data.text.substring(0, firstLineEnd > -1 ? firstLineEnd : data.text.length);
+        const targetPhase = actionLine.replace("[ACTION: NAVIGATE TO", "").replace("]", "").trim();
+        const phaseIndex = blueprintData.indexOf(targetPhase);
+        
+        if (phaseIndex !== -1) {
+          setDisplayedLength(phaseIndex);
+          setIsPlaying(false);
+          
+          setTimeout(() => {
+            const mdContainer = document.querySelector(".prose");
+            if (mdContainer) {
+               mdContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }, 100);
+        }
+        
+        const msgContent = firstLineEnd > -1 ? data.text.substring(firstLineEnd + 1).trim() : "Pulling that up for you now.";
+        if (msgContent) {
+          setChatHistory((prev) => [...prev, { role: "ai", content: msgContent }]);
+        }
+      } else {
+        setChatHistory((prev) => [...prev, { role: "ai", content: data.text }]);
+      }
+    }
+  };
+
   const handleTaskChecked = async (taskText: string) => {
     const systemMsg = `[SYSTEM: The user just completed task: "${taskText}"]`;
     const updatedHistory = [
@@ -476,8 +506,8 @@ function VaultContent() {
         }),
       });
       const data = await res.json();
-      if (res.ok && data.text) {
-        setChatHistory((prev) => [...prev, { role: "ai", content: data.text }]);
+      if (res.ok) {
+        handleChatResponse(data);
       }
     } catch (error) {
       console.error(error);
@@ -506,8 +536,8 @@ function VaultContent() {
         }),
       });
       const data = await res.json();
-      if (res.ok && data.text) {
-        setChatHistory((prev) => [...prev, { role: "ai", content: data.text }]);
+      if (res.ok) {
+        handleChatResponse(data);
       } else {
         throw new Error(data.error || "Failed to fetch response");
       }

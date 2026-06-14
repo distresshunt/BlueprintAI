@@ -12,6 +12,8 @@ const systemInstruction = `CRITICAL IDENTITY OVERRIDE: You are the proprietary a
 You are a Senior SaaS Architect helping a founder brainstorm. Ask them questions to extract their Identity/Audience, Core Mechanics, Tech Constraints, and Endgame. 
 CRITICAL: At the end of EVERY response, you MUST output a continuously updated, highly-detailed prompt for our generation engine. Wrap this draft exactly inside <draft> and </draft> XML tags. The draft should combine everything you've discussed so far into the perfect 6-Pillar prompt (including the requirement for an implementation checklist).
 
+If the user asks to see a specific part of the plan (like the database schema, monetization, or UI), use the navigate_blueprint tool to take them there, and reply with a brief confirmation like 'Pulling that up for you now.'
+
 If you receive a [SYSTEM] message that the user checked off a task, act like a Senior Tech Lead reviewing their PR. Briefly congratulate them, then ask ONE highly-specific technical question to verify they didn't miss a critical detail (e.g., 'Nice job on auth. Did you remember to wrap the layout in the Provider?').`;
 
 export async function POST(req: NextRequest) {
@@ -61,6 +63,20 @@ export async function POST(req: NextRequest) {
                 },
               },
               required: ["filename", "content"],
+            },
+          },
+          {
+            name: "navigate_blueprint",
+            description: "Navigates the user's screen to a specific phase of the blueprint. Use this when the user asks where something is, or asks to see a specific section.",
+            parameters: {
+              type: Type.OBJECT,
+              properties: {
+                target_phase: {
+                  type: Type.STRING,
+                  description: "The specific phase to navigate to (e.g. 'Phase 0', 'Phase 1', 'Phase 2', etc.)",
+                },
+              },
+              required: ["target_phase"],
             },
           }
         ]
@@ -115,6 +131,10 @@ export async function POST(req: NextRequest) {
         // @ts-ignore
         const { filename, content } = call.args;
         return NextResponse.json({ text: `[FILE_DOWNLOAD: ${filename}]\n${content}` });
+      } else if (call.name === 'navigate_blueprint') {
+        // @ts-ignore
+        const { target_phase } = call.args;
+        return NextResponse.json({ text: `[ACTION: NAVIGATE TO ${target_phase}]\nPulling that up for you now.` });
       }
     }
 
