@@ -34,6 +34,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `How to ${buildPhrase} in 2026 | BlueprintAI`,
     description: `Get the complete, step-by-step technical blueprint and AI agent prompts to ${buildPhrase.toLowerCase()} without writing a single line of backend code.`,
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
   };
 }
 
