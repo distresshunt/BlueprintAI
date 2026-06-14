@@ -792,18 +792,33 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               prose-pre:bg-slate-950 prose-pre:border prose-pre:border-slate-800 relative
               prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline hover:prose-a:text-cyan-300 transition-colors"
             >
-              <ReactMarkdown components={{ 
-                blockquote: ExpandableBlockquote, 
-                pre: CodeBlock,
-                a: ({ node, ...props }: any) => (
-                  <a
-                    {...props}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-cyan-400 hover:text-cyan-300 underline font-medium"
-                  />
-                )
-              }}>{free}</ReactMarkdown>
+              <ReactMarkdown 
+                remarkPlugins={[remarkGfm]}
+                components={{ 
+                  blockquote: ExpandableBlockquote, 
+                  pre: CodeBlock,
+                  a: ({ node, ...props }: any) => (
+                    <a
+                      {...props}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-400 hover:text-cyan-300 underline font-medium"
+                    />
+                  ),
+                  input: ({ node, checked, ...props }: any) => {
+                    if (props.type === 'checkbox') {
+                      return (
+                        <input 
+                          type="checkbox" 
+                          defaultChecked={checked}
+                          className="w-4 h-4 text-cyan-500 rounded border-slate-700 bg-slate-800 focus:ring-cyan-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1" 
+                        />
+                      );
+                    }
+                    return <input {...props} />;
+                  }
+                }}
+              >{free}</ReactMarkdown>
             </div>
 
             {cursorRules && (
