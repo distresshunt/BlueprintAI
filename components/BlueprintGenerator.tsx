@@ -364,33 +364,50 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
     `An offline-first ${pSeoModel} that allows ${pSeoNiche} to track material yield and waste without an internet connection...`
   ] : defaultIdeas;
 
-  const [placeholder, setPlaceholder] = useState("");
-  const [ideaIndex, setIdeaIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const inputRef = useRef<HTMLTextAreaElement>(null); // Attach this to the textarea/input!
+  const ideaIndex = useRef(0);
+  const isDeleting = useRef(false);
+  const currentText = useRef("");
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    const currentText = ideas[ideaIndex];
 
-    if (isDeleting) {
-      timeout = setTimeout(() => {
-        setPlaceholder(currentText.substring(0, placeholder.length - 1));
-        if (placeholder.length <= 1) {
-          setIsDeleting(false);
-          setIdeaIndex((prev) => (prev + 1) % ideas.length);
-        }
-      }, 30); // Fast delete
-    } else {
-      if (placeholder.length === currentText.length) {
-        timeout = setTimeout(() => setIsDeleting(true), 4000); // Long 4-second pause to read
+    const typeLoop = () => {
+      const targetIdea = ideas[ideaIndex.current];
+
+      if (isDeleting.current) {
+        currentText.current = targetIdea.substring(0, currentText.current.length - 1);
       } else {
-        timeout = setTimeout(() => {
-          setPlaceholder(currentText.substring(0, placeholder.length + 1));
-        }, 80); // Smooth, natural typing speed
+        currentText.current = targetIdea.substring(0, currentText.current.length + 1);
       }
-    }
+
+      // DIRECT DOM UPDATE (Bypasses React Render Cycle)
+      if (inputRef.current) {
+        inputRef.current.placeholder = currentText.current || "\u00A0";
+      }
+
+      let speed = isDeleting.current ? 20 : 40; // Extremely fast and smooth
+
+      if (!isDeleting.current && currentText.current === targetIdea) {
+        speed = 3000; // Pause to read
+        isDeleting.current = true;
+      } else if (isDeleting.current && currentText.current === "") {
+        isDeleting.current = false;
+        // Pick new random idea
+        let nextIndex;
+        do {
+          nextIndex = Math.floor(Math.random() * ideas.length);
+        } while (nextIndex === ideaIndex.current);
+        ideaIndex.current = nextIndex;
+        speed = 500; // Pause before starting new word
+      }
+
+      timeout = setTimeout(typeLoop, speed);
+    };
+
+    timeout = setTimeout(typeLoop, 500); // Start the loop
     return () => clearTimeout(timeout);
-  }, [placeholder, isDeleting, ideaIndex]);
+  }, []); // Empty dependency array so it only mounts once!
 
   const startRecording = () => {
     setMicError('');
@@ -433,12 +450,10 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
   };
 
   const ideaRef = useRef(idea);
-  const placeholderRef = useRef(placeholder);
   const techLevelRef = useRef(techLevel);
   const aiBuilderRef = useRef(aiBuilder);
 
   useEffect(() => { ideaRef.current = idea; }, [idea]);
-  useEffect(() => { placeholderRef.current = placeholder; }, [placeholder]);
   useEffect(() => { techLevelRef.current = techLevel; }, [techLevel]);
   useEffect(() => { aiBuilderRef.current = aiBuilder; }, [aiBuilder]);
 
@@ -446,7 +461,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
     const finalTechLevel = pivotTechLevel || techLevelRef.current;
     const finalAiBuilder = pivotAiBuilder || aiBuilderRef.current;
     
-    const promptToUse = ideaRef.current.trim() || placeholderRef.current.trim();
+    const promptToUse = ideaRef.current.trim() || ideas[ideaIndex.current];
     if (!promptToUse) return;
     
     setLoading(true);
@@ -621,10 +636,10 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
         )}
         <div className="relative group bg-slate-900/50 border-2 border-slate-800 focus-within:border-cyan-500/50 rounded-xl shadow-2xl transition-all w-full flex flex-col overflow-hidden">
           <textarea
+            ref={inputRef}
             value={idea}
             onChange={(e) => setIdea(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={idea.length > 0 ? '' : (placeholder || "\u00A0")}
             className="w-full h-40 min-h-[120px] max-h-[600px] bg-transparent p-6 pb-24 text-lg text-zinc-100 placeholder:text-zinc-500 focus:outline-none resize-y overflow-y-auto"
             disabled={loading}
             aria-label="Business idea input"
@@ -723,7 +738,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
 
           <button
             onClick={() => generateBlueprint()}
-            disabled={loading || (!idea?.trim() && !placeholder?.trim())}
+            disabled={loading}
             className="w-full h-14 bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-800 disabled:text-slate-500 disabled:shadow-none text-black font-bold text-lg rounded-xl flex items-center justify-center gap-3 transition-colors shadow-[0_0_30px_-5px_rgba(34,211,238,0.4)] group overflow-hidden relative cursor-pointer disabled:cursor-not-allowed"
           >
             {loading ? (
