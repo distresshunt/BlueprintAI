@@ -828,6 +828,16 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                 remarkPlugins={[remarkGfm]}
                 components={{ 
                   blockquote: ExpandableBlockquote, 
+                  h2: ({ node, children, ...props }: any) => {
+                    const text = String(children);
+                    const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                    return <h2 id={id} className="" {...props}>{children}</h2>;
+                  },
+                  h3: ({ node, children, ...props }: any) => {
+                    const text = String(children);
+                    const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                    return <h3 id={id} className="" {...props}>{children}</h3>;
+                  },
                   pre: CodeBlock,
                   a: ({ node, ...props }: any) => (
                     <a

@@ -730,14 +730,14 @@ function VaultContent() {
                         <button
                           key={phase}
                           onClick={() => {
-                            setDisplayedLength(phaseIndex);
-                            setIsPlaying(false);
-                            setTimeout(() => {
-                              const mdContainer = document.querySelector(".prose");
-                              if (mdContainer) {
-                                mdContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                              }
-                            }, 100);
+                            let selector = `[id*="${phase.toLowerCase().replace(/[^a-z0-9]+/g, '-')}"]`;
+                            if (phase === "Intro") {
+                                selector = `[id*="the-dynamic-hook"]`;
+                            }
+                            const element = document.querySelector(selector);
+                            if (element) {
+                              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
                           }}
                           className="text-[10px] font-mono font-bold px-2 py-1 bg-zinc-800/50 border border-zinc-700/50 rounded text-cyan-500/70 hover:bg-zinc-700 hover:text-cyan-400 transition-colors cursor-pointer uppercase tracking-wider"
                         >
@@ -780,6 +780,16 @@ function VaultContent() {
                   <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
+                    h2: ({ node, children, ...props }: any) => {
+                      const text = String(children);
+                      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                      return <h2 id={id} className="" {...props}>{children}</h2>;
+                    },
+                    h3: ({ node, children, ...props }: any) => {
+                      const text = String(children);
+                      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                      return <h3 id={id} className="" {...props}>{children}</h3>;
+                    },
                     pre: CodeBlock,
                     a: ({ node, ...props }: any) => (
                       <a
