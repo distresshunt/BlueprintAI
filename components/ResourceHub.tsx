@@ -16,11 +16,19 @@ const extractLinks = (text: string) => {
     const label = linkMatch[1];
     const url = linkMatch[2];
     const normalizedLabel = label.toLowerCase().trim();
+    const urlLower = url.toLowerCase();
     
+    const isGoogleSearchOrYoutube = 
+      urlLower.includes('youtube.com') || 
+      urlLower.includes('search') || 
+      normalizedLabel.includes('search') ||
+      ((urlLower.includes('google.com') || normalizedLabel.includes('google.com')) && !urlLower.includes('aistudio') && !normalizedLabel.includes('aistudio'));
+
     // Ignore local links and aggressively deduplicate by label name
-    if (!url.includes('localhost') && !url.includes('blueprintagent')) {
+    if (!urlLower.includes('localhost') && !urlLower.includes('blueprintagent') && !isGoogleSearchOrYoutube) {
       if (!uniqueLinks.has(normalizedLabel)) {
-        uniqueLinks.set(normalizedLabel, { label, url });
+        const displayLabel = label.length > 22 ? label.substring(0, 20) + '...' : label;
+        uniqueLinks.set(normalizedLabel, { label: displayLabel, url });
       }
     }
   }
@@ -45,8 +53,8 @@ export function ResourceHub({ blueprintMarkdown }: ResourceHubProps) {
             <LinkIcon className="w-5 h-5 text-cyan-400" />
           </div>
           <div>
-            <h2 className="font-bold text-white tracking-tight">Magical Resource Hub</h2>
-            <p className="text-xs text-zinc-500 font-medium">Auto-extracted links from your blueprint</p>
+            <h2 className="font-bold text-white tracking-tight">Project Toolkit</h2>
+            <p className="text-xs text-zinc-500 font-medium">Core infrastructure and developer tools required for this build.</p>
           </div>
         </div>
         <div className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover:border-zinc-600 transition-colors">

@@ -404,123 +404,7 @@ function VaultContent() {
         </header>
       )}
 
-      {/* A2A Sync Key */}
-      {id && (
-        <div className="mb-8 p-4 bg-[#0D0D0D] border border-zinc-800 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl">
-          <div className="flex items-center gap-3">
-            <Terminal className="w-5 h-5 text-cyan-400 shrink-0" />
-            <div>
-              <h3 className="font-bold text-white text-sm tracking-tight">
-                A2A Sync Key
-              </h3>
-              <p className="text-xs text-zinc-500">
-                Paste this ID into your local BlueprintAI CLI to sync directly
-                with your IDE.
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-lg p-2 max-w-full overflow-hidden">
-            <code className="text-cyan-400 font-mono text-xs truncate select-all">
-              {id}
-            </code>
-            <button
-              onClick={() => navigator.clipboard.writeText(id)}
-              className="text-zinc-400 hover:text-white transition-colors shrink-0 p-1"
-              title="Copy Sync ID"
-            >
-              <Copy className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      )}
 
-      {/* GitHub Integration */}
-      <div className="mb-8 p-6 bg-slate-900/50 backdrop-blur-md border border-zinc-800 rounded-xl shadow-2xl flex flex-col gap-4">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
-            <svg
-              viewBox="0 0 24 24"
-              className="w-5 h-5 text-white"
-              fill="currentColor"
-            >
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-            </svg>
-          </div>
-          <div>
-            <h3 className="font-bold text-white text-base tracking-tight">
-              GitHub 1-Click Repo Initializer
-            </h3>
-            <p className="text-xs text-zinc-400">
-              Instantly deploy your generated architecture (.clinerules and
-              schema.sql) to a new private repository.
-            </p>
-          </div>
-        </div>
-
-        {githubRepoUrl ? (
-          <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-            <p className="text-emerald-400 font-semibold mb-2">
-              ✅ Repository initialized successfully!
-            </p>
-            <a
-              href={githubRepoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-emerald-300 underline text-sm hover:text-emerald-200"
-            >
-              {githubRepoUrl}
-            </a>
-          </div>
-        ) : !hasGithub ? (
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
-            <div>
-              <p className="text-sm text-zinc-300 font-medium">
-                Connect your GitHub Account
-              </p>
-              <p className="text-xs text-zinc-500">
-                Click to open your Account Settings, select 'Connected
-                Accounts', and link your GitHub.
-              </p>
-            </div>
-            <button
-              onClick={() => clerk.openUserProfile()}
-              className="bg-zinc-800 hover:bg-zinc-700 text-white font-semibold py-2 px-6 rounded-lg transition-all shrink-0 border border-zinc-700 hover:border-zinc-500"
-            >
-              Connect GitHub
-            </button>
-          </div>
-        ) : (
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-4 bg-cyan-950/20 rounded-lg border border-cyan-900/50">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-700">
-                <img
-                  src={githubAccount?.imageUrl}
-                  alt="GitHub Avatar"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div>
-                <p className="text-sm text-zinc-300 font-medium">
-                  Connected as{" "}
-                  <span className="text-white font-bold">{githubUsername}</span>
-                </p>
-                <p className="text-xs text-zinc-500">
-                  Ready for 1-Click Deployment.
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={handleGithubDeploy}
-              disabled={isGithubLoading}
-              className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2.5 px-6 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] whitespace-nowrap"
-            >
-              {isGithubLoading
-                ? "Creating repository and injecting files..."
-                : "🚀 1-Click Deploy to GitHub"}
-            </button>
-          </div>
-        )}
-      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         {/* Left Column: Markdown Blueprint / Sandpack Workspace */}
@@ -610,6 +494,124 @@ function VaultContent() {
                   "/App.tsx": `export default function App() {\n  return (\n    <div style={{ padding: '2rem', backgroundColor: '#09090b', color: 'white', minHeight: '100vh', fontFamily: 'sans-serif' }}>\n      <h1 style={{ color: '#22d3ee', fontSize: '2rem', fontWeight: 'bold' }}>BlueprintAI Workspace</h1>\n      <p style={{ marginTop: '1rem', color: '#a1a1aa' }}>Your live React environment is initialized. Paste your UI components here.</p>\n    </div>\n  );\n}`,
                 }}
               />
+            )}
+          </div>
+
+          {/* A2A Sync Key */}
+          {id && (
+            <div className="mb-8 p-4 bg-[#0D0D0D] border border-zinc-800 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl">
+              <div className="flex items-center gap-3">
+                <Terminal className="w-5 h-5 text-cyan-400 shrink-0" />
+                <div>
+                  <h3 className="font-bold text-white text-sm tracking-tight">
+                    A2A Sync Key
+                  </h3>
+                  <p className="text-xs text-zinc-500">
+                    Paste this ID into your local BlueprintAI CLI to sync directly
+                    with your IDE.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-lg p-2 max-w-full overflow-hidden">
+                <code className="text-cyan-400 font-mono text-xs truncate select-all">
+                  {id}
+                </code>
+                <button
+                  onClick={() => navigator.clipboard.writeText(id)}
+                  className="text-zinc-400 hover:text-white transition-colors shrink-0 p-1"
+                  title="Copy Sync ID"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* GitHub Integration */}
+          <div className="mb-8 p-6 bg-slate-900/50 backdrop-blur-md border border-zinc-800 rounded-xl shadow-2xl flex flex-col gap-4">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-5 h-5 text-white"
+                  fill="currentColor"
+                >
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-bold text-white text-base tracking-tight">
+                  GitHub 1-Click Repo Initializer
+                </h3>
+                <p className="text-xs text-zinc-400">
+                  Instantly deploy your generated architecture (.clinerules and
+                  schema.sql) to a new private repository.
+                </p>
+              </div>
+            </div>
+
+            {githubRepoUrl ? (
+              <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
+                <p className="text-emerald-400 font-semibold mb-2">
+                  ✅ Repository initialized successfully!
+                </p>
+                <a
+                  href={githubRepoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-300 underline text-sm hover:text-emerald-200"
+                >
+                  {githubRepoUrl}
+                </a>
+              </div>
+            ) : !hasGithub ? (
+              <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                <div>
+                  <p className="text-sm text-zinc-300 font-medium">
+                    Connect your GitHub Account
+                  </p>
+                  <p className="text-xs text-zinc-500">
+                    Click to open your Account Settings, select 'Connected
+                    Accounts', and link your GitHub.
+                  </p>
+                </div>
+                <button
+                  onClick={() => clerk.openUserProfile()}
+                  className="bg-zinc-800 hover:bg-zinc-700 text-white font-semibold py-2 px-6 rounded-lg transition-all shrink-0 border border-zinc-700 hover:border-zinc-500"
+                >
+                  Connect GitHub
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-4 bg-cyan-950/20 rounded-lg border border-cyan-900/50">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-700">
+                    <img
+                      src={githubAccount?.imageUrl}
+                      alt="GitHub Avatar"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-sm text-zinc-300 font-medium">
+                      Connected as{" "}
+                      <span className="text-white font-bold">{githubUsername}</span>
+                    </p>
+                    <p className="text-xs text-zinc-500">
+                      Ready for 1-Click Deployment.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleGithubDeploy}
+                  disabled={isGithubLoading}
+                  className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2.5 px-6 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] whitespace-nowrap"
+                >
+                  {isGithubLoading
+                    ? "Creating repository and injecting files..."
+                    : "🚀 1-Click Deploy to GitHub"}
+                </button>
+              </div>
             )}
           </div>
 
