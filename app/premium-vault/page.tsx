@@ -29,6 +29,7 @@ function VaultContent() {
   const [isGithubLoading, setIsGithubLoading] = useState(false);
   const [githubRepoUrl, setGithubRepoUrl] = useState('');
 
+  const hasGithub = user?.externalAccounts?.some((account) => (account.provider as string) === 'oauth_github');
   const githubAccount = user?.externalAccounts?.find(a => (a.provider as string) === 'oauth_github');
   const githubUsername = githubAccount?.username || githubAccount?.emailAddress;
 
@@ -382,7 +383,7 @@ function VaultContent() {
               {githubRepoUrl}
             </a>
           </div>
-        ) : !githubAccount ? (
+        ) : !hasGithub ? (
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
             <div>
               <p className="text-sm text-zinc-300 font-medium">Connect your GitHub Account</p>
@@ -399,7 +400,7 @@ function VaultContent() {
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-4 bg-cyan-950/20 rounded-lg border border-cyan-900/50">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-700">
-                <img src={githubAccount.imageUrl} alt="GitHub Avatar" className="w-full h-full object-cover" />
+                <img src={githubAccount?.imageUrl} alt="GitHub Avatar" className="w-full h-full object-cover" />
               </div>
               <div>
                 <p className="text-sm text-zinc-300 font-medium">Connected as <span className="text-white font-bold">{githubUsername}</span></p>
