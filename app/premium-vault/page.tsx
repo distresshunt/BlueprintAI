@@ -18,6 +18,7 @@ import {
   FastForward,
   Zap,
   Loader2,
+  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 import { CodeBlock } from "@/components/CodeBlock";
@@ -376,39 +377,7 @@ function VaultContent() {
     return "INTRO";
   }, [blueprintData, displayedLength]);
 
-  // Predictive Thought Stream
-  const announcedPhases = useRef<Set<string>>(new Set());
-  
-  useEffect(() => {
-    if (!blueprintData) return;
 
-    const phases = [
-      { id: "Phase 1", message: "[SYS_EVAL] Parsing DOM component tree. Validating Tailwind utility classes and Shadcn primitives against mock JSON schema..." },
-      { id: "Phase 2", message: "[A2A_SYNC] Compiling AST constraints. Verifying .clinerules token density and strict execution directives for target IDE..." },
-      { id: "Phase 3", message: "[AUTH_HANDSHAKE] Evaluating webhook payload logic. Verifying Stripe cryptographic signatures and Clerk JWT integration paths..." },
-      { id: "Phase 4", message: "[DATA_PIPELINE] Analyzing PostgreSQL relational mapping. Auditing Row Level Security (RLS) policies for payload isolation..." },
-      { id: "Phase 5", message: "[SCALE_ARCH] Validating horizontal scaling vectors and memory constraints..." },
-      { id: "Phase 6", message: "[COMPILE_CHECK] Finalizing implementation checklist. Ensuring strict step-by-step dependency resolution..." }
-    ];
-
-    phases.forEach(phase => {
-      const phaseIndex = blueprintData.indexOf(phase.id + ":");
-      if (phaseIndex !== -1 && !announcedPhases.current.has(phase.id)) {
-        // Trigger if we're rendering new text and approaching this phase, OR if scrolling past it in playback
-        if (displayedLength >= phaseIndex - 50 && displayedLength <= phaseIndex + 100) {
-          announcedPhases.current.add(phase.id);
-          setChatHistory(prev => [
-            ...prev,
-            {
-              role: "ai",
-              content: phase.message,
-              type: "thought"
-            }
-          ]);
-        }
-      }
-    });
-  }, [displayedLength, blueprintData]);
 
   const toggleRecording = () => {
     if (isRecording && recognitionRef.current) {
@@ -569,18 +538,25 @@ function VaultContent() {
     }
   };
 
-  let renderText = blueprintData.substring(0, displayedLength);
+  let renderTextRaw = blueprintData.substring(0, displayedLength);
+  
+  const thinkMatch = renderTextRaw.match(/<think>([\s\S]*?)(?:<\/think>|$)/i);
+  const thinkText = thinkMatch ? thinkMatch[1].trim() : '';
+  const mainContent = renderTextRaw.replace(/<think>[\s\S]*?(?:<\/think>|$)/i, '').trim();
+  
+  let renderText = mainContent;
+
   const lastOpen = renderText.lastIndexOf('[');
   const lastCloseParen = renderText.lastIndexOf(')');
   const lastCloseBracket = renderText.lastIndexOf(']');
 
   // If we are currently typing a link label (we have an open bracket but haven't finished the URL)
   if (lastOpen > lastCloseParen && lastOpen > lastCloseBracket) {
-    const urlStart = blueprintData.indexOf('](', lastOpen);
-    const urlEnd = blueprintData.indexOf(')', urlStart);
+    const urlStart = mainContent.indexOf('](', lastOpen);
+    const urlEnd = mainContent.indexOf(')', urlStart);
     if (urlStart !== -1 && urlEnd !== -1) {
       // Silently append the URL syntax so the text types out as a live blue hyperlink!
-      renderText += blueprintData.substring(urlStart, urlEnd + 1);
+      renderText += mainContent.substring(urlStart, urlEnd + 1);
     }
   }
 
@@ -758,6 +734,21 @@ function VaultContent() {
                         </p>
                       </div>
                     </div>
+                  )}
+
+                  {thinkText && (
+                    <details className="group mb-6 border border-zinc-800/80 rounded-xl overflow-hidden bg-zinc-950/40 backdrop-blur-md">
+                      <summary className="flex items-center justify-between p-3 text-[11px] font-semibold text-zinc-400 uppercase tracking-widest cursor-pointer hover:bg-zinc-900/50 transition-colors list-none outline-none">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-cyan-500 animate-pulse" />
+                          View Agent Reasoning
+                        </div>
+                        <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
+                      </summary>
+                      <div className="p-4 border-t border-zinc-800 bg-black/80 font-mono text-[10px] text-zinc-500 whitespace-pre-wrap leading-relaxed max-h-64 overflow-y-auto custom-scrollbar">
+                        {thinkText}
+                      </div>
+                    </details>
                   )}
                   <div 
                     className={`prose prose-invert prose-cyan max-w-none prose-headings:font-bold prose-h1:text-cyan-400 prose-h2:text-zinc-200 prose-h3:text-cyan-500/80 prose-p:text-zinc-400 prose-p:leading-relaxed prose-li:text-zinc-400 prose-strong:text-zinc-300 bg-transparent transition-opacity duration-300 ${isRegenerating ? "opacity-50 pointer-events-none" : "opacity-100"}`}

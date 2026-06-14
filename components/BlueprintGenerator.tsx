@@ -580,6 +580,13 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
     let free = '';
     let premium = '';
     let cursorRules = '';
+    let thinkText = '';
+
+    const thinkMatch = text.match(/<think>([\s\S]*?)(?:<\/think>|$)/i);
+    if (thinkMatch) {
+      thinkText = thinkMatch[1].trim();
+      text = text.replace(/<think>[\s\S]*?(?:<\/think>|$)/i, '').trim();
+    }
 
     const cursorRulesMatch = text.match(/```a2a\n([\s\S]*?)```/) || text.match(/```cursorrules\n([\s\S]*?)```/);
     if (cursorRulesMatch) {
@@ -602,10 +609,10 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
       }
     }
 
-    return { free, premium, cursorRules };
+    return { free, premium, cursorRules, thinkText };
   };
 
-  const { free, premium, cursorRules } = splitBlueprint(blueprint);
+  const { free, premium, cursorRules, thinkText } = splitBlueprint(blueprint);
 
   const handleCopyRules = () => {
     if (!cursorRules) return;
@@ -820,6 +827,21 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                 </div>
               </div>
             </div>
+
+            {thinkText && (
+              <details className="group mb-6 border border-zinc-800/80 rounded-xl overflow-hidden bg-zinc-950/40 backdrop-blur-md">
+                <summary className="flex items-center justify-between p-3 text-[11px] font-semibold text-zinc-400 uppercase tracking-widest cursor-pointer hover:bg-zinc-900/50 transition-colors list-none outline-none">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-cyan-500 animate-pulse" />
+                    View Agent Reasoning
+                  </div>
+                  <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
+                </summary>
+                <div className="p-4 border-t border-zinc-800 bg-black/80 font-mono text-[10px] text-zinc-500 whitespace-pre-wrap leading-relaxed max-h-64 overflow-y-auto custom-scrollbar">
+                  {thinkText}
+                </div>
+              </details>
+            )}
 
             <div className="prose prose-invert prose-cyan max-w-none prose-headings:font-bold prose-h1:text-cyan-400 prose-h2:text-zinc-200 prose-h3:text-cyan-500/80 prose-p:text-zinc-400 prose-p:leading-relaxed prose-li:text-zinc-400 prose-strong:text-zinc-300 bg-transparent"
               onCopy={handleCopyTrap}
