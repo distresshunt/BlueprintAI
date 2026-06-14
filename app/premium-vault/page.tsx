@@ -12,6 +12,10 @@ import {
   ChevronUp,
   ChevronDown,
   Copy,
+  Rewind,
+  Play,
+  Pause,
+  FastForward,
 } from "lucide-react";
 import Link from "next/link";
 import { CodeBlock } from "@/components/CodeBlock";
@@ -30,6 +34,10 @@ function VaultContent() {
     "blueprint",
   );
   const [blueprintData, setBlueprintData] = useState<string>("");
+  const [displayedLength, setDisplayedLength] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [playbackSpeed, setPlaybackSpeed] = useState<number>(1);
+  const [isCompleted, setIsCompleted] = useState<boolean>(true);
   const [isLocked, setIsLocked] = useState<boolean>(false);
   const [chatMessage, setChatMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<
@@ -189,6 +197,33 @@ function VaultContent() {
 
     loadData();
   }, [id, userId, isAdmin]);
+
+  useEffect(() => {
+    if (blueprintData) {
+      setDisplayedLength(blueprintData.length);
+      setIsCompleted(true);
+      setIsPlaying(false);
+    }
+  }, [blueprintData]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isPlaying && blueprintData) {
+      interval = setInterval(() => {
+        setDisplayedLength((prev) => {
+          const next = prev + (50 * playbackSpeed);
+          if (next >= blueprintData.length) {
+            setIsPlaying(false);
+            setIsCompleted(true);
+            return blueprintData.length;
+          }
+          setIsCompleted(false);
+          return next;
+        });
+      }, 50);
+    }
+    return () => clearInterval(interval);
+  }, [isPlaying, blueprintData, playbackSpeed]);
 
   // Dwell Time Tracking
   useEffect(() => {
@@ -436,8 +471,44 @@ function VaultContent() {
 
           <div className="bg-slate-900/50 border border-slate-800 rounded-2xl rounded-tl-none p-6 md:p-10 shadow-2xl backdrop-blur-xl min-h-[600px]">
             {activeTab === "blueprint" ? (
-              <div className="prose prose-invert prose-cyan max-w-none prose-p:text-slate-400 prose-headings:text-slate-200">
-                <ReactMarkdown
+              <div className="flex flex-col gap-4">
+                {/* DVR Controls */}
+                <div className="flex items-center gap-4 bg-zinc-900/80 border border-zinc-800 rounded-lg px-4 py-3 backdrop-blur-md shadow-lg sticky top-0 z-10">
+                  <button onClick={() => { setDisplayedLength(0); setIsPlaying(false); setIsCompleted(false); }} className="text-zinc-400 hover:text-cyan-400 transition-colors cursor-pointer" title="Rewind to start">
+                    <Rewind className="w-5 h-5" />
+                  </button>
+                  <button onClick={() => { if (displayedLength >= blueprintData.length) setDisplayedLength(0); setIsPlaying(!isPlaying); }} className="text-zinc-400 hover:text-cyan-400 transition-colors cursor-pointer" title={isPlaying ? "Pause" : "Play"}>
+                    {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+                  </button>
+                  <button onClick={() => { setDisplayedLength(blueprintData.length); setIsPlaying(false); setIsCompleted(true); }} className="text-zinc-400 hover:text-cyan-400 transition-colors cursor-pointer" title="Skip to end">
+                    <FastForward className="w-5 h-5" />
+                  </button>
+                  
+                  <input
+                    type="range"
+                    min="0"
+                    max={blueprintData.length || 100}
+                    value={displayedLength}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      setDisplayedLength(val);
+                      setIsPlaying(false);
+                      setIsCompleted(val >= blueprintData.length);
+                    }}
+                    className="flex-1 accent-cyan-500 bg-zinc-800 h-1.5 rounded-full outline-none appearance-none cursor-pointer"
+                  />
+                  
+                  <button 
+                    onClick={() => setPlaybackSpeed(s => s === 1 ? 2 : s === 2 ? 0.5 : 1)}
+                    className="text-xs font-mono font-bold px-2 py-1 bg-zinc-800 border border-zinc-700 rounded text-cyan-400 hover:bg-zinc-700 transition-colors w-10 text-center cursor-pointer select-none"
+                    title="Playback Speed"
+                  >
+                    {playbackSpeed}x
+                  </button>
+                </div>
+
+                <div className="prose prose-invert prose-cyan max-w-none prose-p:text-slate-400 prose-headings:text-slate-200">
+                  <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
                     pre: CodeBlock,
@@ -472,8 +543,9 @@ function VaultContent() {
                     },
                   }}
                 >
-                  {blueprintData}
+                  {blueprintData.substring(0, displayedLength)}
                 </ReactMarkdown>
+              </div>
               </div>
             ) : (
               <Sandpack
@@ -664,7 +736,7 @@ function VaultContent() {
 
         {/* Right Column: AI Co-Founder Chat */}
         <div className="lg:col-span-1">
-          <div className="sticky top-8 bg-slate-900/80 border border-cyan-500/30 rounded-2xl flex flex-col h-[600px] overflow-hidden shadow-[0_0_30px_rgba(34,211,238,0.1)] backdrop-blur-xl">
+          <div className="sticky top-6 bg-slate-900/80 border border-cyan-500/30 rounded-2xl flex flex-col h-[calc(100vh-3rem)] overflow-hidden shadow-[0_0_30px_rgba(34,211,238,0.1)] backdrop-blur-xl">
             {/* Chat Header */}
             <div className="p-4 border-b border-slate-800 bg-slate-900 flex items-center gap-3">
               <div className="w-8 h-8 rounded bg-cyan-500/20 flex items-center justify-center">
