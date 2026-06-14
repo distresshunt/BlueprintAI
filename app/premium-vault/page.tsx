@@ -264,6 +264,32 @@ function VaultContent() {
     recognition.start();
   };
 
+  const handleTaskChecked = async (taskText: string) => {
+    const systemMsg = `[SYSTEM: The user just completed task: "${taskText}"]`;
+    const updatedHistory = [...chatHistory, { role: 'user', content: systemMsg }];
+    // @ts-ignore
+    setChatHistory(updatedHistory);
+    
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: updatedHistory.map(m => ({
+            sender: m.role,
+            text: m.content
+          }))
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data.text) {
+        setChatHistory(prev => [...prev, { role: 'ai', content: data.text }]);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatMessage.trim()) return;
@@ -439,6 +465,14 @@ function VaultContent() {
                           <input 
                             type="checkbox" 
                             defaultChecked={checked}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                const taskText = e.target.parentElement?.textContent?.trim();
+                                if (taskText) {
+                                  handleTaskChecked(taskText);
+                                }
+                              }
+                            }}
                             className="w-4 h-4 text-cyan-500 rounded border-slate-700 bg-slate-800 focus:ring-cyan-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1" 
                           />
                         );
