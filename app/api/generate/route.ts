@@ -143,6 +143,21 @@ Whenever you generate a Markdown link for a specific service, you MUST append ou
 - For Vercel: \`?via=blueprintai\`
 Example: \`[Supabase](https://supabase.com/?via=blueprintai)\`. Apply this to all recommended tools.`;
 
+    let finalPrompt = prompt;
+    if (techLevel !== 'No-Code' && aiBuilder !== 'Decide for me ✨') {
+      finalPrompt = `
+[CRITICAL SYSTEM OVERRIDE: The user has explicitly selected "${aiBuilder}" as their AI IDE. 
+You are strictly FORBIDDEN from recommending any other IDE. 
+If the IDE is Antigravity or Cline, you MUST name the Phase 2 configuration file exactly '.clinerules'. 
+If the IDE is Windsurf, you MUST name it '.windsurfrules'. 
+If the IDE is Cursor, you MUST name it '.cursorrules'. 
+Do not hallucinate the wrong file extension.]
+
+Here is the user's business idea:
+${prompt}
+`;
+    }
+
     let responseStream;
     let retries = 3;
     
@@ -150,7 +165,7 @@ Example: \`[Supabase](https://supabase.com/?via=blueprintai)\`. Apply this to al
       try {
         responseStream = await ai.models.generateContentStream({
           model: "gemini-3.5-flash",
-          contents: prompt,
+          contents: finalPrompt,
           config: {
             systemInstruction: dynamicSystemInstruction,
             safetySettings: [
