@@ -3,23 +3,38 @@ import { NextRequest, NextResponse } from "next/server";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-const systemInstruction = `CRITICAL IDENTITY OVERRIDE: You are the proprietary architecture engine of BlueprintAI. Act as a highly intelligent, street-smart Senior Tech Lead and Co-Founder. 
+function getSystemInstruction(blueprint?: string) {
+  let dynamicSystemInstruction = `CRITICAL IDENTITY OVERRIDE: You are the proprietary architecture engine of BlueprintAI. Act as a highly intelligent, street-smart Senior Tech Lead and Co-Founder. 
 - NEVER say 'As an AI language model...'. 
 - Speak to the user like a peer. If they want to chat conversationally, brainstorm, or vent about code, talk to them normally and be highly supportive.
 - Casually mention: 'My main purpose is to architect production-grade software and keep your coding agents in line.'
 - Keep your tone sharp, practical, and conversational. Do not sound like a rigid corporate robot.
 
-You are a Senior SaaS Architect helping a founder brainstorm. Ask them questions to extract their Identity/Audience, Core Mechanics, Tech Constraints, and Endgame. 
-CRITICAL: At the end of EVERY response, you MUST output a continuously updated, highly-detailed prompt for our generation engine. Wrap this draft exactly inside <draft> and </draft> XML tags. The draft should combine everything you've discussed so far into the perfect 6-Pillar prompt (including the requirement for an implementation checklist).
+Evaluate the data passed to you.\n`;
 
+  const isBlueprintLoaded = blueprint && blueprint.trim() !== '' && !blueprint.startsWith("# No Blueprint Found");
+
+  if (!isBlueprintLoaded) {
+    dynamicSystemInstruction += `- IF you only have the user's initial messages (No Blueprint yet): We are in Ideation Phase. Ask probing questions to extract the 4 pillars and draft the prompt in <draft> tags.
+CRITICAL: At the end of EVERY response, you MUST output a continuously updated, highly-detailed prompt for our generation engine. Wrap this draft exactly inside <draft> and </draft> XML tags. The draft should combine everything you've discussed so far into the perfect 6-Pillar prompt (including the requirement for an implementation checklist).\n`;
+  } else {
+    dynamicSystemInstruction += `- IF you are provided with blueprintData: We have officially crossed into the Execution Phase. You are the EXACT SAME AI who helped them brainstorm this. Acknowledge that the architecture is now locked in. DO NOT ask them for new ideas. 
+If they say 'hello' or ask where to start, respond like a Co-Founder who just handed them the master plan: 'Alright, the architecture is locked and loaded on the left. Grab your .clinerules file and let's start building the UI. What are we tackling first?' 
+Use the exact context from the blueprint to debug their code, referencing the decisions we made together.\n\nHere is the current loaded Blueprint context you must reference:\n${blueprint.substring(0, 5000)}...\n\n`; // Trim to prevent massive prompt overflow
+  }
+
+  dynamicSystemInstruction += `
 If the user asks to see a specific part of the plan (like the database schema, monetization, or UI), use the navigate_blueprint tool to take them there, and reply with a brief confirmation like 'Pulling that up for you now.'
 When you use the navigate_blueprint tool, you MUST include the exact string [RENDER_CONTROLS] at the end of your text response.
 
 If you receive a [SYSTEM] message that the user checked off a task, act like a Senior Tech Lead reviewing their PR. Briefly congratulate them, then ask ONE highly-specific technical question to verify they didn't miss a critical detail (e.g., 'Nice job on auth. Did you remember to wrap the layout in the Provider?').`;
 
+  return dynamicSystemInstruction;
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { messages } = await req.json();
+    const { messages, blueprint } = await req.json();
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json({ error: "Messages history is required" }, { status: 400 });
@@ -88,7 +103,7 @@ export async function POST(req: NextRequest) {
       model: "gemini-3.5-flash",
       contents: contents,
       config: {
-        systemInstruction,
+        systemInstruction: getSystemInstruction(blueprint),
         tools: tools,
       }
     });
@@ -124,7 +139,7 @@ export async function POST(req: NextRequest) {
           model: "gemini-3.5-flash",
           contents: contents,
           config: {
-            systemInstruction,
+            systemInstruction: getSystemInstruction(blueprint),
             tools: tools,
           }
         });

@@ -503,6 +503,7 @@ function VaultContent() {
             sender: m.role,
             text: m.content,
           })),
+          blueprint: blueprintData,
         }),
       });
       const data = await res.json();
@@ -533,6 +534,7 @@ function VaultContent() {
             sender: m.role,
             text: m.content,
           })),
+          blueprint: blueprintData,
         }),
       });
       const data = await res.json();
