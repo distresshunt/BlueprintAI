@@ -43,7 +43,7 @@ function VaultContent() {
   const [isLocked, setIsLocked] = useState<boolean>(false);
   const [chatMessage, setChatMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<
-    { role: "user" | "ai"; content: string }[]
+    { role: "user" | "ai"; content: string; isPredictive?: boolean }[]
   >([
     {
       role: "ai",
@@ -307,6 +307,37 @@ function VaultContent() {
     return () => clearTimeout(setupObserver);
   }, [blueprintData]);
 
+  // Predictive Thought Stream
+  const announcedPhases = useRef<Set<string>>(new Set());
+  
+  useEffect(() => {
+    if (!isPlaying || !blueprintData) return;
+
+    const phases = [
+      { id: "Phase 1", label: "Phase 1", message: "Drafting the 'Movie Set' UI and mock data schemas..." },
+      { id: "Phase 2", label: "Phase 2", message: "Locking in the strict Agent-to-Agent .clinerules..." },
+      { id: "Phase 3", label: "Phase 3", message: "Setting up the Stripe/Gumroad payment traps..." }
+    ];
+
+    phases.forEach(phase => {
+      const phaseIndex = blueprintData.indexOf(phase.label);
+      if (phaseIndex !== -1 && !announcedPhases.current.has(phase.id)) {
+        // If we are within 150 chars of the phase header
+        if (displayedLength >= phaseIndex - 150 && displayedLength < phaseIndex) {
+          announcedPhases.current.add(phase.id);
+          setChatHistory(prev => [
+            ...prev,
+            {
+              role: "ai",
+              content: phase.message,
+              isPredictive: true
+            }
+          ]);
+        }
+      }
+    });
+  }, [displayedLength, isPlaying, blueprintData]);
+
   // Highlight Tracking
   useEffect(() => {
     const handleMouseUp = () => {
@@ -535,7 +566,18 @@ function VaultContent() {
                   <button onClick={() => { setDisplayedLength(0); setIsPlaying(false); setIsCompleted(false); }} className="text-zinc-400 hover:text-cyan-400 transition-colors cursor-pointer" title="Rewind to start">
                     <Rewind className="w-5 h-5" />
                   </button>
-                  <button onClick={() => { if (displayedLength >= blueprintData.length) setDisplayedLength(0); setIsPlaying(!isPlaying); }} className="text-zinc-400 hover:text-cyan-400 transition-colors cursor-pointer" title={isPlaying ? "Pause" : "Play"}>
+                  <button onClick={() => { 
+                    if (isPlaying) {
+                      const nextSpace = blueprintData.substring(displayedLength).search(/[\s\.\n]/);
+                      if (nextSpace !== -1) {
+                        setDisplayedLength(displayedLength + nextSpace + 1);
+                      }
+                      setIsPlaying(false);
+                    } else {
+                      if (displayedLength >= blueprintData.length) setDisplayedLength(0); 
+                      setIsPlaying(true);
+                    }
+                  }} className="text-zinc-400 hover:text-cyan-400 transition-colors cursor-pointer" title={isPlaying ? "Pause" : "Play"}>
                     {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
                   </button>
                   <button onClick={() => { setDisplayedLength(blueprintData.length); setIsPlaying(false); setIsCompleted(true); }} className="text-zinc-400 hover:text-cyan-400 transition-colors cursor-pointer" title="Skip to end">
@@ -548,7 +590,11 @@ function VaultContent() {
                     max={blueprintData.length || 100}
                     value={displayedLength}
                     onChange={(e) => {
-                      const val = Number(e.target.value);
+                      let val = Number(e.target.value);
+                      const nextSpace = blueprintData.substring(val).search(/[\s\.\n]/);
+                      if (nextSpace !== -1) {
+                        val = val + nextSpace + 1;
+                      }
                       setDisplayedLength(val);
                       setIsPlaying(false);
                       setIsCompleted(val >= blueprintData.length);
@@ -563,6 +609,25 @@ function VaultContent() {
                   >
                     {playbackSpeed}x
                   </button>
+                </div>
+
+                <div className="flex flex-wrap gap-2 mt-1 px-2">
+                  {["Intro", "Phase 0", "Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5", "Phase 6"].map(phase => {
+                    const phaseIndex = phase === "Intro" ? 0 : blueprintData.indexOf(phase + ":");
+                    if (phase !== "Intro" && phaseIndex === -1) return null;
+                    return (
+                      <button
+                        key={phase}
+                        onClick={() => {
+                          setDisplayedLength(phaseIndex);
+                          setIsPlaying(false);
+                        }}
+                        className="text-[10px] font-mono font-bold px-2 py-1 bg-zinc-800/50 border border-zinc-700/50 rounded text-cyan-500/70 hover:bg-zinc-700 hover:text-cyan-400 transition-colors cursor-pointer uppercase tracking-wider"
+                      >
+                        {phase}
+                      </button>
+                    );
+                  })}
                 </div>
 
                 <div 
@@ -839,7 +904,9 @@ function VaultContent() {
                     className={`max-w-[85%] rounded-xl p-3 text-sm ${
                       msg.role === "user"
                         ? "bg-cyan-500 text-black font-medium"
-                        : "bg-slate-800 text-slate-300 border border-slate-700"
+                        : msg.isPredictive 
+                          ? "bg-slate-800/50 text-slate-400 italic border border-slate-800" 
+                          : "bg-slate-800 text-slate-300 border border-slate-700"
                     }`}
                   >
                     {msg.content.startsWith("[FILE_DOWNLOAD:") ? (
