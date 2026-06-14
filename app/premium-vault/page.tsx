@@ -1,53 +1,80 @@
-'use client';
+"use client";
 
-import { useEffect, useState, Suspense, useRef, useMemo } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { Send, Bot, CheckCircle, Mic, Terminal, ChevronUp, ChevronDown, Copy } from 'lucide-react';
-import Link from 'next/link';
-import { CodeBlock } from '@/components/CodeBlock';
-import { useSearchParams } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
-import { useAuth, useUser, useClerk } from '@clerk/nextjs';
-import { Sandpack } from '@codesandbox/sandpack-react';
-import { ResourceHub } from '@/components/ResourceHub';
+import { useEffect, useState, Suspense, useRef, useMemo } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import {
+  Send,
+  Bot,
+  CheckCircle,
+  Mic,
+  Terminal,
+  ChevronUp,
+  ChevronDown,
+  Copy,
+} from "lucide-react";
+import Link from "next/link";
+import { CodeBlock } from "@/components/CodeBlock";
+import { useSearchParams } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import { useAuth, useUser, useClerk } from "@clerk/nextjs";
+import { Sandpack } from "@codesandbox/sandpack-react";
+import { ResourceHub } from "@/components/ResourceHub";
 function VaultContent() {
   const { userId } = useAuth();
   const { user } = useUser();
   const clerk = useClerk();
-  const isAdmin = user?.emailAddresses?.[0]?.emailAddress === 'exoscommand@gmail.com';
-  const [activeTab, setActiveTab] = useState<'blueprint' | 'workspace'>('blueprint');
-  const [blueprintData, setBlueprintData] = useState<string>('');
+  const isAdmin =
+    user?.emailAddresses?.[0]?.emailAddress === "exoscommand@gmail.com";
+  const [activeTab, setActiveTab] = useState<"blueprint" | "workspace">(
+    "blueprint",
+  );
+  const [blueprintData, setBlueprintData] = useState<string>("");
   const [isLocked, setIsLocked] = useState<boolean>(false);
-  const [chatMessage, setChatMessage] = useState('');
-  const [chatHistory, setChatHistory] = useState<{role: 'user' | 'ai', content: string}[]>([
-    { role: 'ai', content: "Welcome to the Premium Vault! I'm your AI Co-Founder. Let me know if you need help executing any phase of your blueprint." }
+  const [chatMessage, setChatMessage] = useState("");
+  const [chatHistory, setChatHistory] = useState<
+    { role: "user" | "ai"; content: string }[]
+  >([
+    {
+      role: "ai",
+      content:
+        "Welcome to the Premium Vault! I'm your AI Co-Founder. Let me know if you need help executing any phase of your blueprint.",
+    },
   ]);
   const [isRecording, setIsRecording] = useState(false);
-  const [micError, setMicError] = useState('');
+  const [micError, setMicError] = useState("");
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [isGithubLoading, setIsGithubLoading] = useState(false);
-  const [githubRepoUrl, setGithubRepoUrl] = useState('');
+  const [githubRepoUrl, setGithubRepoUrl] = useState("");
 
-  const hasGithub = user?.externalAccounts?.some(acc => (acc.provider as string) === 'oauth_github' || (acc.provider as string).includes('github')) || false;
-  const githubAccount = user?.externalAccounts?.find(acc => (acc.provider as string) === 'oauth_github' || (acc.provider as string).includes('github'));
+  const hasGithub =
+    user?.externalAccounts?.some(
+      (acc) =>
+        (acc.provider as string) === "oauth_github" ||
+        (acc.provider as string).includes("github"),
+    ) || false;
+  const githubAccount = user?.externalAccounts?.find(
+    (acc) =>
+      (acc.provider as string) === "oauth_github" ||
+      (acc.provider as string).includes("github"),
+  );
   const githubUsername = githubAccount?.username || githubAccount?.emailAddress;
 
   const handleGithubDeploy = async () => {
     try {
       setIsGithubLoading(true);
-      
-      const res = await fetch('/api/github-init', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ blueprintMarkdown: blueprintData })
+
+      const res = await fetch("/api/github-init", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ blueprintMarkdown: blueprintData }),
       });
-      
+
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to deploy');
-      
+      if (!res.ok) throw new Error(data.error || "Failed to deploy");
+
       setGithubRepoUrl(data.url);
-      window.open(data.url, '_blank');
+      window.open(data.url, "_blank");
     } catch (err: any) {
       console.error("Deploy failed:", err.message);
       alert("Deploy failed: " + err.message);
@@ -58,21 +85,21 @@ function VaultContent() {
 
   const cliCommands = useMemo(() => {
     if (!blueprintData) return [];
-    
+
     const commands: string[] = [];
     // Extract block commands
     const regex = /```(?:bash|sh|shell)([\s\S]*?)```/gi;
     let match;
     while ((match = regex.exec(blueprintData)) !== null) {
       const block = match[1].trim();
-      const lines = block.split('\n');
+      const lines = block.split("\n");
       for (const line of lines) {
-        if (line.trim() && !line.trim().startsWith('#')) {
+        if (line.trim() && !line.trim().startsWith("#")) {
           commands.push(line.trim());
         }
       }
     }
-    
+
     // Extract inline commands starting with npx, npm, yarn, pnpm
     const inlineRegex = /`([^`]+)`/g;
     let inlineMatch;
@@ -82,14 +109,14 @@ function VaultContent() {
         commands.push(code);
       }
     }
-    
+
     return [...new Set(commands)];
   }, [blueprintData]);
-  
+
   const searchParams = useSearchParams();
-  const id = searchParams.get('id');
-  const sessionId = searchParams.get('session_id');
-  const isSuccess = searchParams.get('success') === 'true';
+  const id = searchParams.get("id");
+  const sessionId = searchParams.get("session_id");
+  const isSuccess = searchParams.get("success") === "true";
   const showBanner = sessionId || isSuccess;
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -98,7 +125,7 @@ function VaultContent() {
 
   useEffect(() => {
     if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [chatHistory]);
 
@@ -107,11 +134,11 @@ function VaultContent() {
       if (id) {
         try {
           const { data, error } = await supabase
-            .from('blueprints')
-            .select('blueprint_markdown, is_unlocked')
-            .eq('id', id)
+            .from("blueprints")
+            .select("blueprint_markdown, is_unlocked")
+            .eq("id", id)
             .single();
-            
+
           if (data) {
             if (data.is_unlocked === false && !isAdmin) {
               setIsLocked(true);
@@ -121,21 +148,22 @@ function VaultContent() {
             if (data.blueprint_markdown) {
               setBlueprintData(data.blueprint_markdown);
             }
-            
+
             if (userId) {
               // Mark user as Pro
               supabase
-                .from('profiles')
+                .from("profiles")
                 .upsert({ user_id: userId, is_pro: true })
                 .then(({ error: profileError }) => {
-                  if (profileError) console.error("Failed to mark as Pro:", profileError);
+                  if (profileError)
+                    console.error("Failed to mark as Pro:", profileError);
                 });
 
               // Optimistic Unlock in background
               supabase
-                .from('blueprints')
+                .from("blueprints")
                 .update({ is_unlocked: true })
-                .eq('user_id', userId)
+                .eq("user_id", userId)
                 .then(({ error: unlockError }) => {
                   if (unlockError) {
                     console.error("Silent unlock failed:", unlockError);
@@ -148,42 +176,52 @@ function VaultContent() {
           console.error("Failed to load from Supabase:", e);
         }
       }
-      
-      const localData = localStorage.getItem('blueprintData');
+
+      const localData = localStorage.getItem("blueprintData");
       if (localData) {
         setBlueprintData(localData);
       } else {
-        setBlueprintData('# No Blueprint Found\nPlease generate a blueprint from the home page.');
+        setBlueprintData(
+          "# No Blueprint Found\nPlease generate a blueprint from the home page.",
+        );
       }
     }
-    
+
     loadData();
   }, [id, userId, isAdmin]);
 
   // Dwell Time Tracking
   useEffect(() => {
     const setupObserver = setTimeout(() => {
-      const elements = document.querySelectorAll('.prose strong');
-      const phaseElements = Array.from(elements).filter(el => el.textContent?.startsWith('Phase'));
+      const elements = document.querySelectorAll(".prose strong");
+      const phaseElements = Array.from(elements).filter((el) =>
+        el.textContent?.startsWith("Phase"),
+      );
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const phaseName = entry.target.textContent;
-            if (timeoutRef.current) clearTimeout(timeoutRef.current);
-            timeoutRef.current = setTimeout(() => {
-              setChatHistory(prev => [...prev, { 
-                role: 'ai', 
-                content: `I notice you're reviewing ${phaseName}. Let me know if you need the exact Stripe API keys or specific code to proceed.` 
-              }]);
-            }, 15000);
-          } else {
-            if (timeoutRef.current) clearTimeout(timeoutRef.current);
-          }
-        });
-      }, { threshold: 0.5 });
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const phaseName = entry.target.textContent;
+              if (timeoutRef.current) clearTimeout(timeoutRef.current);
+              timeoutRef.current = setTimeout(() => {
+                setChatHistory((prev) => [
+                  ...prev,
+                  {
+                    role: "ai",
+                    content: `I notice you're reviewing ${phaseName}. Let me know if you need the exact Stripe API keys or specific code to proceed.`,
+                  },
+                ]);
+              }, 15000);
+            } else {
+              if (timeoutRef.current) clearTimeout(timeoutRef.current);
+            }
+          });
+        },
+        { threshold: 0.5 },
+      );
 
-      phaseElements.forEach(el => observer.observe(el));
+      phaseElements.forEach((el) => observer.observe(el));
 
       return () => {
         observer.disconnect();
@@ -201,18 +239,23 @@ function VaultContent() {
       const text = selection?.toString().trim();
       if (text && text.length > 10) {
         // Find if we already asked about this exact snippet to prevent spam
-        const alreadyAsked = chatHistory.some(msg => msg.content.includes(text.substring(0, 10)));
+        const alreadyAsked = chatHistory.some((msg) =>
+          msg.content.includes(text.substring(0, 10)),
+        );
         if (!alreadyAsked) {
-          setChatHistory(prev => [...prev, {
-            role: 'ai',
-            content: `I see you highlighted: "${text.length > 50 ? text.substring(0, 50) + '...' : text}". Let me know if you want me to explain or code that specific part.`
-          }]);
+          setChatHistory((prev) => [
+            ...prev,
+            {
+              role: "ai",
+              content: `I see you highlighted: "${text.length > 50 ? text.substring(0, 50) + "..." : text}". Let me know if you want me to explain or code that specific part.`,
+            },
+          ]);
         }
       }
     };
 
-    document.addEventListener('mouseup', handleMouseUp);
-    return () => document.removeEventListener('mouseup', handleMouseUp);
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => document.removeEventListener("mouseup", handleMouseUp);
   }, [chatHistory]);
 
   const toggleRecording = () => {
@@ -222,11 +265,13 @@ function VaultContent() {
       return;
     }
 
-    setMicError('');
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    setMicError("");
+    const SpeechRecognition =
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
       setMicError("Browser doesn't support voice input.");
-      setTimeout(() => setMicError(''), 5000);
+      setTimeout(() => setMicError(""), 5000);
       return;
     }
 
@@ -238,7 +283,7 @@ function VaultContent() {
     recognition.onstart = () => setIsRecording(true);
 
     recognition.onresult = (event: any) => {
-      let finalTranscript = '';
+      let finalTranscript = "";
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
           finalTranscript += event.results[i][0].transcript;
@@ -246,18 +291,24 @@ function VaultContent() {
       }
       if (finalTranscript.trim()) {
         const message = finalTranscript.trim();
-        setChatHistory(prev => [...prev, { role: 'user', content: message }]);
+        setChatHistory((prev) => [...prev, { role: "user", content: message }]);
         setTimeout(() => {
-          setChatHistory(prev => [...prev, { role: 'ai', content: `I heard: "${message}". I am analyzing the blueprint to assist you.` }]);
+          setChatHistory((prev) => [
+            ...prev,
+            {
+              role: "ai",
+              content: `I heard: "${message}". I am analyzing the blueprint to assist you.`,
+            },
+          ]);
         }, 1000);
       }
     };
 
     recognition.onerror = (event: any) => {
       setIsRecording(false);
-      if (event.error !== 'no-speech') {
-          setMicError(`Mic error: ${event.error}`);
-          setTimeout(() => setMicError(''), 5000);
+      if (event.error !== "no-speech") {
+        setMicError(`Mic error: ${event.error}`);
+        setTimeout(() => setMicError(""), 5000);
       }
     };
 
@@ -267,24 +318,27 @@ function VaultContent() {
 
   const handleTaskChecked = async (taskText: string) => {
     const systemMsg = `[SYSTEM: The user just completed task: "${taskText}"]`;
-    const updatedHistory = [...chatHistory, { role: 'user', content: systemMsg }];
+    const updatedHistory = [
+      ...chatHistory,
+      { role: "user", content: systemMsg },
+    ];
     // @ts-ignore
     setChatHistory(updatedHistory);
-    
+
     try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: updatedHistory.map(m => ({
+          messages: updatedHistory.map((m) => ({
             sender: m.role,
-            text: m.content
-          }))
-        })
+            text: m.content,
+          })),
+        }),
       });
       const data = await res.json();
       if (res.ok && data.text) {
-        setChatHistory(prev => [...prev, { role: 'ai', content: data.text }]);
+        setChatHistory((prev) => [...prev, { role: "ai", content: data.text }]);
       }
     } catch (error) {
       console.error(error);
@@ -294,33 +348,39 @@ function VaultContent() {
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatMessage.trim()) return;
-    
+
     const userMsg = chatMessage.trim();
-    const updatedHistory = [...chatHistory, { role: 'user', content: userMsg }];
+    const updatedHistory = [...chatHistory, { role: "user", content: userMsg }];
     // @ts-ignore
     setChatHistory(updatedHistory);
-    setChatMessage('');
-    
+    setChatMessage("");
+
     try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: updatedHistory.map(m => ({
+          messages: updatedHistory.map((m) => ({
             sender: m.role,
-            text: m.content
-          }))
-        })
+            text: m.content,
+          })),
+        }),
       });
       const data = await res.json();
       if (res.ok && data.text) {
-        setChatHistory(prev => [...prev, { role: 'ai', content: data.text }]);
+        setChatHistory((prev) => [...prev, { role: "ai", content: data.text }]);
       } else {
-        throw new Error(data.error || 'Failed to fetch response');
+        throw new Error(data.error || "Failed to fetch response");
       }
     } catch (error) {
       console.error(error);
-      setChatHistory(prev => [...prev, { role: 'ai', content: "I'm having trouble connecting to my neural net right now." }]);
+      setChatHistory((prev) => [
+        ...prev,
+        {
+          role: "ai",
+          content: "I'm having trouble connecting to my neural net right now.",
+        },
+      ]);
     }
   };
 
@@ -331,9 +391,14 @@ function VaultContent() {
         <header className="mb-8 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-between">
           <div className="flex items-center gap-3">
             <CheckCircle className="text-emerald-400 w-6 h-6 shrink-0" />
-            <h1 className="text-emerald-400 font-bold text-lg md:text-xl tracking-tight">Payment Successful. Your Blueprint is unlocked.</h1>
+            <h1 className="text-emerald-400 font-bold text-lg md:text-xl tracking-tight">
+              Payment Successful. Your Blueprint is unlocked.
+            </h1>
           </div>
-          <Link href="/dashboard" className="text-xs md:text-sm text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-widest font-mono shrink-0">
+          <Link
+            href="/dashboard"
+            className="text-xs md:text-sm text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-widest font-mono shrink-0"
+          >
             &larr; Back to Dashboard
           </Link>
         </header>
@@ -345,13 +410,20 @@ function VaultContent() {
           <div className="flex items-center gap-3">
             <Terminal className="w-5 h-5 text-cyan-400 shrink-0" />
             <div>
-              <h3 className="font-bold text-white text-sm tracking-tight">A2A Sync Key</h3>
-              <p className="text-xs text-zinc-500">Paste this ID into your local BlueprintAI CLI to sync directly with your IDE.</p>
+              <h3 className="font-bold text-white text-sm tracking-tight">
+                A2A Sync Key
+              </h3>
+              <p className="text-xs text-zinc-500">
+                Paste this ID into your local BlueprintAI CLI to sync directly
+                with your IDE.
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-lg p-2 max-w-full overflow-hidden">
-            <code className="text-cyan-400 font-mono text-xs truncate select-all">{id}</code>
-            <button 
+            <code className="text-cyan-400 font-mono text-xs truncate select-all">
+              {id}
+            </code>
+            <button
               onClick={() => navigator.clipboard.writeText(id)}
               className="text-zinc-400 hover:text-white transition-colors shrink-0 p-1"
               title="Copy Sync ID"
@@ -366,28 +438,49 @@ function VaultContent() {
       <div className="mb-8 p-6 bg-slate-900/50 backdrop-blur-md border border-zinc-800 rounded-xl shadow-2xl flex flex-col gap-4">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
-            <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="currentColor">
+            <svg
+              viewBox="0 0 24 24"
+              className="w-5 h-5 text-white"
+              fill="currentColor"
+            >
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
             </svg>
           </div>
           <div>
-            <h3 className="font-bold text-white text-base tracking-tight">GitHub 1-Click Repo Initializer</h3>
-            <p className="text-xs text-zinc-400">Instantly deploy your generated architecture (.clinerules and schema.sql) to a new private repository.</p>
+            <h3 className="font-bold text-white text-base tracking-tight">
+              GitHub 1-Click Repo Initializer
+            </h3>
+            <p className="text-xs text-zinc-400">
+              Instantly deploy your generated architecture (.clinerules and
+              schema.sql) to a new private repository.
+            </p>
           </div>
         </div>
-        
+
         {githubRepoUrl ? (
           <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-            <p className="text-emerald-400 font-semibold mb-2">✅ Repository initialized successfully!</p>
-            <a href={githubRepoUrl} target="_blank" rel="noopener noreferrer" className="text-emerald-300 underline text-sm hover:text-emerald-200">
+            <p className="text-emerald-400 font-semibold mb-2">
+              ✅ Repository initialized successfully!
+            </p>
+            <a
+              href={githubRepoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-emerald-300 underline text-sm hover:text-emerald-200"
+            >
               {githubRepoUrl}
             </a>
           </div>
         ) : !hasGithub ? (
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
             <div>
-              <p className="text-sm text-zinc-300 font-medium">Connect your GitHub Account</p>
-              <p className="text-xs text-zinc-500">Click to open your Account Settings, select 'Connected Accounts', and link your GitHub.</p>
+              <p className="text-sm text-zinc-300 font-medium">
+                Connect your GitHub Account
+              </p>
+              <p className="text-xs text-zinc-500">
+                Click to open your Account Settings, select 'Connected
+                Accounts', and link your GitHub.
+              </p>
             </div>
             <button
               onClick={() => clerk.openUserProfile()}
@@ -400,11 +493,20 @@ function VaultContent() {
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-4 bg-cyan-950/20 rounded-lg border border-cyan-900/50">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden border border-zinc-700">
-                <img src={githubAccount?.imageUrl} alt="GitHub Avatar" className="w-full h-full object-cover" />
+                <img
+                  src={githubAccount?.imageUrl}
+                  alt="GitHub Avatar"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
-                <p className="text-sm text-zinc-300 font-medium">Connected as <span className="text-white font-bold">{githubUsername}</span></p>
-                <p className="text-xs text-zinc-500">Ready for 1-Click Deployment.</p>
+                <p className="text-sm text-zinc-300 font-medium">
+                  Connected as{" "}
+                  <span className="text-white font-bold">{githubUsername}</span>
+                </p>
+                <p className="text-xs text-zinc-500">
+                  Ready for 1-Click Deployment.
+                </p>
               </div>
             </div>
             <button
@@ -412,35 +514,36 @@ function VaultContent() {
               disabled={isGithubLoading}
               className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2.5 px-6 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] whitespace-nowrap"
             >
-              {isGithubLoading ? 'Creating repository and injecting files...' : '🚀 1-Click Deploy to GitHub'}
+              {isGithubLoading
+                ? "Creating repository and injecting files..."
+                : "🚀 1-Click Deploy to GitHub"}
             </button>
           </div>
         )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        
         {/* Left Column: Markdown Blueprint / Sandpack Workspace */}
         <div className="lg:col-span-2 space-y-6">
           <ResourceHub blueprintMarkdown={blueprintData} />
-          
+
           <div className="flex items-center gap-2 mb-4">
             <button
-              onClick={() => setActiveTab('blueprint')}
+              onClick={() => setActiveTab("blueprint")}
               className={`px-4 py-2 rounded-t-lg font-bold text-sm uppercase tracking-widest transition-colors ${
-                activeTab === 'blueprint' 
-                  ? 'bg-slate-900 text-cyan-400 border-t border-x border-slate-800' 
-                  : 'bg-transparent text-slate-500 hover:text-slate-300'
+                activeTab === "blueprint"
+                  ? "bg-slate-900 text-cyan-400 border-t border-x border-slate-800"
+                  : "bg-transparent text-slate-500 hover:text-slate-300"
               }`}
             >
               Architecture Blueprint
             </button>
             <button
-              onClick={() => setActiveTab('workspace')}
+              onClick={() => setActiveTab("workspace")}
               className={`px-4 py-2 rounded-t-lg font-bold text-sm uppercase tracking-widest transition-colors ${
-                activeTab === 'workspace' 
-                  ? 'bg-slate-900 text-cyan-400 border-t border-x border-slate-800' 
-                  : 'bg-transparent text-slate-500 hover:text-slate-300'
+                activeTab === "workspace"
+                  ? "bg-slate-900 text-cyan-400 border-t border-x border-slate-800"
+                  : "bg-transparent text-slate-500 hover:text-slate-300"
               }`}
             >
               Live Code Workspace
@@ -448,11 +551,11 @@ function VaultContent() {
           </div>
 
           <div className="bg-slate-900/50 border border-slate-800 rounded-2xl rounded-tl-none p-6 md:p-10 shadow-2xl backdrop-blur-xl min-h-[600px]">
-            {activeTab === 'blueprint' ? (
+            {activeTab === "blueprint" ? (
               <div className="prose prose-invert prose-cyan max-w-none prose-p:text-slate-400 prose-headings:text-slate-200">
-                <ReactMarkdown 
+                <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
-                  components={{ 
+                  components={{
                     pre: CodeBlock,
                     a: ({ node, ...props }: any) => (
                       <a
@@ -463,25 +566,26 @@ function VaultContent() {
                       />
                     ),
                     input: ({ node, checked, ...props }: any) => {
-                      if (props.type === 'checkbox') {
+                      if (props.type === "checkbox") {
                         return (
-                          <input 
-                            type="checkbox" 
+                          <input
+                            type="checkbox"
                             defaultChecked={checked}
                             onChange={(e) => {
                               if (e.target.checked) {
-                                const taskText = e.target.parentElement?.textContent?.trim();
+                                const taskText =
+                                  e.target.parentElement?.textContent?.trim();
                                 if (taskText) {
                                   handleTaskChecked(taskText);
                                 }
                               }
                             }}
-                            className="w-4 h-4 text-cyan-500 rounded border-slate-700 bg-slate-800 focus:ring-cyan-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1" 
+                            className="w-4 h-4 text-cyan-500 rounded border-slate-700 bg-slate-800 focus:ring-cyan-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1"
                           />
                         );
                       }
                       return <input {...props} />;
-                    }
+                    },
                   }}
                 >
                   {blueprintData}
@@ -498,8 +602,9 @@ function VaultContent() {
                   // @ts-ignore
                   editorOptions: { wordWrap: "on" },
                   classes: {
-                    "sp-wrapper": "custom-sandpack-wrapper w-full max-w-full overflow-hidden rounded-xl border border-zinc-800 shadow-2xl",
-                  }
+                    "sp-wrapper":
+                      "custom-sandpack-wrapper w-full max-w-full overflow-hidden rounded-xl border border-zinc-800 shadow-2xl",
+                  },
                 }}
                 files={{
                   "/App.tsx": `export default function App() {\n  return (\n    <div style={{ padding: '2rem', backgroundColor: '#09090b', color: 'white', minHeight: '100vh', fontFamily: 'sans-serif' }}>\n      <h1 style={{ color: '#22d3ee', fontSize: '2rem', fontWeight: 'bold' }}>BlueprintAI Workspace</h1>\n      <p style={{ marginTop: '1rem', color: '#a1a1aa' }}>Your live React environment is initialized. Paste your UI components here.</p>\n    </div>\n  );\n}`,
@@ -507,35 +612,45 @@ function VaultContent() {
               />
             )}
           </div>
-          
+
           {/* Terminal Drawer */}
           <div className="fixed bottom-0 left-4 md:left-8 lg:w-[calc((100vw-4rem)*0.66)] lg:max-w-[calc(80rem*0.66)] right-4 lg:right-auto bg-[#0D0D0D] border-t border-zinc-800 rounded-t-xl z-40 transition-all duration-300 flex flex-col shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
             {/* Toggle Tab */}
-            <button 
+            <button
               onClick={() => setIsTerminalOpen(!isTerminalOpen)}
               className="bg-zinc-900 hover:bg-zinc-800 border-t border-x border-zinc-800 rounded-t-lg px-4 py-2 flex items-center gap-2 self-start ml-4 md:ml-8 -mt-[37px] text-xs font-mono text-zinc-400 transition-colors"
             >
               <Terminal className="w-3 h-3 text-green-400" />
               &gt;_ TERMINAL
-              {isTerminalOpen ? <ChevronDown className="w-3 h-3" /> : <ChevronUp className="w-3 h-3" />}
+              {isTerminalOpen ? (
+                <ChevronDown className="w-3 h-3" />
+              ) : (
+                <ChevronUp className="w-3 h-3" />
+              )}
             </button>
-            
+
             {/* Expanded Content */}
             {isTerminalOpen && (
               <div className="p-4 h-48 overflow-y-auto font-mono text-sm relative">
-                <button 
-                  onClick={() => navigator.clipboard.writeText(cliCommands.join('\n'))}
+                <button
+                  onClick={() =>
+                    navigator.clipboard.writeText(cliCommands.join("\n"))
+                  }
                   className="absolute top-4 right-4 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-3 py-1 rounded text-xs flex items-center gap-2 transition-colors"
                 >
                   <Copy className="w-3 h-3" />
                   Copy All
                 </button>
                 {cliCommands.length === 0 ? (
-                  <div className="text-zinc-600 mt-2">~ % No setup commands detected in blueprint.</div>
+                  <div className="text-zinc-600 mt-2">
+                    ~ % No setup commands detected in blueprint.
+                  </div>
                 ) : (
                   cliCommands.map((cmd, idx) => (
                     <div key={idx} className="flex gap-3 mt-1">
-                      <span className="text-zinc-600 select-none shrink-0">~ %</span>
+                      <span className="text-zinc-600 select-none shrink-0">
+                        ~ %
+                      </span>
                       <span className="text-green-400 break-all">{cmd}</span>
                     </div>
                   ))
@@ -548,42 +663,58 @@ function VaultContent() {
         {/* Right Column: AI Co-Founder Chat */}
         <div className="lg:col-span-1">
           <div className="sticky top-8 bg-slate-900/80 border border-cyan-500/30 rounded-2xl flex flex-col h-[600px] overflow-hidden shadow-[0_0_30px_rgba(34,211,238,0.1)] backdrop-blur-xl">
-            
             {/* Chat Header */}
             <div className="p-4 border-b border-slate-800 bg-slate-900 flex items-center gap-3">
               <div className="w-8 h-8 rounded bg-cyan-500/20 flex items-center justify-center">
                 <Bot className="w-5 h-5 text-cyan-400" />
               </div>
               <div>
-                <h3 className="font-bold text-white tracking-tight">AI Co-Founder</h3>
-                <p className="text-[10px] uppercase font-mono tracking-widest text-emerald-400">Online & Ready</p>
+                <h3 className="font-bold text-white tracking-tight">
+                  AI Co-Founder
+                </h3>
+                <p className="text-[10px] uppercase font-mono tracking-widest text-emerald-400">
+                  Online & Ready
+                </p>
               </div>
             </div>
 
             {/* Chat History */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {chatHistory.map((msg, i) => (
-                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[85%] rounded-xl p-3 text-sm ${
-                    msg.role === 'user' 
-                      ? 'bg-cyan-500 text-black font-medium' 
-                      : 'bg-slate-800 text-slate-300 border border-slate-700'
-                  }`}>
-                    {msg.content.startsWith('[FILE_DOWNLOAD:') ? (
+                <div
+                  key={i}
+                  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                >
+                  <div
+                    className={`max-w-[85%] rounded-xl p-3 text-sm ${
+                      msg.role === "user"
+                        ? "bg-cyan-500 text-black font-medium"
+                        : "bg-slate-800 text-slate-300 border border-slate-700"
+                    }`}
+                  >
+                    {msg.content.startsWith("[FILE_DOWNLOAD:") ? (
                       (() => {
-                        const lines = msg.content.split('\n');
+                        const lines = msg.content.split("\n");
                         const firstLine = lines[0];
-                        const filenameMatch = firstLine.match(/\[FILE_DOWNLOAD:\s*(.*?)\]/);
-                        const filename = filenameMatch ? filenameMatch[1].trim() : 'download.txt';
-                        const content = lines.slice(1).join('\n');
+                        const filenameMatch = firstLine.match(
+                          /\[FILE_DOWNLOAD:\s*(.*?)\]/,
+                        );
+                        const filename = filenameMatch
+                          ? filenameMatch[1].trim()
+                          : "download.txt";
+                        const content = lines.slice(1).join("\n");
                         return (
                           <div className="flex flex-col gap-2">
-                            <p className="text-xs text-emerald-400 font-mono tracking-widest uppercase">Generated File:</p>
+                            <p className="text-xs text-emerald-400 font-mono tracking-widest uppercase">
+                              Generated File:
+                            </p>
                             <button
                               onClick={() => {
-                                const blob = new Blob([content], { type: 'text/plain' });
+                                const blob = new Blob([content], {
+                                  type: "text/plain",
+                                });
                                 const url = URL.createObjectURL(blob);
-                                const a = document.createElement('a');
+                                const a = document.createElement("a");
                                 a.href = url;
                                 a.download = filename;
                                 a.click();
@@ -597,11 +728,18 @@ function VaultContent() {
                         );
                       })()
                     ) : (
-                      <ReactMarkdown 
+                      <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         components={{
                           pre: CodeBlock,
-                          a: ({ node, ...props }: any) => <a {...props} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline" />
+                          a: ({ node, ...props }: any) => (
+                            <a
+                              {...props}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-cyan-400 hover:underline"
+                            />
+                          ),
                         }}
                       >
                         {msg.content}
@@ -619,19 +757,23 @@ function VaultContent() {
                 <button
                   type="button"
                   onClick={toggleRecording}
-                  className={`absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg transition-colors z-10 ${isRecording ? 'text-red-500 bg-red-500/10 animate-pulse' : 'text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10'}`}
+                  className={`absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg transition-colors z-10 ${isRecording ? "text-red-500 bg-red-500/10 animate-pulse" : "text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10"}`}
                   title="Hands-free Coding Mic"
                 >
                   <Mic className="w-4 h-4" />
                 </button>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={chatMessage}
                   onChange={(e) => setChatMessage(e.target.value)}
-                  placeholder={isRecording ? "Listening..." : "Ask your technical questions..."}
+                  placeholder={
+                    isRecording
+                      ? "Listening..."
+                      : "Ask your technical questions..."
+                  }
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 pl-12 pr-12 text-sm text-slate-200 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all placeholder:text-slate-600"
                 />
-                <button 
+                <button
                   type="submit"
                   disabled={!chatMessage.trim() && !isRecording}
                   className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors z-10"
@@ -639,12 +781,12 @@ function VaultContent() {
                   <Send className="w-4 h-4" />
                 </button>
               </form>
-              {micError && <p className="text-xs text-red-400 px-2">{micError}</p>}
+              {micError && (
+                <p className="text-xs text-red-400 px-2">{micError}</p>
+              )}
             </div>
-            
           </div>
         </div>
-
       </div>
     </div>
   );
@@ -652,7 +794,13 @@ function VaultContent() {
 
 export default function PremiumVaultPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#050507] text-slate-300 flex items-center justify-center">Loading vault...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#050507] text-slate-300 flex items-center justify-center">
+          Loading vault...
+        </div>
+      }
+    >
       <VaultContent />
     </Suspense>
   );
