@@ -16,16 +16,9 @@ const ASCII_ART = `
 
 console.log(chalk.cyanBright.bold(ASCII_ART));
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-rl.question(chalk.yellow('⚡ Enter your BlueprintAI Sync ID: '), async (syncId) => {
-  const id = syncId.trim();
+async function executeSync(id) {
   if (!id) {
     console.log(chalk.red('Error: Sync ID cannot be empty.'));
-    rl.close();
     return;
   }
 
@@ -52,7 +45,6 @@ rl.question(chalk.yellow('⚡ Enter your BlueprintAI Sync ID: '), async (syncId)
         errorMessage = `HTTP Error ${response.status}`;
       }
       spinner.fail(chalk.red(errorMessage));
-      rl.close();
       return;
     }
 
@@ -60,7 +52,6 @@ rl.question(chalk.yellow('⚡ Enter your BlueprintAI Sync ID: '), async (syncId)
 
     if (data.status !== 'success' || !data.agent_directives) {
       spinner.fail(chalk.red('Failed to parse successful response from server.'));
-      rl.close();
       return;
     }
 
@@ -69,11 +60,35 @@ rl.question(chalk.yellow('⚡ Enter your BlueprintAI Sync ID: '), async (syncId)
     // Write directives locally to .clinerules
     await fs.writeFile('.clinerules', directives, 'utf8');
 
-    spinner.succeed(chalk.green('✔ A2A Configuration Locked. Your local AI is now synced with BlueprintAI.'));
+    spinner.succeed(chalk.green('✔ Blueprint Synced Successfully.\n🧠 Architecture "Skill" Injected: .clinerules generated.\nYour local AI agent now has the strict context required to execute this build.'));
     
   } catch (error) {
     spinner.fail(chalk.red(`Fatal Error: ${error.message}`));
-  } finally {
-    rl.close();
   }
-});
+}
+
+const args = process.argv.slice(2);
+const command = args[0];
+
+let syncId = null;
+
+if (command === 'init') {
+  const idIndex = args.findIndex(arg => arg === '--id' || arg === '-i');
+  if (idIndex !== -1 && args[idIndex + 1]) {
+    syncId = args[idIndex + 1];
+  }
+}
+
+if (syncId) {
+  executeSync(syncId).then(() => process.exit(0));
+} else {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  rl.question(chalk.yellow('⚡ Enter your BlueprintAI Sync ID: '), async (input) => {
+    await executeSync(input.trim());
+    rl.close();
+  });
+}
