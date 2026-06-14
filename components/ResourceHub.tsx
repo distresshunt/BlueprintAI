@@ -7,39 +7,33 @@ interface ResourceHubProps {
   blueprintMarkdown: string;
 }
 
-const extractLinksByPhase = (text: string) => {
-  const phases: Record<string, { label: string; url: string }[]> = {};
-  let currentPhase = "General / Phase 0";
-
-  const lines = text.split('\n');
-  for (const line of lines) {
-    // Detect Phase Headers (matches Phase 1, **Phase 1**, ### Phase 1, etc.)
-    const phaseMatch = line.match(/(?:Phase)[\s_]*([0-9A-Za-z]+)/i);
-    if (phaseMatch && (line.includes('#') || line.includes('**'))) {
-      currentPhase = `Phase ${phaseMatch[1].toUpperCase()}`;
-    }
-
-    const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
-    let linkMatch: RegExpExecArray | null;
-    while ((linkMatch = linkRegex.exec(line)) !== null) {
-      const match = linkMatch;
-      if (!phases[currentPhase]) phases[currentPhase] = [];
-      // Prevent duplicate buttons for the same URL in the same phase
-      if (!phases[currentPhase].some(l => l.url === match[2])) {
-        phases[currentPhase].push({ label: match[1], url: match[2] });
+const extractLinks = (text: string) => {
+  const uniqueLinks = new Map<string, { label: string; url: string }>();
+  const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
+  let linkMatch: RegExpExecArray | null;
+  
+  while ((linkMatch = linkRegex.exec(text)) !== null) {
+    const label = linkMatch[1];
+    const url = linkMatch[2];
+    const normalizedLabel = label.toLowerCase().trim();
+    
+    // Ignore local links and aggressively deduplicate by label name
+    if (!url.includes('localhost') && !url.includes('blueprintagent')) {
+      if (!uniqueLinks.has(normalizedLabel)) {
+        uniqueLinks.set(normalizedLabel, { label, url });
       }
     }
   }
-  return phases;
+  return Array.from(uniqueLinks.values());
 };
 
 export function ResourceHub({ blueprintMarkdown }: ResourceHubProps) {
-  const categorizedLinks = useMemo(() => {
-    if (!blueprintMarkdown) return {};
-    return extractLinksByPhase(blueprintMarkdown);
+  const uniqueLinksList = useMemo(() => {
+    if (!blueprintMarkdown) return [];
+    return extractLinks(blueprintMarkdown);
   }, [blueprintMarkdown]);
 
-  if (Object.keys(categorizedLinks).length === 0) {
+  if (uniqueLinksList.length === 0) {
     return null;
   }
 
@@ -60,30 +54,22 @@ export function ResourceHub({ blueprintMarkdown }: ResourceHubProps) {
         </div>
       </summary>
       <div className="p-5 pt-0 border-t border-zinc-800/50 bg-slate-900/20">
-        {Object.entries(categorizedLinks).map(([phase, links]) => (
-          <div key={phase} className="mt-6 first:mt-4">
-            <h3 className="text-cyan-400 text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
-              <span className="w-4 h-[1px] bg-cyan-500/30"></span>
-              {phase}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-              {links.map((link, idx) => (
-                <a
-                  key={idx}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group/link flex items-center justify-between bg-zinc-900/80 hover:bg-[#0D0D0D] border border-zinc-800 hover:border-cyan-500/40 px-4 py-3 rounded-xl transition-all duration-200 shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.1)]"
-                >
-                  <span className="text-sm font-medium text-zinc-300 group-hover/link:text-cyan-300 truncate pr-4 transition-colors">
-                    {link.label}
-                  </span>
-                  <ExternalLink className="w-4 h-4 text-zinc-600 group-hover/link:text-cyan-400 shrink-0 transition-colors" />
-                </a>
-              ))}
-            </div>
-          </div>
-        ))}
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+          {uniqueLinksList.map((link, idx) => (
+            <a
+              key={idx}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/link flex items-center justify-between bg-zinc-900/80 hover:bg-[#0D0D0D] border border-zinc-800 hover:border-cyan-500/40 px-4 py-3 rounded-xl transition-all duration-200 shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+            >
+              <span className="text-sm font-medium text-zinc-300 group-hover/link:text-cyan-300 truncate pr-4 transition-colors">
+                {link.label}
+              </span>
+              <ExternalLink className="w-4 h-4 text-zinc-600 group-hover/link:text-cyan-400 shrink-0 transition-colors" />
+            </a>
+          ))}
+        </div>
       </div>
     </details>
   );
