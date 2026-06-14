@@ -44,7 +44,7 @@ function VaultContent() {
   const [isLocked, setIsLocked] = useState<boolean>(false);
   const [chatMessage, setChatMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<
-    { role: "user" | "ai"; content: string; isPredictive?: boolean }[]
+    { role: "user" | "ai"; content: string; type?: "thought" | "message" }[]
   >([
     {
       role: "ai",
@@ -156,7 +156,7 @@ function VaultContent() {
         try {
           const { data, error } = await supabase
             .from("blueprints")
-            .select("blueprint_markdown, is_unlocked, idea_prompt")
+            .select("blueprint_markdown, is_unlocked, idea_prompt, tech_level, ai_builder")
             .eq("id", id)
             .single();
 
@@ -171,6 +171,16 @@ function VaultContent() {
             }
             if (data.idea_prompt) {
               setIdeaPrompt(data.idea_prompt);
+            }
+            if (data.tech_level) {
+              setTechLevel(data.tech_level);
+            } else {
+              setTechLevel("AI Developer");
+            }
+            if (data.ai_builder) {
+              setAiBuilder(data.ai_builder);
+            } else {
+              setAiBuilder("Decide for me ✨");
             }
 
             if (userId) {
@@ -324,7 +334,9 @@ function VaultContent() {
           user_id: userId,
           idea_prompt: promptToUse,
           blueprint_markdown: fullText,
-          is_unlocked: true
+          is_unlocked: true,
+          tech_level: newTechLevel,
+          ai_builder: newTechLevel === 'No-Code' ? 'None' : newAiBuilder
         }).select('id').single();
         
         if (newRow?.id) {
@@ -363,6 +375,40 @@ function VaultContent() {
     }
     return "INTRO";
   }, [blueprintData, displayedLength]);
+
+  // Predictive Thought Stream
+  const announcedPhases = useRef<Set<string>>(new Set());
+  
+  useEffect(() => {
+    if (!blueprintData) return;
+
+    const phases = [
+      { id: "Phase 1", message: "[SYS_EVAL] Parsing DOM component tree. Validating Tailwind utility classes and Shadcn primitives against mock JSON schema..." },
+      { id: "Phase 2", message: "[A2A_SYNC] Compiling AST constraints. Verifying .clinerules token density and strict execution directives for target IDE..." },
+      { id: "Phase 3", message: "[AUTH_HANDSHAKE] Evaluating webhook payload logic. Verifying Stripe cryptographic signatures and Clerk JWT integration paths..." },
+      { id: "Phase 4", message: "[DATA_PIPELINE] Analyzing PostgreSQL relational mapping. Auditing Row Level Security (RLS) policies for payload isolation..." },
+      { id: "Phase 5", message: "[SCALE_ARCH] Validating horizontal scaling vectors and memory constraints..." },
+      { id: "Phase 6", message: "[COMPILE_CHECK] Finalizing implementation checklist. Ensuring strict step-by-step dependency resolution..." }
+    ];
+
+    phases.forEach(phase => {
+      const phaseIndex = blueprintData.indexOf(phase.id + ":");
+      if (phaseIndex !== -1 && !announcedPhases.current.has(phase.id)) {
+        // Trigger if we're rendering new text and approaching this phase, OR if scrolling past it in playback
+        if (displayedLength >= phaseIndex - 50 && displayedLength <= phaseIndex + 100) {
+          announcedPhases.current.add(phase.id);
+          setChatHistory(prev => [
+            ...prev,
+            {
+              role: "ai",
+              content: phase.message,
+              type: "thought"
+            }
+          ]);
+        }
+      }
+    });
+  }, [displayedLength, blueprintData]);
 
   const toggleRecording = () => {
     if (isRecording && recognitionRef.current) {
@@ -985,15 +1031,23 @@ function VaultContent() {
                   className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-xl p-3 text-sm ${
-                      msg.role === "user"
-                        ? "bg-cyan-500 text-black font-medium"
-                        : msg.isPredictive 
-                          ? "bg-slate-800/50 text-slate-400 italic border border-slate-800" 
-                          : "bg-slate-800 text-slate-300 border border-slate-700"
-                    }`}
+                    className={
+                      msg.type === "thought"
+                        ? "font-mono text-[10px] sm:text-xs text-zinc-500 bg-transparent border-l-2 border-zinc-800 pl-3 my-2 uppercase tracking-wide w-full"
+                        : `max-w-[85%] rounded-xl p-3 text-sm ${
+                            msg.role === "user"
+                              ? "bg-cyan-500 text-black font-medium"
+                              : "bg-slate-800 text-slate-300 border border-slate-700"
+                          }`
+                    }
                   >
-                    {msg.content.startsWith("[FILE_DOWNLOAD:") ? (
+                    {msg.type === "thought" && (
+                      <>
+                        {msg.content}
+                        <span className="inline-block w-1.5 h-3 ml-1 bg-zinc-500 animate-pulse"></span>
+                      </>
+                    )}
+                    {msg.type !== "thought" && msg.content.startsWith("[FILE_DOWNLOAD:") ? (
                       (() => {
                         const lines = msg.content.split("\n");
                         const firstLine = lines[0];

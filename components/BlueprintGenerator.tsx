@@ -550,7 +550,9 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
             user_id: userId,
             idea_prompt: promptToUse,
             blueprint_markdown: fullText,
-            is_unlocked: isUserPro || isAdmin
+            is_unlocked: isUserPro || isAdmin,
+            tech_level: finalTechLevel,
+            ai_builder: finalTechLevel === 'No-Code' ? 'None' : finalAiBuilder
           });
           
           if (isUserPro || isAdmin) {
