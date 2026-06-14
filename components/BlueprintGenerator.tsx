@@ -522,6 +522,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
       }
       
       localStorage.setItem('blueprintData', fullText);
+      localStorage.setItem('ideaPrompt', promptToUse);
       
       if (userId) {
         try {

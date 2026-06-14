@@ -17,10 +17,11 @@ import {
   Pause,
   FastForward,
   Zap,
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
 import { CodeBlock } from "@/components/CodeBlock";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useAuth, useUser, useClerk } from "@clerk/nextjs";
 import { Sandpack } from "@codesandbox/sandpack-react";
@@ -60,6 +61,11 @@ function VaultContent() {
   const [highlightMenu, setHighlightMenu] = useState({ visible: false, x: 0, y: 0, text: '' });
   const [isHighlightCopied, setIsHighlightCopied] = useState(false);
   const [isNewGeneration, setIsNewGeneration] = useState(false);
+  const [ideaPrompt, setIdeaPrompt] = useState<string>("");
+  const [techLevel, setTechLevel] = useState<string>("No-Code");
+  const [aiBuilder, setAiBuilder] = useState<string>("Cursor");
+  const [isRegenerating, setIsRegenerating] = useState<boolean>(false);
+  const router = useRouter();
 
   const hasGithub =
     user?.externalAccounts?.some(
@@ -150,7 +156,7 @@ function VaultContent() {
         try {
           const { data, error } = await supabase
             .from("blueprints")
-            .select("blueprint_markdown, is_unlocked")
+            .select("blueprint_markdown, is_unlocked, idea_prompt")
             .eq("id", id)
             .single();
 
@@ -162,6 +168,9 @@ function VaultContent() {
             }
             if (data.blueprint_markdown) {
               setBlueprintData(data.blueprint_markdown);
+            }
+            if (data.idea_prompt) {
+              setIdeaPrompt(data.idea_prompt);
             }
 
             if (userId) {
@@ -193,8 +202,10 @@ function VaultContent() {
       }
 
       const localData = localStorage.getItem("blueprintData");
+      const localIdea = localStorage.getItem("ideaPrompt");
       if (localData) {
         setBlueprintData(localData);
+        if (localIdea) setIdeaPrompt(localIdea);
         setIsNewGeneration(true);
       } else {
         setBlueprintData(
@@ -267,6 +278,68 @@ function VaultContent() {
     window.addEventListener('mousedown', handleGlobalClick);
     return () => window.removeEventListener('mousedown', handleGlobalClick);
   }, []);
+  const handlePivot = async (newTechLevel: string, newAiBuilder: string) => {
+    if (newTechLevel === techLevel && newAiBuilder === aiBuilder) return;
+    
+    setTechLevel(newTechLevel);
+    setAiBuilder(newAiBuilder);
+    setIsRegenerating(true);
+    
+    const bridgeMessage = `Got it. Branching a new architecture for **${newTechLevel}**${newTechLevel === "AI Developer" ? ` using ${newAiBuilder}` : ""}. Give me 15 seconds...`;
+    // @ts-ignore
+    setChatHistory(prev => [...prev, { role: "ai", content: bridgeMessage }]);
+
+    try {
+      const promptToUse = ideaPrompt || "Build a modern SaaS application.";
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          prompt: promptToUse, 
+          techLevel: newTechLevel, 
+          aiBuilder: newAiBuilder 
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to generate");
+      
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error("No reader");
+      const decoder = new TextDecoder();
+      let fullText = "";
+      
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        fullText += decoder.decode(value, { stream: true });
+        setBlueprintData(fullText);
+      }
+
+      localStorage.setItem("blueprintData", fullText);
+      setDisplayedLength(0);
+      setIsPlaying(true);
+      
+      if (userId && id) {
+        const { data: newRow, error } = await supabase.from('blueprints').insert({
+          user_id: userId,
+          idea_prompt: promptToUse,
+          blueprint_markdown: fullText,
+          is_unlocked: true
+        }).select('id').single();
+        
+        if (newRow?.id) {
+          router.push(`/premium-vault?id=${newRow.id}`);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+      // @ts-ignore
+      setChatHistory(prev => [...prev, { role: "ai", content: "Sorry, the generation failed. Please try again." }]);
+    } finally {
+      setIsRegenerating(false);
+    }
+  };
+
 
   // Dwell Time Tracking
   useEffect(() => {
@@ -626,6 +699,37 @@ function VaultContent() {
           <div className="bg-slate-900/50 border border-slate-800 rounded-2xl rounded-tl-none p-6 md:p-10 shadow-2xl backdrop-blur-xl min-h-[600px]">
             {activeTab === "blueprint" ? (
               <div className="flex flex-col gap-4">
+                {/* Mode Switcher UI */}
+                <div className="flex flex-wrap items-center gap-4 bg-zinc-900/50 p-4 rounded-xl border border-zinc-800 mb-2">
+                  <span className="text-zinc-400 text-sm font-semibold uppercase tracking-widest">Current Mode:</span>
+                  <select 
+                    value={techLevel}
+                    onChange={(e) => handlePivot(e.target.value, aiBuilder)}
+                    disabled={isRegenerating}
+                    className="bg-zinc-950 border border-zinc-700 text-cyan-400 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block p-2"
+                  >
+                    <option value="No-Code">No-Code</option>
+                    <option value="Learn to Code">Learn to Code</option>
+                    <option value="AI Developer">AI Developer</option>
+                  </select>
+                  
+                  {techLevel === "AI Developer" && (
+                    <>
+                      <span className="text-zinc-400 text-sm font-semibold uppercase tracking-widest ml-2">AI Builder:</span>
+                      <select 
+                        value={aiBuilder}
+                        onChange={(e) => handlePivot(techLevel, e.target.value)}
+                        disabled={isRegenerating}
+                        className="bg-zinc-950 border border-zinc-700 text-cyan-400 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block p-2"
+                      >
+                        <option value="Cursor">Cursor</option>
+                        <option value="Windsurf">Windsurf</option>
+                        <option value="Antigravity">Antigravity</option>
+                      </select>
+                    </>
+                  )}
+                </div>
+
                 {/* DVR Controls & Chapter Bar */}
                 <div className="sticky top-0 z-40 bg-zinc-950/90 backdrop-blur-xl border-b border-zinc-800 pb-4 pt-4 mb-6 shadow-2xl -mx-6 px-6 md:-mx-10 md:px-10">
                   <div className="flex items-center gap-4 bg-zinc-900/80 border border-zinc-800 rounded-lg px-4 py-3 shadow-lg">
@@ -703,8 +807,19 @@ function VaultContent() {
                   </div>
                 </div>
 
-                <div 
-                  className="prose prose-invert prose-cyan max-w-none prose-p:text-slate-400 prose-headings:text-slate-200"
+                <div className="relative">
+                  {isRegenerating && (
+                    <div className="absolute inset-0 z-50 flex items-center justify-center bg-zinc-950/50 backdrop-blur-sm rounded-xl">
+                      <div className="flex flex-col items-center gap-4">
+                        <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+                        <p className="text-cyan-400 font-mono tracking-widest uppercase text-sm">
+                          Re-architecting for {techLevel}...
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  <div 
+                    className={`prose prose-invert prose-cyan max-w-none prose-p:text-slate-400 prose-headings:text-slate-200 transition-opacity duration-300 ${isRegenerating ? "opacity-50 pointer-events-none" : "opacity-100"}`}
                   onMouseUp={() => {
                     const selection = window.getSelection();
                     const text = selection?.toString().trim();
@@ -759,6 +874,7 @@ function VaultContent() {
                 >
                   {renderText}
                 </ReactMarkdown>
+              </div>
               </div>
               </div>
             ) : (
