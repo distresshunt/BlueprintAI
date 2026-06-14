@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
 export function LiveCounterBanner() {
-  const [count, setCount] = useState(420);
+  const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
     // Initial fetch
@@ -13,9 +13,7 @@ export function LiveCounterBanner() {
         .from('blueprints')
         .select('*', { count: 'exact', head: true });
       
-      if (dbCount !== null) {
-        setCount(420 + dbCount);
-      }
+      setCount(420 + (dbCount || 0));
     };
 
     fetchCount();
@@ -31,7 +29,7 @@ export function LiveCounterBanner() {
       channel = supabase
         .channel('realtime-blueprints')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'blueprints' }, (payload) => {
-          setCount((prev) => prev + 1);
+          setCount((prev) => (prev !== null ? prev + 1 : 421));
         })
         .subscribe((status, err) => {
           if (err) {
@@ -54,7 +52,7 @@ export function LiveCounterBanner() {
   return (
     <div className="sticky top-0 w-full bg-cyan-950/30 border-b border-cyan-500/30 backdrop-blur-md py-2 z-50 flex justify-center items-center">
       <span className="text-cyan-400 text-xs sm:text-sm font-mono uppercase tracking-widest font-semibold text-center px-4">
-        ⚡ SYSTEM ACTIVE: Over {count} App Blueprints architected by Founders.
+        ⚡ SYSTEM ACTIVE: Over {count === null ? <span className="animate-pulse tracking-widest">...</span> : count} App Blueprints architected by Founders.
       </span>
     </div>
   );

@@ -29,8 +29,8 @@ function VaultContent() {
   const [isGithubLoading, setIsGithubLoading] = useState(false);
   const [githubRepoUrl, setGithubRepoUrl] = useState('');
 
-  const hasGithub = user?.externalAccounts?.some((account) => (account.provider as string) === 'oauth_github');
-  const githubAccount = user?.externalAccounts?.find(a => (a.provider as string) === 'oauth_github');
+  const hasGithub = user?.externalAccounts?.some(acc => (acc.provider as string) === 'oauth_github' || (acc.provider as string).includes('github')) || false;
+  const githubAccount = user?.externalAccounts?.find(acc => (acc.provider as string) === 'oauth_github' || (acc.provider as string).includes('github'));
   const githubUsername = githubAccount?.username || githubAccount?.emailAddress;
 
   const handleGithubDeploy = async () => {
