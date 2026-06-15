@@ -116,9 +116,14 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
   const activeId = urlId || initialId;
 
   const [idea, setIdea] = useState(initialIdea || (learnSkill && learnNiche ? `I want to learn ${learnSkill} from scratch by building a real software business for ${learnNiche}.` : (pSeoModel && pSeoNiche ? `I want to build a ${pSeoModel} for ${pSeoNiche}.` : '')));
+  const [activeProjectType, setActiveProjectType] = useState<string>('Full Stack App');
+  const [llmCore, setLlmCore] = useState<string>('Gemini 3.1 Pro (Default)');
+  const [mcpTools, setMcpTools] = useState<string>('None');
+  const [baseTemplate, setBaseTemplate] = useState<string>('Next.js + Supabase (Default)');
   const [aiBuilder, setAiBuilder] = useState('Decide for me ✨');
   const [blueprint, setBlueprint] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState('ARCHITECTING MVP...');
   const [isPivoting, setIsPivoting] = useState(false);
   const [error, setError] = useState('');
@@ -478,8 +483,10 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
     const finalTechLevel = pivotTechLevel || techLevelRef.current;
     const finalAiBuilder = pivotAiBuilder || aiBuilderRef.current;
     
-    const promptToUse = ideaRef.current.trim() || ideas[ideaIndex.current];
-    if (!promptToUse) return;
+    let basePrompt = ideaRef.current.trim() || ideas[ideaIndex.current];
+    if (!basePrompt) return;
+    
+    const promptToUse = `Build a [${activeProjectType}] doing: ${basePrompt}`;
     
     setLoading(true);
     setError('');
@@ -498,7 +505,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
     } else {
       setBlueprint('');
       setIsPivoting(false);
-      setLoadingMessage('ARCHITECTING MVP...');
+      setLoadingStep(0);
     }
     
     try {
@@ -508,7 +515,10 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
         body: JSON.stringify({ 
           prompt: promptToUse, 
           aiBuilder: finalTechLevel === 'No-Code' ? 'None' : finalAiBuilder, 
-          techLevel: finalTechLevel 
+          techLevel: finalTechLevel,
+          llmCore,
+          mcpTools,
+          baseTemplate
         }),
       });
       
@@ -569,6 +579,22 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
       setIsPivoting(false);
     }
   };
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (loading && !isPivoting) {
+      interval = setInterval(() => {
+        setLoadingStep((prev) => (prev + 1) % 3);
+      }, 2000);
+    }
+    return () => clearInterval(interval);
+  }, [loading, isPivoting]);
+
+  const loadingMessages = [
+    "> [Arch-Agent] Mapping database relations...",
+    "> [Sec-Agent] Writing RLS policies...",
+    "> [Dev-Agent] Generating .clinerules environment..."
+  ];
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
@@ -661,6 +687,28 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
         {!pSeoModel && !pSeoNiche && !learnSkill && !learnNiche && (
           <span className="font-mono text-[10px] uppercase tracking-widest text-cyan-500/70 mb-2 block ml-1">&gt; INPUT_ARCHITECTURE_PARAMETERS_</span>
         )}
+        
+        {/* Project Type Tabs */}
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          {['Full Stack App', 'Mobile App', 'Landing Page', 'Brainstorm'].map((type) => (
+            <button
+              key={type}
+              onClick={() => setActiveProjectType(type)}
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all backdrop-blur-md ${
+                activeProjectType === type
+                  ? 'bg-cyan-950/30 text-cyan-400 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+                  : 'bg-zinc-900/50 text-zinc-400 border border-zinc-800 hover:text-zinc-200'
+              }`}
+            >
+              {type === 'Full Stack App' && '🌐 '}
+              {type === 'Mobile App' && '📱 '}
+              {type === 'Landing Page' && '🛬 '}
+              {type === 'Brainstorm' && '🧠 '}
+              {type}
+            </button>
+          ))}
+        </div>
+
         <div 
           className="relative group bg-slate-900/50 border-2 border-slate-800 focus-within:border-cyan-500/50 rounded-xl shadow-2xl transition-all w-full flex flex-col overflow-hidden"
           onCopy={handleCopyTrap}
@@ -718,66 +766,73 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full bg-slate-900/40 p-4 rounded-xl border border-slate-800 mt-2">
-          <label className="text-xs font-mono text-slate-400 uppercase tracking-widest">Your Technical Level:</label>
-          <div className="flex flex-wrap gap-2">
-            {['No-Code', 'Learn to Code', 'AI Developer'].map(option => (
-              <button
-                key={option}
-                onClick={() => {
-                  setTechLevel(option);
-                  if (blueprint && !loading) {
-                    generateBlueprint(true, option, aiBuilder);
-                  }
-                }}
-                className={`px-4 py-2 text-xs font-mono rounded-lg transition-all border ${
-                  techLevel === option 
-                    ? 'bg-amber-500/10 border-amber-500 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.2)]' 
-                    : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white hover:border-slate-500'
-                }`}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {techLevel === 'AI Developer' && (
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full bg-slate-900/40 p-4 rounded-xl border border-slate-800">
-            <label className="text-xs font-mono text-slate-400 uppercase tracking-widest">Select your AI Builder:</label>
-            <div className="flex flex-wrap gap-2">
-              {['Cursor', 'Windsurf', 'Antigravity', 'Decide for me ✨'].map(option => (
-                <button
-                  key={option}
-                  onClick={() => {
-                    setAiBuilder(option);
-                    if (blueprint && !loading) {
-                      generateBlueprint(true, techLevel, option);
-                    }
-                  }}
-                  className={`px-4 py-2 text-xs font-mono rounded-lg transition-all border ${
-                    aiBuilder === option 
-                      ? 'bg-cyan-500/10 border-cyan-500 text-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.2)]' 
-                      : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white hover:border-slate-500'
-                  }`}
-                >
-                  {option}
-                </button>
-              ))}
+        {/* Advanced Controls Drawer */}
+        <details className="group w-full bg-slate-900/40 rounded-xl border border-slate-800 mt-2">
+          <summary className="flex items-center justify-between p-4 cursor-pointer list-none outline-none text-xs font-mono text-slate-400 uppercase tracking-widest hover:text-cyan-400 transition-colors">
+            <div className="flex items-center gap-2">
+              <span>⚙️ Advanced Controls</span>
             </div>
+            <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
+          </summary>
+          <div className="p-4 border-t border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-950/50">
+            
+            <div className="flex flex-col gap-2">
+              <label className="text-[10px] text-slate-500 font-mono uppercase tracking-wider">Select LLM Core:</label>
+              <select 
+                value={llmCore}
+                onChange={(e) => setLlmCore(e.target.value)}
+                className="bg-slate-900 border border-slate-700 text-slate-300 text-sm rounded-lg p-2.5 focus:border-cyan-500 outline-none"
+              >
+                <option>Gemini 3.1 Pro (Default)</option>
+                <option>Claude 3.5 Sonnet</option>
+                <option>GPT-4o</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-[10px] text-slate-500 font-mono uppercase tracking-wider">Select MCPs to use:</label>
+              <select 
+                value={mcpTools}
+                onChange={(e) => setMcpTools(e.target.value)}
+                className="bg-slate-900 border border-slate-700 text-slate-300 text-sm rounded-lg p-2.5 focus:border-cyan-500 outline-none"
+              >
+                <option>None</option>
+                <option>Firecrawl (Web Scraper)</option>
+                <option>GitHub</option>
+                <option>Vercel</option>
+                <option>Supabase</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-[10px] text-slate-500 font-mono uppercase tracking-wider">Select Template:</label>
+              <select 
+                value={baseTemplate}
+                onChange={(e) => setBaseTemplate(e.target.value)}
+                className="bg-slate-900 border border-slate-700 text-slate-300 text-sm rounded-lg p-2.5 focus:border-cyan-500 outline-none"
+              >
+                <option>Next.js + Supabase (Default)</option>
+                <option>React + Firebase</option>
+                <option>Node + Postgres</option>
+              </select>
+            </div>
+
           </div>
-        )}
+        </details>
 
           <button
             onClick={() => generateBlueprint()}
             disabled={loading}
-            className="w-full h-14 bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-800 disabled:text-slate-500 disabled:shadow-none text-black font-bold text-lg rounded-xl flex items-center justify-center gap-3 transition-colors shadow-[0_0_30px_-5px_rgba(34,211,238,0.4)] group overflow-hidden relative cursor-pointer disabled:cursor-not-allowed"
+            className="w-full h-14 bg-cyan-500 hover:bg-cyan-400 disabled:bg-[#0D0D0D] disabled:border disabled:border-zinc-800 disabled:text-zinc-500 disabled:shadow-none text-black font-bold text-lg rounded-xl flex items-center justify-center gap-3 transition-colors shadow-[0_0_30px_-5px_rgba(34,211,238,0.4)] group overflow-hidden relative cursor-pointer disabled:cursor-not-allowed"
           >
             {loading ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin relative z-10" />
-                <span className="uppercase tracking-wider relative z-10">{loadingMessage}</span>
-              </>
+              <div className="flex items-center gap-3 w-full px-6 font-mono text-xs sm:text-sm">
+                <Loader2 className="w-5 h-5 animate-spin text-cyan-500 shrink-0" />
+                <span className="text-zinc-400 whitespace-nowrap overflow-hidden text-ellipsis flex-1 text-left">
+                  {isPivoting ? loadingMessage : loadingMessages[loadingStep]}
+                </span>
+                <span className="w-2 h-4 bg-cyan-500 animate-pulse shrink-0"></span>
+              </div>
             ) : (
               <>
                 <span className="uppercase tracking-wider relative z-10">GENERATE LAUNCH BLUEPRINT</span>
@@ -833,7 +888,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                 <summary className="flex items-center justify-between p-3 text-[11px] font-semibold text-zinc-400 uppercase tracking-widest cursor-pointer hover:bg-zinc-900/50 transition-colors list-none outline-none">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-cyan-500 animate-pulse" />
-                    View Agent Reasoning
+                    ✨ Agent Reasoning Process
                   </div>
                   <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
                 </summary>
