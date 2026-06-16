@@ -1,6 +1,7 @@
 export const maxDuration = 60;
 import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
+import businessModels from "@/data/business-models.json";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
 
@@ -67,10 +68,17 @@ Tone: Ruthlessly practical, highly encouraging, zero corporate fluff. Note: The 
 
 export async function POST(req: NextRequest) {
   try {
-    let { prompt, aiBuilder = 'Decide for me ✨', techLevel = 'No-Code' } = await req.json();
+    let { prompt, aiBuilder = 'Decide for me ✨', techLevel = 'No-Code', businessModelSlug } = await req.json();
 
     if (!prompt) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
+    }
+
+    if (businessModelSlug) {
+      const model = businessModels.find((m) => m.slug === businessModelSlug);
+      if (model) {
+        prompt = `[BUSINESS MODEL: ${model.name}]\nStrict Technical Directive: ${model.engine_context}\n\n${prompt}`;
+      }
     }
 
     if (techLevel === 'No-Code') {

@@ -9,6 +9,7 @@ import { useAuth, SignInButton, useUser } from '@clerk/nextjs';
 import { supabase } from '@/lib/supabase';
 import { CodeBlock } from './CodeBlock';
 import { useSearchParams } from 'next/navigation';
+import businessModels from '@/data/business-models.json';
 
 const ExpandableBlockquote = ({ children }: any) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -116,6 +117,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
   const activeId = urlId || initialId;
 
   const [idea, setIdea] = useState(initialIdea || (learnSkill && learnNiche ? `I want to learn ${learnSkill} from scratch by building a real software business for ${learnNiche}.` : (pSeoModel && pSeoNiche ? `I want to build a ${pSeoModel} for ${pSeoNiche}.` : '')));
+  const [selectedModel, setSelectedModel] = useState(pSeoModel || '');
   const [activeProjectType, setActiveProjectType] = useState<string>('Full Stack App');
   const [llmCore, setLlmCore] = useState<string>('Gemini 3.1 Pro (Default)');
   const [mcpTools, setMcpTools] = useState<string>('None');
@@ -474,10 +476,12 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
   const ideaRef = useRef(idea);
   const techLevelRef = useRef(techLevel);
   const aiBuilderRef = useRef(aiBuilder);
+  const selectedModelRef = useRef(selectedModel);
 
   useEffect(() => { ideaRef.current = idea; }, [idea]);
   useEffect(() => { techLevelRef.current = techLevel; }, [techLevel]);
   useEffect(() => { aiBuilderRef.current = aiBuilder; }, [aiBuilder]);
+  useEffect(() => { selectedModelRef.current = selectedModel; }, [selectedModel]);
 
   const generateBlueprint = async (isPivot = false, pivotTechLevel?: string, pivotAiBuilder?: string) => {
     const finalTechLevel = pivotTechLevel || techLevelRef.current;
@@ -518,7 +522,8 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
           techLevel: finalTechLevel,
           llmCore,
           mcpTools,
-          baseTemplate
+          baseTemplate,
+          businessModelSlug: selectedModelRef.current
         }),
       });
       
@@ -707,6 +712,31 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               {type}
             </button>
           ))}
+        </div>
+
+        {/* Business Model Select Dropdown */}
+        <div className="flex flex-col gap-1.5 mb-2 max-w-xs">
+          <label htmlFor="business-model-select" className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block ml-1">
+            Select Business Model (Optional):
+          </label>
+          <div className="relative">
+            <select
+              id="business-model-select"
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value)}
+              className="w-full bg-slate-950/80 border border-slate-800 text-zinc-300 text-xs rounded-xl p-3 focus:border-cyan-500/50 focus:outline-none transition-all cursor-pointer appearance-none pr-10 shadow-inner"
+            >
+              <option value="">-- No Specific Model --</option>
+              {businessModels.map((model) => (
+                <option key={model.slug} value={model.slug} className="bg-slate-950 text-zinc-300 text-xs">
+                  {model.name}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-zinc-500">
+              <ChevronDown className="w-4 h-4" />
+            </div>
+          </div>
         </div>
 
         <div 

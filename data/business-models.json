@@ -1,0 +1,152 @@
+[
+  {
+    "slug": "b2b-saas",
+    "name": "B2B SaaS",
+    "engine_context": "Requires multi-tenant database partitioning and Stripe Billing subscription logic."
+  },
+  {
+    "slug": "micro-saas",
+    "name": "Micro-SaaS",
+    "engine_context": "Requires single-database setup and quick Stripe checkout integration."
+  },
+  {
+    "slug": "usage-based-saas",
+    "name": "Usage-Based SaaS",
+    "engine_context": "Requires real-time event ingestion pipeline and meter-based Stripe billing."
+  },
+  {
+    "slug": "open-core",
+    "name": "Open-Core",
+    "engine_context": "Requires separate open-source codebase and premium feature authentication gates."
+  },
+  {
+    "slug": "api-as-a-service",
+    "name": "API-as-a-Service",
+    "engine_context": "Requires API key management, rate-limiting middleware, and Stripe metered billing."
+  },
+  {
+    "slug": "ai-wrapper",
+    "name": "AI Wrapper",
+    "engine_context": "Requires OpenAI/Gemini API integration, usage tracking, and streaming responses."
+  },
+  {
+    "slug": "two-sided-b2c-marketplace",
+    "name": "Two-Sided B2C Marketplace",
+    "engine_context": "Requires Stripe Connect for split routing and automated seller onboarding."
+  },
+  {
+    "slug": "b2b-managed-marketplace",
+    "name": "B2B Managed Marketplace",
+    "engine_context": "Requires Stripe Connect, escrow capabilities, and manual admin verification flows."
+  },
+  {
+    "slug": "reverse-auction",
+    "name": "Reverse Auction",
+    "engine_context": "Requires real-time WebSockets for bidding, stripe authorization holds, and bid matching engine."
+  },
+  {
+    "slug": "directory",
+    "name": "Directory",
+    "engine_context": "Requires PostgreSQL search indexes, structured metadata schemas, and submission payment collection."
+  },
+  {
+    "slug": "pay-per-lead",
+    "name": "Pay-Per-Lead",
+    "engine_context": "Requires lead distribution router, validation API, and stripe balance charging."
+  },
+  {
+    "slug": "data-arbitrage",
+    "name": "Data Arbitrage",
+    "engine_context": "Requires scheduled web scraping cron jobs, data cleaning pipelines, and API query billing."
+  },
+  {
+    "slug": "pseo-empire",
+    "name": "pSEO Empire",
+    "engine_context": "Requires dynamic routing with ISR, localized sitemap generation, and schema.org structured data."
+  },
+  {
+    "slug": "productized-service",
+    "name": "Productized Service",
+    "engine_context": "Requires client portal workspace, Stripe subscription billing, and intake questionnaire flows."
+  },
+  {
+    "slug": "drop-servicing",
+    "name": "Drop-Servicing",
+    "engine_context": "Requires stripe payment integration, automated vendor referral API, and client messaging board."
+  },
+  {
+    "slug": "robotics-as-a-service",
+    "name": "Robotics-as-a-Service",
+    "engine_context": "Requires IoT device telemetry ingestion, remote control API gates, and lease billing cycles."
+  },
+  {
+    "slug": "b2g",
+    "name": "B2G",
+    "engine_context": "Requires strict SAML SSO authentication, FEDRAMP-compliant encrypted database, and audit log tracking."
+  },
+  {
+    "slug": "paid-newsletter",
+    "name": "Paid Newsletter",
+    "engine_context": "Requires integration with Resend/Loop, Stripe subscription gates, and markdown content compilers."
+  },
+  {
+    "slug": "token-gated-community",
+    "name": "Token-Gated Community",
+    "engine_context": "Requires Web3 wallet authentication, ERC-20/721 contract verification, and Discord webhook sync."
+  },
+  {
+    "slug": "hub-and-spoke-ecosystem",
+    "name": "Hub & Spoke Ecosystem",
+    "engine_context": "Requires central database API distribution, cross-domain CORS credentials, and unified authentication."
+  },
+  {
+    "slug": "info-product",
+    "name": "Info-Product",
+    "engine_context": "Requires secure file download storage, Stripe single-checkout, and email product delivery via Resend."
+  },
+  {
+    "slug": "d2c",
+    "name": "D2C",
+    "engine_context": "Requires Shopify storefront API integration, Stripe payment gateway, and shipping fulfillment webhooks."
+  },
+  {
+    "slug": "dropshipping",
+    "name": "Dropshipping",
+    "engine_context": "Requires AliExpress/Spocket API syncing, order automated placement, and stripe payment processing."
+  },
+  {
+    "slug": "print-on-demand",
+    "name": "Print-on-Demand",
+    "engine_context": "Requires Printful/Printify API webhooks, dynamic image rendering, and Stripe checkout."
+  },
+  {
+    "slug": "subscription-box",
+    "name": "Subscription Box",
+    "engine_context": "Requires monthly recurring billing logic, shipping address verification, and inventory count webhooks."
+  },
+  {
+    "slug": "white-labeling",
+    "name": "White-Labeling",
+    "engine_context": "Requires dynamic custom domain routing, white-label client admin console, and tenant-branded emails."
+  },
+  {
+    "slug": "affiliate-marketing",
+    "name": "Affiliate Marketing",
+    "engine_context": "Requires click attribution tracking, referral cookie management, and automated payout ledger."
+  },
+  {
+    "slug": "ad-supported-platform",
+    "name": "Ad-Supported Platform",
+    "engine_context": "Requires Google AdSense/Doubleclick script injection, ad impression analytics database, and content walls."
+  },
+  {
+    "slug": "hardware-as-a-service",
+    "name": "Hardware-as-a-Service",
+    "engine_context": "Requires device activation API, asset tracking inventory database, and recurring device lease billing."
+  },
+  {
+    "slug": "open-source-sponsor-backed",
+    "name": "Open-Source Sponsor-Backed",
+    "engine_context": "Requires GitHub Sponsors webhook integration, sponsor-only feature gates, and public ledger database."
+  }
+]
