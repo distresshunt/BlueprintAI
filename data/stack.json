@@ -1,23 +1,740 @@
 [
   {
-    "category": "Payments & MoR",
+    "category": "Databases & Backend",
     "tools": [
-      { "name": "Stripe", "description": "The industry standard for developers.", "pros": "Maximum flexibility, lowest fees.", "cons": "Strict KYC, requires coding for complex logic.", "difficulty": "Hard", "url": "https://stripe.com" },
-      { "name": "Gumroad", "description": "Easiest way to sell digital products instantly.", "pros": "No ID required to launch, acts as Merchant of Record.", "cons": "High transaction fees.", "difficulty": "Easy", "url": "https://gumroad.com" }
+      {
+        "name": "Supabase",
+        "description": "Open-source Firebase alternative: hosted Postgres with realtime features, auth, and storage.",
+        "pros": "Integrated real-time database, auth and storage for rapid development.",
+        "cons": "Vendor lock-in concerns and scaling complexity at high volumes.",
+        "difficulty": "Medium",
+        "url": "https://supabase.com"
+      },
+      {
+        "name": "Firebase",
+        "description": "Google\u2019s Backend-as-a-Service with realtime database, authentication, hosting, and other developer tools.",
+        "pros": "Easy setup and integration with Google Cloud, great for realtime apps and auth.",
+        "cons": "Tight coupling to GCP and NoSQL data model can be limiting and costly at scale.",
+        "difficulty": "Easy",
+        "url": "https://firebase.google.com"
+      },
+      {
+        "name": "MongoDB Atlas",
+        "description": "Fully-managed MongoDB database service that handles scaling, backups, and multi-cloud clusters.",
+        "pros": "Simplifies running MongoDB in the cloud with global distribution and automated management.",
+        "cons": "Non-relational data model requires a learning curve and costs can grow with scale.",
+        "difficulty": "Medium",
+        "url": "https://www.mongodb.com/cloud/atlas"
+      },
+      {
+        "name": "PlanetScale",
+        "description": "Serverless MySQL platform (based on Vitess) offering horizontal scaling and GitHub-style branching for schema.",
+        "pros": "Handles massive scale with minimal ops and enables schema branching for safe changes.",
+        "cons": "Pricing can be high; complexity of Vitess under the hood; only supports MySQL.",
+        "difficulty": "Medium",
+        "url": "https://planetscale.com"
+      },
+      {
+        "name": "Hasura",
+        "description": "Real-time GraphQL engine that instantly exposes a GraphQL API on top of your Postgres database.",
+        "pros": "Automatic GraphQL API generation with built-in auth and subscriptions.",
+        "cons": "Requires familiarity with GraphQL; can be complex for custom data logic.",
+        "difficulty": "Medium",
+        "url": "https://hasura.io"
+      },
+      {
+        "name": "Prisma",
+        "description": "Next-generation ORM (Object-Relational Mapping) for Node.js and TypeScript with a focus on type safety and ease of use.",
+        "pros": "Type-safe database client with automated migrations and intuitive API.",
+        "cons": "Adds abstraction layer, which can hide complex SQL issues; some learning curve.",
+        "difficulty": "Medium",
+        "url": "https://prisma.io"
+      },
+      {
+        "name": "Strapi",
+        "description": "Headless CMS and API framework to build customizable content management backends.",
+        "pros": "Quickly sets up content API with a UI; highly extensible with plugins.",
+        "cons": "Less mature than larger CMS, can be heavy to maintain customizations.",
+        "difficulty": "Medium",
+        "url": "https://strapi.io"
+      },
+      {
+        "name": "Appwrite",
+        "description": "Open-source backend server providing REST APIs for authentication, database, storage, and more.",
+        "pros": "Self-hostable all-in-one backend BaaS with open source flexibility.",
+        "cons": "Newer project with smaller community; requires self-hosting management.",
+        "difficulty": "Medium",
+        "url": "https://appwrite.io"
+      },
+      {
+        "name": "Fauna",
+        "description": "Cloud-native distributed database with built-in GraphQL API and strong security controls.",
+        "pros": "Serverless with ACID transactions and modern GraphQL API.",
+        "cons": "Proprietary query language; less community support compared to big names.",
+        "difficulty": "Medium",
+        "url": "https://fauna.com"
+      },
+      {
+        "name": "Neon",
+        "description": "Serverless Postgres with branching, autoscaling, and separation of compute and storage for better efficiency.",
+        "pros": "Easy Postgres hosting with instant branch creation and cost-effective scaling.",
+        "cons": "Relatively new; advanced features (like branching) may be overkill for simple apps.",
+        "difficulty": "Medium",
+        "url": "https://neon.tech"
+      }
     ]
   },
   {
-    "category": "AI Coding Agents (IDEs)",
+    "category": "Authentication & Identity",
     "tools": [
-      { "name": "Cursor", "description": "The most popular AI code editor.", "pros": "Familiar VS Code UI, amazing inline autocomplete.", "cons": "Can be overwhelming for non-coders.", "difficulty": "Medium", "url": "https://cursor.com" },
-      { "name": "Google Antigravity", "description": "Autonomous execution agent.", "pros": "Runs terminal commands, highly autonomous.", "cons": "Beta quirks, heavy resource usage.", "difficulty": "Hard", "url": "https://aistudio.google.com" }
+      {
+        "name": "Clerk",
+        "description": "Full-stack authentication API with pre-built sign-in and user management components.",
+        "pros": "Feature-rich with multi-factor and social logins, and beautiful UI out-of-the-box.",
+        "cons": "Can be expensive and inflexible if you need highly custom auth flows.",
+        "difficulty": "Easy",
+        "url": "https://clerk.com"
+      },
+      {
+        "name": "Auth0",
+        "description": "Flexible identity and access management platform for apps, supporting many protocols and social logins.",
+        "pros": "Scalable, enterprise-grade with lots of features and provider support.",
+        "cons": "Complex pricing and can be overkill for small projects; vendor lock-in concerns.",
+        "difficulty": "Medium",
+        "url": "https://auth0.com"
+      },
+      {
+        "name": "Magic.link",
+        "description": "Passwordless authentication SDK using magic links or social logins for seamless sign-ins.",
+        "pros": "Developer-friendly, password-free login experience that’s easy to integrate.",
+        "cons": "Dependency on email magic links or third parties; newer product stability.",
+        "difficulty": "Easy",
+        "url": "https://magic.link"
+      },
+      {
+        "name": "Stytch",
+        "description": "Authentication platform specializing in passwordless and multi-factor login methods.",
+        "pros": "Modern auth with email, SMS, and OAuth flows, plus strong developer tooling.",
+        "cons": "Costly beyond free tier and still growing feature set.",
+        "difficulty": "Easy",
+        "url": "https://stytch.com"
+      },
+      {
+        "name": "Firebase Auth",
+        "description": "Authentication service from Google Firebase providing easy signup and login for apps.",
+        "pros": "Quick to set up with Google/Facebook integrations and supports email/password out of box.",
+        "cons": "Locked to Google Cloud; user management features are basic.",
+        "difficulty": "Easy",
+        "url": "https://firebase.google.com/products/auth"
+      },
+      {
+        "name": "NextAuth.js",
+        "description": "Open-source authentication library for Next.js applications supporting many providers.",
+        "pros": "Flexible and free; supports OAuth, email logins, JWTs, etc., in Next.js.",
+        "cons": "Only for Next.js framework; requires coding and server setup.",
+        "difficulty": "Medium",
+        "url": "https://next-auth.js.org"
+      },
+      {
+        "name": "Ory",
+        "description": "Open source identity and access platform with components for login, MFA, and user management.",
+        "pros": "Highly customizable, cloud-native, and good for complex enterprise flows.",
+        "cons": "Complex to configure and not as beginner-friendly.",
+        "difficulty": "Hard",
+        "url": "https://www.ory.sh"
+      },
+      {
+        "name": "Keycloak",
+        "description": "Open-source identity and access management solution from Red Hat.",
+        "pros": "Feature-rich (SSO, social login, SAML, OAuth), and self-hostable.",
+        "cons": "Heavyweight and complex to maintain; outdated admin UI.",
+        "difficulty": "Hard",
+        "url": "https://www.keycloak.org"
+      }
     ]
   },
   {
-    "category": "Databases & Auth",
+    "category": "Payments & Commerce",
     "tools": [
-      { "name": "Supabase", "description": "Open source Firebase alternative.", "pros": "PostgreSQL power, built-in vector scaling.", "cons": "RLS policies have a learning curve.", "difficulty": "Medium", "url": "https://supabase.com" },
-      { "name": "Clerk", "description": "Drop-in authentication.", "pros": "Unbeatable Next.js integration, beautiful UI.", "cons": "Expensive at high scale.", "difficulty": "Easy", "url": "https://clerk.com" }
+      {
+        "name": "Stripe",
+        "description": "Developer-friendly payments platform for online businesses (cards, subscriptions, etc.).",
+        "pros": "Robust APIs, supports global currencies, easy recurring billing.",
+        "cons": "Transaction fees can add up; opaque pricing for some services.",
+        "difficulty": "Medium",
+        "url": "https://stripe.com"
+      },
+      {
+        "name": "PayPal",
+        "description": "Widely-used online payments system allowing credit card payments and money transfers.",
+        "pros": "Global trust and reach with multiple payment methods.",
+        "cons": "High fees for some transactions; account holds can be problematic.",
+        "difficulty": "Easy",
+        "url": "https://paypal.com"
+      },
+      {
+        "name": "Paddle",
+        "description": "E-commerce and subscription management platform geared toward SaaS businesses.",
+        "pros": "Handles checkout, subscriptions, taxes (including EU VAT) seamlessly.",
+        "cons": "Higher fees than Stripe; less flexible integration; limited to software products.",
+        "difficulty": "Medium",
+        "url": "https://paddle.com"
+      },
+      {
+        "name": "Lemon Squeezy",
+        "description": "All-in-one platform for selling digital products and subscriptions with built-in checkout and tax compliance.",
+        "pros": "Quick setup for digital goods; handles VAT/sales tax automatically.",
+        "cons": "Extra transaction fees; fewer payment options than larger platforms.",
+        "difficulty": "Easy",
+        "url": "https://lemonsqueezy.com"
+      },
+      {
+        "name": "Braintree",
+        "description": "Payment gateway (by PayPal) for accepting credit cards, PayPal, and digital wallets.",
+        "pros": "Supports multiple payment methods and currencies; enterprise-ready.",
+        "cons": "More complex setup; pricing can be confusing.",
+        "difficulty": "Medium",
+        "url": "https://www.braintreepayments.com"
+      },
+      {
+        "name": "Square",
+        "description": "Point-of-sale and online payment solutions, including e-commerce and hardware.",
+        "pros": "Easy to get started; strong in-person and online integration.",
+        "cons": "Primarily US/Canada focused; limited international support.",
+        "difficulty": "Easy",
+        "url": "https://squareup.com"
+      },
+      {
+        "name": "Coinbase Commerce",
+        "description": "Cryptocurrency payment processor allowing businesses to accept crypto easily.",
+        "pros": "Supports major cryptocurrencies; no extra fees to accept crypto.",
+        "cons": "Crypto volatility; limited to crypto payments only.",
+        "difficulty": "Medium",
+        "url": "https://commerce.coinbase.com"
+      },
+      {
+        "name": "Mollie",
+        "description": "European payment service provider supporting local and international payment methods.",
+        "pros": "Easy EU payment integrations (iDEAL, SEPA, credit cards).",
+        "cons": "Primarily Europe-focused; not ideal for global reach.",
+        "difficulty": "Easy",
+        "url": "https://www.mollie.com"
+      }
+    ]
+  },
+  {
+    "category": "Hosting & Deployment",
+    "tools": [
+      {
+        "name": "Vercel",
+        "description": "Cloud platform to deploy front-end and full-stack web apps with serverless functions.",
+        "pros": "Hassle-free deployments, optimized for Next.js, with global CDN and previews.",
+        "cons": "Limited low-level control; costs rise for heavy usage.",
+        "difficulty": "Easy",
+        "url": "https://vercel.com"
+      },
+      {
+        "name": "Netlify",
+        "description": "JAMstack hosting and serverless platform for deploying static sites and apps.",
+        "pros": "Simple Git-based deployments, built-in CDN and functions.",
+        "cons": "Not suited for heavy dynamic server apps; certain features locked behind tiers.",
+        "difficulty": "Easy",
+        "url": "https://netlify.com"
+      },
+      {
+        "name": "Render",
+        "description": "Unified cloud platform for hosting web services, static sites, databases, and more.",
+        "pros": "Generous free tier, Docker support, easy to configure (automatic builds/deploys).",
+        "cons": "Newer platform with smaller ecosystem; occasional performance issues.",
+        "difficulty": "Easy",
+        "url": "https://render.com"
+      },
+      {
+        "name": "Fly.io",
+        "description": "Edge cloud platform that runs your fullstack apps globally using lightweight VMs.",
+        "pros": "Run code close to users around the world; supports many languages and containers.",
+        "cons": "Pricing and concepts can be confusing; CLI-driven setup.",
+        "difficulty": "Medium",
+        "url": "https://fly.io"
+      },
+      {
+        "name": "Railway",
+        "description": "Cloud deployment platform that abstracts infrastructure for quick app launches.",
+        "pros": "Pulls code from Git, auto-provisions services and databases, very beginner-friendly.",
+        "cons": "Limited configuration and debugging; pricing grows quickly.",
+        "difficulty": "Easy",
+        "url": "https://railway.app"
+      },
+      {
+        "name": "Cloudflare Pages",
+        "description": "Jamstack hosting platform by Cloudflare with instant global deployments.",
+        "pros": "Free tier with CDN edge and simple Git integration; strong DDoS protection.",
+        "cons": "Limited backend support (though Workers can be added separately).",
+        "difficulty": "Easy",
+        "url": "https://pages.cloudflare.com"
+      },
+      {
+        "name": "AWS Amplify",
+        "description": "Amazon's fullstack web and mobile app hosting with built-in backend services.",
+        "pros": "Integrates easily with AWS services (AppSync, Cognito, etc.); scalable.",
+        "cons": "AWS complexity; billing can be confusing.",
+        "difficulty": "Medium",
+        "url": "https://aws.amazon.com/amplify"
+      },
+      {
+        "name": "DigitalOcean App Platform",
+        "description": "Platform-as-a-service to deploy web apps, databases, and static sites on DigitalOcean.",
+        "pros": "Managed infrastructure with predictable pricing; easy scaling.",
+        "cons": "Less global reach than big cloud providers; lower free tier cap.",
+        "difficulty": "Medium",
+        "url": "https://www.digitalocean.com/products/app-platform"
+      },
+      {
+        "name": "Heroku",
+        "description": "Platform-as-a-service for deploying apps with Git push, automated builds, and dynos.",
+        "pros": "Very easy to start; integrates with many languages and add-ons marketplace.",
+        "cons": "High cost for scale; recent changes to dyno pricing have upset users.",
+        "difficulty": "Easy",
+        "url": "https://heroku.com"
+      }
+    ]
+  },
+  {
+    "category": "Frontend & UI Libraries",
+    "tools": [
+      {
+        "name": "Next.js",
+        "description": "React framework for server-rendered and statically-exported web apps.",
+        "pros": "Built-in SSR/ISR, API routes, and fast performance; great for SEO.",
+        "cons": "Opinionated conventions; can be complex beyond basic usage.",
+        "difficulty": "Medium",
+        "url": "https://nextjs.org"
+      },
+      {
+        "name": "React",
+        "description": "JavaScript library for building user interfaces with components.",
+        "pros": "Huge ecosystem, reusable components, backed by Facebook/Meta.",
+        "cons": "JSX and build tooling have a learning curve; fast iterations can break code.",
+        "difficulty": "Medium",
+        "url": "https://react.dev"
+      },
+      {
+        "name": "Vue.js",
+        "description": "Progressive UI framework that is approachable and performant.",
+        "pros": "Easy to learn, flexible structure, great docs.",
+        "cons": "Smaller ecosystem than React; some tooling differences.",
+        "difficulty": "Easy",
+        "url": "https://vuejs.org"
+      },
+      {
+        "name": "Svelte",
+        "description": "Innovative UI framework that compiles components to minimal vanilla JS.",
+        "pros": "Tiny bundles, fast performance, very concise syntax.",
+        "cons": "Smaller community, fewer third-party components.",
+        "difficulty": "Easy",
+        "url": "https://svelte.dev"
+      },
+      {
+        "name": "Astro",
+        "description": "Modern static-site framework optimized for content-driven websites.",
+        "pros": "Ultra-fast by default (islands architecture), supports multiple UI frameworks.",
+        "cons": "Primarily for static content; not ideal for dynamic SPAs.",
+        "difficulty": "Medium",
+        "url": "https://astro.build"
+      },
+      {
+        "name": "Material UI",
+        "description": "Comprehensive React component library implementing Material Design.",
+        "pros": "Many ready-made components with theming support.",
+        "cons": "Relatively large bundle size and opinionated design.",
+        "difficulty": "Medium",
+        "url": "https://mui.com"
+      },
+      {
+        "name": "Chakra UI",
+        "description": "Accessible React component library with built-in theming.",
+        "pros": "Easy styling with props, highly customizable, and good accessibility.",
+        "cons": "Smaller component catalog; relies on style props DSL.",
+        "difficulty": "Easy",
+        "url": "https://chakra-ui.com"
+      },
+      {
+        "name": "Tailwind CSS",
+        "description": "Utility-first CSS framework with low-level classes for custom designs.",
+        "pros": "Ultra-customizable design without writing custom CSS; speeds up dev.",
+        "cons": "HTML can get class-heavy; initial learning curve.",
+        "difficulty": "Medium",
+        "url": "https://tailwindcss.com"
+      },
+      {
+        "name": "daisyUI",
+        "description": "Tailwind CSS plugin providing pre-built UI components with semantic classes.",
+        "pros": "Speeds up styling by offering common component classes; easy theming.",
+        "cons": "Limited to Tailwind ecosystem; less flexible than writing custom styles.",
+        "difficulty": "Easy",
+        "url": "https://daisyui.com"
+      },
+      {
+        "name": "SolidJS",
+        "description": "Declarative JavaScript library with fine-grained reactivity (component-based).",
+        "pros": "Fastest web UI performance; JSX familiarity.",
+        "cons": "Smaller community and ecosystem.",
+        "difficulty": "Medium",
+        "url": "https://solidjs.com"
+      },
+      {
+        "name": "Qwik",
+        "description": "New framework for instant-loading web apps using resumability instead of hydration.",
+        "pros": "Ultra-performant with automatic lazy-loading of code.",
+        "cons": "Young project; unfamiliar paradigm for many.",
+        "difficulty": "Medium",
+        "url": "https://qwik.builder.io"
+      }
+    ]
+  },
+  {
+    "category": "Email & Marketing",
+    "tools": [
+      {
+        "name": "Resend",
+        "description": "Developer-focused email API for sending transactional and marketing emails easily.",
+        "pros": "Simple to integrate with modern SDKs and high deliverability.",
+        "cons": "Newer service; pricing and long-term reliability unknown.",
+        "difficulty": "Easy",
+        "url": "https://resend.com"
+      },
+      {
+        "name": "SendGrid",
+        "description": "Popular email API service for sending transactional and marketing emails.",
+        "pros": "Proven scalability and deliverability with robust APIs.",
+        "cons": "Strict compliance review and can be pricey for high volume.",
+        "difficulty": "Easy",
+        "url": "https://sendgrid.com"
+      },
+      {
+        "name": "Mailgun",
+        "description": "Email sending service for developers with RESTful APIs.",
+        "pros": "Flexible pricing, good deliverability, and powerful analytics.",
+        "cons": "Initial setup with DNS can be tricky; no free plan beyond trial.",
+        "difficulty": "Medium",
+        "url": "https://mailgun.com"
+      },
+      {
+        "name": "Postmark",
+        "description": "Transactional email service focused on speed and reliability.",
+        "pros": "Fast delivery to inbox, simple API, great for transactional emails.",
+        "cons": "No free tier and limited marketing/email campaign features.",
+        "difficulty": "Easy",
+        "url": "https://postmarkapp.com"
+      },
+      {
+        "name": "Mailchimp",
+        "description": "All-in-one marketing platform for email newsletters, automation, and ads.",
+        "pros": "Beginner-friendly, generous free tier, wide template library.",
+        "cons": "Can be expensive as lists grow; branded emails on free plan.",
+        "difficulty": "Easy",
+        "url": "https://mailchimp.com"
+      },
+      {
+        "name": "ConvertKit",
+        "description": "Creator-focused email marketing for newsletters and automated funnels.",
+        "pros": "Intuitive for creators, powerful subscriber tagging and automation.",
+        "cons": "Limited design options; pricing based on subscriber count.",
+        "difficulty": "Easy",
+        "url": "https://kit.com"
+      },
+      {
+        "name": "Twilio (SMS)",
+        "description": "Cloud communications platform offering SMS, WhatsApp, and voice APIs.",
+        "pros": "Reliable global SMS reach and programmable messaging tools.",
+        "cons": "Per-message costs add up; complex number management.",
+        "difficulty": "Medium",
+        "url": "https://twilio.com"
+      },
+      {
+        "name": "Brevo",
+        "description": "Email marketing platform (formerly Sendinblue) for email, SMS, and automation.",
+        "pros": "Affordable pricing, built-in CRM features, multilingual support.",
+        "cons": "Email editor less sophisticated; daily sending limits on free plan.",
+        "difficulty": "Medium",
+        "url": "https://brevo.com"
+      }
+    ]
+  },
+  {
+    "category": "Analytics & Monitoring",
+    "tools": [
+      {
+        "name": "PostHog",
+        "description": "Open-source product analytics suite (events, funnels, session replay, etc.).",
+        "pros": "Self-host or cloud; no user data sampling; full ownership of data.",
+        "cons": "Resource-intensive to self-host; interface less polished than rivals.",
+        "difficulty": "Medium",
+        "url": "https://posthog.com"
+      },
+      {
+        "name": "Amplitude",
+        "description": "Enterprise product analytics and experimentation platform.",
+        "pros": "Powerful user behavior insights, funnel analysis, and A/B testing.",
+        "cons": "Very expensive; steep learning curve; data governance needed.",
+        "difficulty": "Hard",
+        "url": "https://amplitude.com"
+      },
+      {
+        "name": "Mixpanel",
+        "description": "Product analytics platform focused on tracking user interactions and retention.",
+        "pros": "Advanced segmentation and real-time analytics.",
+        "cons": "Pricing based on events can be high; upfront setup planning required.",
+        "difficulty": "Medium",
+        "url": "https://mixpanel.com"
+      },
+      {
+        "name": "Google Analytics 4",
+        "description": "Google\u2019s web and app analytics service for understanding user interactions.",
+        "pros": "Free tier with generous limits; well-known metrics and Google ecosystem.",
+        "cons": "Privacy compliance needed; GA4 can be confusing with a steep learning curve.",
+        "difficulty": "Medium",
+        "url": "https://analytics.google.com"
+      },
+      {
+        "name": "Fathom Analytics",
+        "description": "Simple, privacy-focused website analytics tool.",
+        "pros": "No cookies needed, GDPR/CCPA compliant, easy setup and clean dashboard.",
+        "cons": "Limited metrics and features compared to GA.",
+        "difficulty": "Easy",
+        "url": "https://usefathom.com"
+      },
+      {
+        "name": "Plausible Analytics",
+        "description": "Open-source privacy-friendly Google Analytics alternative.",
+        "pros": "Lightweight, no cookies, easy self-host or cloud options.",
+        "cons": "Basic feature set; not suitable for deep analysis.",
+        "difficulty": "Easy",
+        "url": "https://plausible.io"
+      },
+      {
+        "name": "Sentry",
+        "description": "Error tracking and performance monitoring for apps and services.",
+        "pros": "Real-time crash reporting with stack traces across many languages.",
+        "cons": "Alerts can be noisy; quota limits in free plan.",
+        "difficulty": "Medium",
+        "url": "https://sentry.io"
+      },
+      {
+        "name": "Grafana",
+        "description": "Open-source analytics and monitoring platform for data visualization.",
+        "pros": "Highly customizable dashboards; integrates with many data sources.",
+        "cons": "Complex to set up; mainly visualizing technical metrics, not user events.",
+        "difficulty": "Hard",
+        "url": "https://grafana.com"
+      }
+    ]
+  },
+  {
+    "category": "AI & ML Platforms",
+    "tools": [
+      {
+        "name": "OpenAI",
+        "description": "Provider of cutting-edge AI models (ChatGPT, GPT, DALL\u00b7E) via API.",
+        "pros": "State-of-the-art language and image models; rich docs and SDKs.",
+        "cons": "Usage costs; data privacy concerns; rate limits.",
+        "difficulty": "Easy",
+        "url": "https://openai.com"
+      },
+      {
+        "name": "Claude (Anthropic)",
+        "description": "Large language model by Anthropic optimized for helpfulness and safety.",
+        "pros": "High-quality text generation; strong context handling.",
+        "cons": "Access limited; pricing details less transparent; slower updates.",
+        "difficulty": "Easy",
+        "url": "https://www.anthropic.com"
+      },
+      {
+        "name": "Hugging Face",
+        "description": "AI model hub with community-driven library of transformers and datasets.",
+        "pros": "Massive repository of pretrained models; open-source tools and spaces.",
+        "cons": "Hosting large models can be complex; variable model quality.",
+        "difficulty": "Medium",
+        "url": "https://huggingface.co"
+      },
+      {
+        "name": "LangChain",
+        "description": "Open-source framework for building AI applications with language models.",
+        "pros": "Simplifies agent and chain creation; integrates with multiple LLM providers.",
+        "cons": "Rapidly changing API; some concepts complex for beginners.",
+        "difficulty": "Medium",
+        "url": "https://langchain.com"
+      },
+      {
+        "name": "Cohere",
+        "description": "AI models and infrastructure focused on enterprise NLP use cases.",
+        "pros": "Secure, enterprise-ready text generation and embeddings.",
+        "cons": "Less community support than OpenAI; pricing targets enterprises.",
+        "difficulty": "Hard",
+        "url": "https://cohere.com"
+      },
+      {
+        "name": "Google Vertex AI",
+        "description": "Google Cloud's managed ML platform for building, deploying, and managing models.",
+        "pros": "Integrates with Google Cloud services; AutoML and MLOps tools.",
+        "cons": "Complex and expensive; steep learning curve.",
+        "difficulty": "Hard",
+        "url": "https://cloud.google.com/vertex-ai"
+      },
+      {
+        "name": "AWS SageMaker",
+        "description": "AWS's fully managed ML service for training, tuning, and deploying models.",
+        "pros": "Robust environment for ML with many built-in algorithms.",
+        "cons": "Many components to configure; high costs for large jobs.",
+        "difficulty": "Hard",
+        "url": "https://aws.amazon.com/sagemaker"
+      },
+      {
+        "name": "Stability AI",
+        "description": "Company behind Stable Diffusion image models; provides image and audio generative APIs.",
+        "pros": "Cutting-edge image generation; strong open-source community support.",
+        "cons": "Output quality can vary; ethical/content restrictions.",
+        "difficulty": "Medium",
+        "url": "https://stability.ai"
+      }
+    ]
+  },
+  {
+    "category": "AI Coding Agents",
+    "tools": [
+      {
+        "name": "Cursor",
+        "description": "AI-powered coding assistant where agents autonomously write and test code for you.",
+        "pros": "Automates tasks end-to-end with AI agents; integrates with IDE.",
+        "cons": "Steep learning curve; still in development; may produce errors that need review.",
+        "difficulty": "Medium",
+        "url": "https://cursor.com"
+      },
+      {
+        "name": "Windsurf (Devin Desktop)",
+        "description": "AI coding IDE that manages fleets of coding agents in your editor.",
+        "pros": "Conversational AI workflows; indexes codebase contextually.",
+        "cons": "New product (beta), less polished; requires strong hardware or cloud.",
+        "difficulty": "Medium",
+        "url": "https://devin.ai/desktop"
+      },
+      {
+        "name": "GitHub Copilot",
+        "description": "AI pair programmer by GitHub/ OpenAI that provides code completion suggestions.",
+        "pros": "Improves coding speed; integrates into major IDEs.",
+        "cons": "Code suggestions aren\u2019t always correct; subscription required.",
+        "difficulty": "Easy",
+        "url": "https://github.com/features/copilot"
+      },
+      {
+        "name": "Replit Ghostwriter",
+        "description": "AI assistant built into Replit IDE that helps write code from natural language prompts.",
+        "pros": "Integrated with Replit\u2019s collaborative IDE; generates full app scaffolds.",
+        "cons": "Locked into Replit environment; subscription needed for full use.",
+        "difficulty": "Easy",
+        "url": "https://replit.com/ai"
+      },
+      {
+        "name": "Codeium",
+        "description": "AI code completion tool supporting many languages and editors.",
+        "pros": "Free tier available; supports multiple languages and local models.",
+        "cons": "Performance varies; less feature-rich than Copilot.",
+        "difficulty": "Easy",
+        "url": "https://codeium.com"
+      },
+      {
+        "name": "Tabnine",
+        "description": "AI code completion assistant with offline and enterprise options.",
+        "pros": "Privacy-focused with on-prem option; supports all major IDEs.",
+        "cons": "Requires training on your codebase for best results; paid tier needed for best models.",
+        "difficulty": "Easy",
+        "url": "https://tabnine.com"
+      },
+      {
+        "name": "Amazon CodeWhisperer",
+        "description": "AI coding companion from AWS (formerly part of Q developer) for suggesting code snippets.",
+        "pros": "Free tier available; integrates with AWS and IDEs.",
+        "cons": "Less accurate than some competitors; requires AWS signup.",
+        "difficulty": "Easy",
+        "url": "https://aws.amazon.com/codewhisperer"
+      },
+      {
+        "name": "DeepCode (Snyk Code)",
+        "description": "AI-based code review tool that finds bugs and security issues.",
+        "pros": "Focuses on code quality and security; integrates into CI/CD.",
+        "cons": "Not a code generator; may miss logic errors.",
+        "difficulty": "Medium",
+        "url": "https://snyk.io/developers/code"
+      }
+    ]
+  },
+  {
+    "category": "Automation & Integrations",
+    "tools": [
+      {
+        "name": "Zapier",
+        "description": "No-code automation platform connecting 9,000+ apps through workflows (Zaps).",
+        "pros": "Huge app integrations library; easy visual setup.",
+        "cons": "Limited complex logic; can become costly at scale.",
+        "difficulty": "Easy",
+        "url": "https://zapier.com"
+      },
+      {
+        "name": "Pipedream",
+        "description": "Integration platform for developers to connect APIs, build workflows and deploy event-driven code.",
+        "pros": "Full code support (JavaScript/Python) and thousands of app connectors.",
+        "cons": "Has a learning curve for non-developers; usage-based pricing.",
+        "difficulty": "Medium",
+        "url": "https://pipedream.com"
+      },
+      {
+        "name": "IFTTT",
+        "description": "Simple no-code automation for connecting apps, devices, and services (If This Then That).",
+        "pros": "Easy to use with consumer apps and IoT devices.",
+        "cons": "Basic functionality; limited to simpler one-step triggers.",
+        "difficulty": "Easy",
+        "url": "https://ifttt.com"
+      },
+      {
+        "name": "n8n",
+        "description": "Open-source workflow automation with visual editor, self-hostable.",
+        "pros": "Free and highly customizable; integrates code in workflows.",
+        "cons": "Requires hosting and some technical know-how.",
+        "difficulty": "Medium",
+        "url": "https://n8n.io"
+      },
+      {
+        "name": "Make",
+        "description": "Visual automation platform (formerly Integromat) to connect apps and data.",
+        "pros": "Powerful and flexible with advanced logic; affordable plans.",
+        "cons": "Steeper learning curve; interface can be complex.",
+        "difficulty": "Medium",
+        "url": "https://www.make.com"
+      },
+      {
+        "name": "Workato",
+        "description": "Enterprise-grade integration and automation platform with no-code/low-code.",
+        "pros": "Highly scalable with many connectors; AI and bot features.",
+        "cons": "Very expensive; complex UI.",
+        "difficulty": "Hard",
+        "url": "https://www.workato.com"
+      },
+      {
+        "name": "Tray.io",
+        "description": "AI-ready enterprise automation and integration platform.",
+        "pros": "Visual workflow builder with support for AI agents and governance.",
+        "cons": "Costly, aimed at large teams; heavy to configure.",
+        "difficulty": "Hard",
+        "url": "https://tray.io"
+      },
+      {
+        "name": "Integrately",
+        "description": "Automation platform with 40K+ prebuilt integrations for 1-click setups.",
+        "pros": "Easy for beginners; many one-click templates; lower cost.",
+        "cons": "Less flexible than building custom workflows; fewer deep integrations.",
+        "difficulty": "Easy",
+        "url": "https://integrately.com"
+      }
     ]
   }
 ]
