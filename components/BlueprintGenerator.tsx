@@ -697,7 +697,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
         
         {/* Project Type Tabs */}
         <div className="flex flex-wrap items-center gap-2 mb-2">
-          {['Full Stack App', 'Mobile App', 'Landing Page', 'Brainstorm', 'Chrome Extension'].map((type) => (
+          {['Full Stack App', 'Mobile App', 'Landing Page', 'Chrome Extension'].map((type) => (
             <button
               key={type}
               onClick={() => setActiveProjectType(type)}
@@ -710,7 +710,6 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               {type === 'Full Stack App' && '🌐 '}
               {type === 'Mobile App' && '📱 '}
               {type === 'Landing Page' && '🛬 '}
-              {type === 'Brainstorm' && '🧠 '}
               {type === 'Chrome Extension' && '🧩 '}
               {type}
             </button>

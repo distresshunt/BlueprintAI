@@ -204,7 +204,7 @@ ${prompt}
     while (retries > 0) {
       try {
         responseStream = await ai.models.generateContentStream({
-          model: "gemini-3.5-flash",
+          model: "gemini-3.1-pro-preview",
           contents: finalPrompt,
           config: {
             systemInstruction: dynamicSystemInstruction,

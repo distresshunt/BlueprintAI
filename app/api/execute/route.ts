@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
         sendLog("> Connecting to Gemini 3.1 Pro Execution Engine...");
         
         const chat = ai.chats.create({
-          model: "gemini-3.1-pro",
+          model: "gemini-3.1-pro-preview",
           config: {
             systemInstruction: "You are an Autonomous Cloud Executor. Read the provided blueprint. Use your tools to: 1. Initialize the project architecture. 2. Write the core files. 3. Start the dev server. Return the live URL.",
             tools: [
@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
               } else if (call.name === "start_dev_server") {
                 const args = call.args as any;
                 sendLog(`> Starting dev server on port ${args.port}...`);
-                await sandbox.commands.run(`nohup npm run dev -- --port ${args.port} &`, { background: true });
+                await sandbox.commands.run(`nohup npm run dev -- -H 0.0.0.0 -p ${args.port} &`, { background: true });
                 url = `https://${sandbox.getHost(args.port)}`;
                 sendLog(`> Live URL obtained: ${url}`);
                 functionResponses.push({

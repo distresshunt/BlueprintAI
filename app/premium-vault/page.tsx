@@ -58,6 +58,7 @@ function VaultContent() {
   const [isRecording, setIsRecording] = useState(false);
   const [micError, setMicError] = useState("");
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+  const [isChatMinimized, setIsChatMinimized] = useState(false);
   const [isGithubLoading, setIsGithubLoading] = useState(false);
   const [githubRepoUrl, setGithubRepoUrl] = useState("");
   const [sandboxCode, setSandboxCode] = useState<string>("");
@@ -636,7 +637,7 @@ function VaultContent() {
     <div className="flex flex-col min-h-screen bg-[#050507] text-slate-300 font-sans overflow-hidden">
       <Navbar />
       <main className="flex-1 p-4 sm:p-4 flex flex-col gap-4 overflow-y-auto">
-        <div className="max-w-none w-full px-4 lg:px-8 mx-auto">
+        <div className="max-w-4xl w-full px-4 lg:px-8 mx-auto pb-32">
       {/* Header */}
       {showBanner && (
         <header className="mb-8 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-between">
@@ -1120,9 +1121,8 @@ function VaultContent() {
           </div>
         </div>
 
-        {/* Right Column: AI Co-Founder Chat */}
-        <div className="w-full lg:w-[400px] xl:w-[450px] shrink-0 lg:border-l lg:border-zinc-800 lg:pl-8">
-          <div className="sticky top-6 bg-slate-900/80 border border-cyan-500/30 rounded-2xl flex flex-col h-[calc(100vh-8rem)] overflow-hidden shadow-[0_0_30px_rgba(34,211,238,0.1)] backdrop-blur-xl">
+        {/* Floating Chat Widget */}
+        <div className={`fixed bottom-6 right-6 z-50 flex flex-col bg-[#0a0a0a] border border-cyan-500/30 rounded-2xl shadow-[0_0_30px_rgba(34,211,238,0.15)] backdrop-blur-xl transition-all duration-300 overflow-hidden ${isChatMinimized ? 'w-[350px] h-[72px]' : 'w-[350px] h-[500px]'}`}>
             {/* Chat Header */}
             <div className="p-4 border-b border-slate-800 bg-slate-900 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -1138,13 +1138,22 @@ function VaultContent() {
                   </p>
                 </div>
               </div>
-              <button 
-                onClick={() => setIsSettingsOpen(true)}
-                className="p-2 rounded-lg text-slate-400 hover:text-cyan-400 hover:bg-slate-800 transition-colors"
-                title="Local API Keys"
-              >
-                <Settings className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-1">
+                <button 
+                  onClick={() => setIsSettingsOpen(true)}
+                  className="p-2 rounded-lg text-slate-400 hover:text-cyan-400 hover:bg-slate-800 transition-colors"
+                  title="Local API Keys"
+                >
+                  <Settings className="w-4 h-4" />
+                </button>
+                <button 
+                  onClick={() => setIsChatMinimized(!isChatMinimized)}
+                  className="p-2 rounded-lg text-slate-400 hover:text-cyan-400 hover:bg-slate-800 transition-colors"
+                  title={isChatMinimized ? "Maximize Chat" : "Minimize Chat"}
+                >
+                  {isChatMinimized ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
 
             {/* Chat History */}
@@ -1289,9 +1298,6 @@ function VaultContent() {
               )}
             </div>
           </div>
-          </div>
-        </div>
-        </div>
         
         {highlightMenu.visible && (
           <div
@@ -1339,6 +1345,8 @@ function VaultContent() {
             </button>
           </div>
         )}
+        </div>
+        </div>
       </main>
       <UserEnvSettings isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </div>
