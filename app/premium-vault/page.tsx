@@ -70,7 +70,6 @@ function VaultContent() {
   const [e2bLogs, setE2bLogs] = useState<string[]>([]);
   const [e2bUrl, setE2bUrl] = useState<string>("");
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
-  const [aiBuilder, setAiBuilder] = useState<string>("Cursor");
   const [isRegenerating, setIsRegenerating] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const router = useRouter();

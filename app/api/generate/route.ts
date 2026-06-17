@@ -66,7 +66,24 @@ Tone: Ruthlessly practical, highly encouraging, zero corporate fluff. Note: The 
 
 export async function POST(req: NextRequest) {
   try {
-    let { prompt, aiBuilder = 'Decide for me ✨', techLevel = 'No-Code', businessModelSlug } = await req.json();
+    let body;
+    try {
+      body = await req.json();
+    } catch (e) {
+      return NextResponse.json({ error: "Invalid JSON payload" }, { status: 400 });
+    }
+
+    let { 
+      prompt, 
+      aiBuilder = 'Decide for me ✨', 
+      techLevel = 'No-Code', 
+      businessModelSlug,
+      projectType,
+      llmCore,
+      mcpTools,
+      baseTemplate,
+      businessModel
+    } = body;
 
     if (!prompt) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
@@ -85,6 +102,15 @@ export async function POST(req: NextRequest) {
     }
 
     let dynamicSystemInstruction = systemInstruction;
+
+    if (projectType || llmCore || mcpTools || baseTemplate || businessModel) {
+      dynamicSystemInstruction += `\n\n**USER PREFERENCES OVERRIDE:**\nThe user has explicitly selected the following constraints for their project. You MUST respect these choices in your generated architecture:\n`;
+      if (projectType) dynamicSystemInstruction += `- Project Type: ${projectType}\n`;
+      if (baseTemplate) dynamicSystemInstruction += `- Base Template: ${baseTemplate}\n`;
+      if (llmCore) dynamicSystemInstruction += `- LLM Core: ${llmCore}\n`;
+      if (mcpTools) dynamicSystemInstruction += `- MCP Tools: ${mcpTools}\n`;
+      if (businessModel) dynamicSystemInstruction += `- Business Model: ${businessModel}\n`;
+    }
 
     if (techLevel === 'No-Code') {
       dynamicSystemInstruction += `\n\n**NO-CODE DIRECTIVE:**
