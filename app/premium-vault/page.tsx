@@ -1116,33 +1116,6 @@ function VaultContent() {
                   ))
                 )}
               </div>
-            ) : (
-              <div className="flex flex-col gap-6">
-                <button
-                  onClick={handleDeployToCloud}
-                  disabled={isDeploying}
-                  className="w-full flex items-center justify-center gap-3 bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-6 rounded-xl text-xl shadow-[0_0_30px_rgba(6,182,212,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isDeploying ? (
-                    <Loader2 className="w-6 h-6 animate-spin" />
-                  ) : (
-                    <Zap className="w-6 h-6" />
-                  )}
-                  🚀 Deploy to Cloud Sandbox
-                </button>
-                
-                <div className="bg-[#0a0a0a] text-green-400 font-mono p-4 rounded-xl h-96 overflow-y-auto border border-zinc-800 shadow-inner flex flex-col gap-1">
-                  {e2bLogs.map((log, i) => (
-                    <div key={i} className="break-all">{log}</div>
-                  ))}
-                  {e2bUrl && (
-                    <div className="mt-4 text-cyan-400 break-all">
-                      <Zap className="w-4 h-4 inline mr-2" />
-                      Live URL: <a href={e2bUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-cyan-300">{e2bUrl}</a>
-                    </div>
-                  )}
-                </div>
-              </div>
             )}
           </div>
         </div>
