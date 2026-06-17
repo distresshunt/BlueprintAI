@@ -1,6 +1,6 @@
 import stackData from "@/data/stack.json";
 import { Navbar } from "@/components/Navbar";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ArrowUpRight } from "lucide-react";
 
 export default function StackPage() {
   return (
@@ -82,7 +82,7 @@ export default function StackPage() {
                         rel="noopener noreferrer"
                         className="mt-6 w-full py-3 bg-zinc-800 hover:bg-cyan-500 hover:text-black text-white rounded-xl text-sm font-bold transition-all text-center flex items-center justify-center gap-2 group-hover:shadow-[0_0_15px_rgba(6,182,212,0.3)]"
                       >
-                        View Tool <span className="font-mono">&nearr;</span>
+                        <span className="flex items-center justify-center gap-1.5">View Tool <ArrowUpRight className="w-4 h-4" /></span>
                       </a>
                     </div>
                   );
