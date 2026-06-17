@@ -49,6 +49,9 @@ export function Navbar() {
                 <Plus className="w-4 h-4" /> <span className="hidden sm:inline">New Blueprint</span>
               </Link>
             )}
+            <Link href="/blog/what-is-google-okf" className="text-xs uppercase tracking-widest font-sans font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-1.5 rounded transition-colors text-emerald-400 border border-emerald-500/20 hidden sm:flex items-center gap-2">
+               Guides
+            </Link>
             <Link href="/stack" className="text-xs uppercase tracking-widest font-sans font-semibold bg-cyan-500/10 hover:bg-cyan-500/20 px-3 py-1.5 rounded transition-colors text-cyan-400 border border-cyan-500/20 hidden sm:flex items-center gap-2">
                Founder's Stack
             </Link>

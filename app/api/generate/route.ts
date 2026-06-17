@@ -1,7 +1,8 @@
 export const maxDuration = 60;
 import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
-import businessModels from "@/data/business-models.json";
+import fs from 'fs';
+import path from 'path';
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
 
@@ -74,15 +75,15 @@ export async function POST(req: NextRequest) {
     }
 
     let { 
-      prompt, 
-      aiBuilder = 'Decide for me ✨', 
-      techLevel = 'No-Code', 
-      businessModelSlug,
-      projectType,
-      llmCore,
-      mcpTools,
-      baseTemplate,
-      businessModel
+      prompt = "", 
+      techLevel = "AI Developer", 
+      aiBuilder = "Decide for me ✨", 
+      businessModelSlug = "",
+      projectType = "Full Stack App", 
+      llmCore = "Gemini 3.1 Pro (Default)", 
+      mcpTools = "None", 
+      baseTemplate = "Next.js + Supabase (Default)",
+      businessModel = ""
     } = body;
 
     if (!prompt) {
@@ -90,7 +91,15 @@ export async function POST(req: NextRequest) {
     }
 
     if (businessModelSlug) {
-      const model = businessModels.find((m) => m.slug === businessModelSlug);
+      let businessModels: any[] = [];
+      try {
+        const filePath = path.join(process.cwd(), 'data', 'business-models.json');
+        const fileData = fs.readFileSync(filePath, 'utf8');
+        businessModels = JSON.parse(fileData);
+      } catch (e) {
+        console.warn("Failed to load business-models.json, falling back to empty array.", e);
+      }
+      const model = businessModels.find((m) => m?.slug === businessModelSlug);
       if (model) {
         prompt = `[BUSINESS MODEL: ${model.name}]\nStrict Technical Directive: ${model.engine_context}\n\n${prompt}`;
       }
@@ -250,7 +259,7 @@ ${prompt}
       }
     });
   } catch (error) {
-    console.error("API error:", error);
+    console.error("GENERATE API CRASH:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     
     if (errorMessage.includes("503") || errorMessage.includes("high demand") || errorMessage.includes("UNAVAILABLE")) {

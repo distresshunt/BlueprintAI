@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
 import { Sandbox } from "@e2b/code-interpreter";
 
 export const maxDuration = 60;
@@ -7,7 +7,13 @@ export const maxDuration = 60;
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
 export async function POST(req: NextRequest) {
-  const { blueprintMarkdown } = await req.json();
+  let body;
+  try {
+    body = await req.json();
+  } catch (e) {
+    return new Response(JSON.stringify({ error: "Invalid JSON payload" }), { status: 400 });
+  }
+  const { blueprintMarkdown = "" } = body;
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
@@ -42,8 +48,8 @@ export async function POST(req: NextRequest) {
                     name: "execute_terminal_command",
                     description: "Executes a shell command in the cloud sandbox and returns stdout/stderr.",
                     parameters: {
-                      type: "OBJECT",
-                      properties: { command: { type: "STRING" } },
+                      type: Type.OBJECT,
+                      properties: { command: { type: Type.STRING } },
                       required: ["command"]
                     }
                   },
@@ -51,18 +57,18 @@ export async function POST(req: NextRequest) {
                     name: "write_file",
                     description: "Writes content to a file at the specified path.",
                     parameters: {
-                      type: "OBJECT",
-                      properties: { path: { type: "STRING" }, content: { type: "STRING" } },
+                      type: Type.OBJECT,
+                      properties: { path: { type: Type.STRING }, content: { type: Type.STRING } },
                       required: ["path", "content"]
                     }
                   },
                   {
                     name: "start_dev_server",
-                    description: "Starts the dev server in the background and returns the exposed live URL.",
+                    description: "Starts a background dev server (e.g. npm run dev). Does NOT block execution. Wait a few seconds for the port to bind before testing the url.",
                     parameters: {
-                      type: "OBJECT",
-                      properties: { port: { type: "NUMBER" } },
-                      required: ["port"]
+                      type: Type.OBJECT,
+                      properties: { command: { type: Type.STRING }, port: { type: Type.INTEGER } },
+                      required: ["command", "port"]
                     }
                   }
                 ]
@@ -107,7 +113,7 @@ export async function POST(req: NextRequest) {
                 const args = call.args as any;
                 sendLog(`> Starting dev server on port ${args.port}...`);
                 await sandbox.commands.run(`nohup npm run dev -- --port ${args.port} &`, { background: true });
-                url = sandbox.getHostname(args.port);
+                url = `https://${sandbox.getHost(args.port)}`;
                 sendLog(`> Live URL obtained: ${url}`);
                 functionResponses.push({
                   name: call.name,
@@ -123,16 +129,16 @@ export async function POST(req: NextRequest) {
             }
           }
 
-          result = await chat.sendMessage(functionResponses.map((r: any) => ({
-             functionResponse: r
-          })));
+          result = await chat.sendMessage({
+             message: functionResponses.map((r: any) => ({ functionResponse: r }))
+          });
         }
 
         sendLog("> Execution complete.");
         if (url) {
           sendSuccess(url);
         } else {
-          sendSuccess(sandbox ? sandbox.getHostname(3000) : "");
+          sendSuccess(sandbox ? `https://${sandbox.getHost(3000)}` : "");
         }
 
       } catch (err: any) {

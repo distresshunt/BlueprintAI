@@ -1,0 +1,104 @@
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { Navbar } from '@/components/Navbar';
+import { Zap } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'Google Open Knowledge Format (OKF) Explained | BlueprintAI',
+  description: 'Google just replaced .clinerules with the Open Knowledge Format (OKF). Learn how to generate OKF bundles for your AI agents instantly.',
+};
+
+export default function BlogPost() {
+  return (
+    <div className="min-h-screen bg-[#050505] text-zinc-200">
+      <Navbar />
+      
+      <main className="max-w-7xl mx-auto px-4 sm:px-8 py-16">
+        <article className="prose prose-invert prose-cyan prose-lg max-w-3xl mx-auto">
+          <header className="mb-12 text-center not-prose">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold uppercase tracking-widest mb-6">
+              <Zap className="w-4 h-4" />
+              Latest Intel
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tighter text-white mb-6 leading-tight">
+              Google Just Killed .clinerules: Welcome to the Open Knowledge Format (OKF)
+            </h1>
+            <p className="text-xl text-zinc-400 leading-relaxed">
+              Google Cloud just announced OKF v0.1 as the new vendor-neutral standard for feeding context to AI agents (Cursor, Windsurf, Antigravity).
+            </p>
+          </header>
+
+          <p>
+            For the past year, the AI coding space has been fractured. Cursor uses <code>.cursorrules</code>, RooCode uses <code>.clinerules</code>, and Windsurf uses its own system prompts. If you wanted to feed architecture context to your AI agent, you had to manually maintain duplicate configuration files for every single IDE. 
+          </p>
+          
+          <p>
+            That era is officially over. Google Cloud has just announced the <strong>Open Knowledge Format (OKF) v0.1</strong>—a unified, vendor-neutral standard for AI agent context.
+          </p>
+
+          <h2>The Problem: OKF is Brutal to Write Manually</h2>
+          
+          <p>
+            While OKF solves the fragmentation problem, it introduces a new one. Writing an OKF bundle by hand is incredibly tedious. You can't just dump a wall of text into a single file anymore. A proper OKF bundle requires:
+          </p>
+          <ul>
+            <li>Strict YAML frontmatter for metadata parsing.</li>
+            <li>Deeply nested folder structures for component isolation.</li>
+            <li>Specific routing tables and database schemas that must align perfectly across multiple Markdown files.</li>
+          </ul>
+          <p>
+            Manually formatting an OKF bundle for a new full-stack SaaS application takes hours of tedious documentation work before you even write your first line of code.
+          </p>
+
+          <div className="not-prose my-12 flex justify-center">
+            <Link 
+              href="/"
+              className="inline-flex items-center justify-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-black px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:shadow-[0_0_40px_rgba(6,182,212,0.5)] hover:-translate-y-1"
+            >
+              <Zap className="w-5 h-5" />
+              Generate your OKF Bundle Now ⚡
+            </Link>
+          </div>
+
+          <h2>The Solution: Instant OKF Generation</h2>
+          
+          <p>
+            This is exactly why we built <strong>BlueprintAI</strong>. We are the world's first AI Tech Lead that natively generates complete, downloadable OKF bundles for your specific app idea in seconds.
+          </p>
+          <p>
+            Instead of spending hours writing documentation, you simply tell BlueprintAI what you want to build. Our Autonomous Cloud Execution Engine instantly architects your app and outputs a perfect, production-ready OKF bundle that looks like this:
+          </p>
+
+          <pre><code className="language-bash">{`.okf/
+├── project.yaml          # Core OKF frontmatter
+├── architecture/
+│   ├── frontend.md       # UI components & Tailwind classes
+│   └── backend.md        # API routes & database schema
+├── dependencies/
+│   └── package.json      # Verified package versions
+└── rules/
+    └── system.md         # Global constraints for your IDE`}</code></pre>
+
+          <h2>Drop it in your IDE and Go</h2>
+          
+          <p>
+            Once you download the ZIP file from BlueprintAI, simply drop the <code>.okf</code> folder into the root of your project. Cursor, Windsurf, and Antigravity will automatically detect the bundle, parse the YAML frontmatter, and instantly understand your entire application's architecture.
+          </p>
+          <p>
+            Stop wasting time writing <code>.cursorrules</code> files by hand. Let BlueprintAI generate your OKF bundle, and get back to actually building your product.
+          </p>
+
+          <div className="not-prose mt-16 mb-8 flex justify-center">
+            <Link 
+              href="/"
+              className="inline-flex items-center justify-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-black px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:shadow-[0_0_40px_rgba(6,182,212,0.5)] hover:-translate-y-1"
+            >
+              <Zap className="w-5 h-5" />
+              Generate your OKF Bundle Now ⚡
+            </Link>
+          </div>
+        </article>
+      </main>
+    </div>
+  );
+}

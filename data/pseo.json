@@ -29,7 +29,10 @@
     "affiliate-marketing",
     "ad-supported-platform",
     "hardware-as-a-service",
-    "open-source-sponsor-backed"
+    "open-source-sponsor-backed",
+    "open-knowledge-format-generator",
+    "okf-bundle-builder",
+    "okf-architecture-exporter"
   ],
   "niches": [
     "saas-tech-automation-tools-niches",

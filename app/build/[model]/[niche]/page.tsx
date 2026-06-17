@@ -9,6 +9,7 @@ type Props = {
 function formatTitleCase(str: string) {
   return str.split('-').map(word => {
     if (word.toLowerCase() === 'ai') return 'AI';
+    if (word.toLowerCase() === 'okf') return 'OKF';
     return word.charAt(0).toUpperCase() + word.slice(1);
   }).join(' ');
 }
