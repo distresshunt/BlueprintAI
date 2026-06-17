@@ -367,7 +367,7 @@ function VaultContent() {
       { id: "Phase 5", name: "WIZARD OF OZ & SCALE" },
       { id: "Phase 4", name: "MONETIZATION" },
       { id: "Phase 3", name: "DEVELOPER BOILERPLATE PACK" },
-      { id: "Phase 2", name: "A2A DIRECTIVES" },
+      { id: "Phase 2", name: "OPEN KNOWLEDGE FORMAT (OKF)" },
       { id: "Phase 1", name: "MOVIE SET & UI" },
       { id: "Phase 0", name: "ARCHITECTURE" }
     ];
@@ -786,7 +786,19 @@ function VaultContent() {
                     h2: ({ node, children, ...props }: any) => {
                       const text = String(children);
                       const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-                      return <h2 id={id} className="" {...props}>{children}</h2>;
+                      const isPhase5 = text.toLowerCase().includes("phase 5") || text.toLowerCase().includes("wizard of oz");
+                      return (
+                        <>
+                          <h2 id={id} className="" {...props}>{children}</h2>
+                          {isPhase5 && (
+                            <div className="my-8 text-center p-6 bg-cyan-950/20 border border-cyan-500/20 rounded-2xl">
+                              <button className="px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black text-lg md:text-xl rounded-2xl shadow-[0_0_40px_rgba(6,182,212,0.4)] hover:shadow-[0_0_60px_rgba(6,182,212,0.6)] transition-all flex items-center justify-center gap-3 w-full sm:w-auto mx-auto transform hover:scale-105 cursor-pointer">
+                                📦 Download OKF Knowledge Bundle (.zip)
+                              </button>
+                            </div>
+                          )}
+                        </>
+                      );
                     },
                     h3: ({ node, children, ...props }: any) => {
                       const text = String(children);

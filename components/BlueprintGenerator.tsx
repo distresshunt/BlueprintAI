@@ -665,6 +665,8 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
           <div className="animate-marquee hover:[animation-play-state:paused] flex items-center text-[11px] font-mono tracking-widest uppercase shrink-0 w-max relative z-0">
             {[...Array(2)].map((_, i) => (
               <div key={i} className="flex items-center gap-8 px-4 shrink-0">
+                <span className="text-zinc-400"><span className="mr-2 text-base">🔥</span> JUST ADDED: <span className="text-zinc-300 font-semibold">Google Open Knowledge Format (OKF) Export</span></span>
+                <span className="text-zinc-700 font-light px-2">|</span>
                 <span className="text-zinc-400"><span className="mr-2 text-base">🔥</span> NEW: <span className="text-zinc-300 font-semibold">Agent-to-Agent (A2A) Anti-Laziness Architecture Files</span></span>
                 <span className="text-zinc-700 font-light px-2">|</span>
                 <span className="text-zinc-400"><span className="mr-2 text-base">🚀</span> JUST SHIPPED: <span className="text-zinc-300 font-semibold">1-Click Cursor &amp; Windsurf Code Export</span></span>

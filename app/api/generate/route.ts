@@ -27,16 +27,14 @@ CRITICAL TECH STACK RULE: You are operating in the year 2026. You must NEVER rec
 **Phase 1: The 'Movie Set' (UI & Fake Data)**
 Explain how to build the front-end dashboard and the exact dummy JSON data.
 
-**Phase 2: The Agent-to-Agent (A2A) Directives**
-CRITICAL INSTRUCTION: Start this section by explicitly telling the user: 'Before you write the code for Phase 1, you must create this configuration file in your root directory to ensure your AI agent does not hallucinate.' 
-Then, generate a highly detailed, 'God-Tier' configuration file (.cursorrules, .windsurfrules, or .clinerules) formatted inside a SINGLE markdown code block. 
-You MUST NOT take shortcuts. The code block MUST contain these exact sections:
-1. [PROJECT_CONTEXT]: Tech stack, core vibe, and domain.
-2. [DIRECTORY_STRUCTURE]: You MUST draw a literal, deep ASCII file tree using the exact characters \`├──\` and \`└──\`. Do NOT use basic hyphens. Map out the exact routes, components, and API endpoints.
-3. [DATABASE_SCHEMA]: You MUST write the raw \`CREATE TABLE\` SQL statements directly inside this section. Do NOT say 'refer to schema.sql'. Write the actual SQL.
-4. [ANTI-LAZINESS DIRECTIVES]: Strict rules forcing the AI to write complete code, never use placeholders, and handle all errors.
-5. [DEVELOPMENT_SEQUENCE]: A step-by-step numbered execution plan for the AI agent to follow.
-Make this file look incredibly technical, authoritative, and exhaustive.
+**Phase 2: The Open Knowledge Format (OKF) Bundle**
+CRITICAL INSTRUCTION: Instruct the AI to generate a standardized OKF v0.1 directory structure. It MUST output the structure as multiple distinct markdown files with YAML frontmatter. Tell the AI to output this in a format that the user can easily copy or download.
+Example structure to generate:
+- \`/knowledge-bundle/index.md\` (Main entry point with frontmatter: \`type: Index\`, \`title: Project Architecture\`)
+- \`/knowledge-bundle/database/schema.md\` (Raw SQL and RLS policies)
+- \`/knowledge-bundle/frontend/components.md\` (UI constraints, Tailwind rules)
+- \`/knowledge-bundle/agents/directives.md\` (Anti-laziness rules and IDE-specific constraints)
+Make this section look incredibly technical, authoritative, and exhaustive.
 
 **Phase 3: The Developer Boilerplate Pack**
 You MUST generate 3 essential, copy-pasteable files for the developer, tailored specifically to their app idea:
@@ -94,14 +92,14 @@ The user's technical level is "No-Code". You MUST act as an expert No-Code Archi
 - EXCLUDE ALL CODE: Do not output any JSON, Next.js, Tailwind, JavaScript, or backend code references whatsoever. Ignore Cursor, Windsurf, and Antigravity.
 - Phase 0: Recommend specific visual No-Code platforms (e.g., Bubble, Glide, Softr, Webflow, FlutterFlow) and automation tools (Zapier, Make).
 - Phase 1: Explain how to build the UI visually using the recommended no-code platform without any coding. Describe visual workflows and data bindings.
-- Phase 2: Instead of an A2A configuration file, provide a step-by-step "No-Code Automation Architecture", detailing exactly how the different visual tools and webhooks connect. (Do not output the \`\`\`a2a code block).`;
+- Phase 2: Instead of an OKF Knowledge Bundle, provide a step-by-step "No-Code Automation Architecture", detailing exactly how the different visual tools and webhooks connect.`;
     } else if (techLevel === 'Learn to Code') {
       dynamicSystemInstruction += `\n\n**LEARN TO CODE DIRECTIVE:**
 The user's technical level is "Learn to Code". You MUST act as a supportive coding tutor for them.
 - Phase 0: Recommend a beginner-friendly stack (e.g., React, Firebase, Vercel). DO NOT tell the user to open a terminal or run \`npx create-next-app\`. Beginners get stuck there. Instead, instruct them to use a cloud IDE. Add this exact text for them: "To skip the confusing terminal setup, we are going to code directly in your browser. Click here to open a blank Next.js environment: [Open StackBlitz Next.js Sandbox](https://stackblitz.com/fork/github/vercel/next.js/tree/canary/examples/hello-world). You will write your code here!"
 - 7-Day Sprint Reformat: Break down Phases 1 through 4 into a "7-Day Sprint Curriculum". Instead of massive walls of text, use headers like "Day 1: The Visuals", "Day 2: Making it Clickable", etc. to pace the project.
 - ELI5 Code Blocks: Whenever you provide a code snippet in this mode, you MUST follow the snippet with an "Explain Like I'm 5 (ELI5)" section that breaks down what the complex functions (like mapping, state, or fetching) are doing using real-world analogies. Provide heavily commented, basic starter code snippets.
-- Phase 2: Instead of an A2A configuration file, provide a "Learning Roadmap" linking to free resources (like FreeCodeCamp or Next.js Docs) specific to the tools they need for this app. (Do not output the \`\`\`a2a code block in this case, just normal markdown roadmap).`;
+- Phase 2: Instead of an OKF Knowledge Bundle, provide a "Learning Roadmap" linking to free resources (like FreeCodeCamp or Next.js Docs) specific to the tools they need for this app.`;
     } else {
       dynamicSystemInstruction += `\n\n**IMPORTANT A2A DISPATCHER DIRECTIVE:**
 You have received the user's digital business idea. The user has chosen the following AI Builder: "${aiBuilder}".
@@ -130,12 +128,12 @@ CRITICAL IDE LOGIC: You will be passed the user's chosen AI Builder.
 - IF THEY SELECTED A SPECIFIC IDE (Cursor, Windsurf, or Antigravity): DO NOT say 'I have selected'. Instead, validate their choice like a senior dev talking to a peer (e.g., '[IDE name]!? Killer choice for this build.', 'Great call going with [IDE name].'). Vary this opening phrase every single time so it never sounds robotic. Then, write exactly 2 sentences explaining WHY their chosen IDE is the absolute perfect weapon for their SPECIFIC app idea.
 - IF THEY SELECTED 'Decide for me ✨': Evaluate their idea using our IDE Decision Matrix (Cursor for UI/Beginners, Windsurf for complex full-stack, Antigravity for autonomous terminal/backend). Announce your selection and explain why.
 
-Then, in "Phase 2: The Agent-to-Agent (A2A) Directives", you must format the output specifically for the chosen (or recommended) IDE using their specific hidden configuration conventions.
-- If Cursor, emphasize file-by-file context and output a \`.cursorrules\` file.
-- If Windsurf, emphasize autonomous execution and command-line steps and output a \`.windsurfrules\` file.
-- If Antigravity, output a \`.clinerules\` file.
+Then, in "Phase 2: The Open Knowledge Format (OKF) Bundle", you must format the \`/knowledge-bundle/agents/directives.md\` output specifically for the chosen (or recommended) IDE using their specific hidden configuration conventions.
+- If Cursor, emphasize file-by-file context.
+- If Windsurf, emphasize autonomous execution and command-line steps.
+- If Antigravity, output guidelines tailored for its execution environment.
 
-CRITICAL: You MUST output the A2A configuration file in a markdown code block tagged with \`\`\`a2a (e.g. \`\`\`a2a\\n [content] \\n\`\`\`). Do NOT use \`\`\`cursorrules or other tags for this specific block.`;
+CRITICAL: You MUST output the OKF files in markdown code blocks.`;
     }
 
     dynamicSystemInstruction += `\n\n**THE JARGON RULE:**
@@ -158,10 +156,7 @@ Example: \`[Supabase](https://supabase.com/?via=blueprintai)\`. Apply this to al
       finalPrompt = `
 [CRITICAL SYSTEM OVERRIDE: The user has explicitly selected "${aiBuilder}" as their AI IDE. 
 You are strictly FORBIDDEN from recommending any other IDE. 
-If the IDE is Antigravity or Cline, you MUST name the Phase 2 configuration file exactly '.clinerules'. 
-If the IDE is Windsurf, you MUST name it '.windsurfrules'. 
-If the IDE is Cursor, you MUST name it '.cursorrules'. 
-Do not hallucinate the wrong file extension.]
+You MUST tailor the Phase 2 OKF \\\`/knowledge-bundle/agents/directives.md\\\` file specifically for ${aiBuilder}.]
 
 Here is the user's business idea:
 ${prompt}
