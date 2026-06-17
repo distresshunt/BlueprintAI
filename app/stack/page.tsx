@@ -25,7 +25,7 @@ export default function StackPage() {
                 <div className="h-px flex-1 bg-gradient-to-r from-zinc-800 to-transparent"></div>
               </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl mx-auto">
                 {categoryGroup.tools.map((tool, tIndex) => {
                   let badgeColor = "bg-zinc-800 text-zinc-300 border-zinc-700";
                   if (tool.difficulty === "Easy") {

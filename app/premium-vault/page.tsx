@@ -26,7 +26,7 @@ import { CodeBlock } from "@/components/CodeBlock";
 import { useSearchParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useAuth, useUser, useClerk } from "@clerk/nextjs";
-import { Sandpack } from "@codesandbox/sandpack-react";
+
 import { Navbar } from "@/components/Navbar";
 import { ResourceHub } from "@/components/ResourceHub";
 import { UserEnvSettings } from "@/components/UserEnvSettings";
@@ -67,6 +67,10 @@ function VaultContent() {
   const [ideaPrompt, setIdeaPrompt] = useState<string>("");
   const [techLevel, setTechLevel] = useState<string>("No-Code");
   const [aiBuilder, setAiBuilder] = useState<string>("Cursor");
+  const [e2bLogs, setE2bLogs] = useState<string[]>([]);
+  const [e2bUrl, setE2bUrl] = useState<string>("");
+  const [isDeploying, setIsDeploying] = useState<boolean>(false);
+  const [aiBuilder, setAiBuilder] = useState<string>("Cursor");
   const [isRegenerating, setIsRegenerating] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const router = useRouter();
@@ -104,6 +108,55 @@ function VaultContent() {
       alert("Deploy failed: " + err.message);
     } finally {
       setIsGithubLoading(false);
+    }
+  };
+
+  const handleDeployToCloud = async () => {
+    try {
+      setIsDeploying(true);
+      setE2bLogs([]);
+      setE2bUrl("");
+
+      const res = await fetch("/api/execute", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ blueprintMarkdown: blueprintData }),
+      });
+
+      if (!res.body) throw new Error("No response body");
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+
+      while (!done) {
+        const { value, done: readerDone } = await reader.read();
+        done = readerDone;
+        if (value) {
+          const chunk = decoder.decode(value);
+          const lines = chunk.split("\n\n");
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              try {
+                const data = JSON.parse(line.slice(6));
+                if (data.type === "log") {
+                  setE2bLogs((prev) => [...prev, data.data]);
+                } else if (data.type === "success") {
+                  setE2bUrl(data.data);
+                } else if (data.type === "error") {
+                  setE2bLogs((prev) => [...prev, `[ERROR] ${data.data}`]);
+                }
+              } catch (e) {
+                // ignore
+              }
+            }
+          }
+        }
+      }
+    } catch (err: any) {
+      setE2bLogs((prev) => [...prev, `[SYSTEM ERROR] ${err.message}`]);
+    } finally {
+      setIsDeploying(false);
     }
   };
 
@@ -844,24 +897,55 @@ function VaultContent() {
               </div>
               </div>
             ) : (
-              <Sandpack
-                template="react-ts"
-                theme="dark"
-                options={{
-                  showNavigator: true,
-                  showTabs: true,
-                  editorHeight: 600,
-                  // @ts-ignore
-                  editorOptions: { wordWrap: "on" },
-                  classes: {
-                    "sp-wrapper":
-                      "custom-sandpack-wrapper w-full max-w-full overflow-hidden rounded-xl border border-zinc-800 shadow-2xl",
-                  },
-                }}
-                files={{
-                  "/App.tsx": sandboxCode || `export default function App() {\n  return (\n    <div style={{ padding: '2rem', backgroundColor: '#09090b', color: 'white', minHeight: '100vh', fontFamily: 'sans-serif' }}>\n      <h1 style={{ color: '#22d3ee', fontSize: '2rem', fontWeight: 'bold' }}>BlueprintAI Workspace</h1>\n      <p style={{ marginTop: '1rem', color: '#a1a1aa' }}>Your live React environment is initialized. Paste your UI components here.</p>\n    </div>\n  );\n}`,
-                }}
-              />
+              <div className="flex flex-col gap-6 w-full">
+                <button
+                  onClick={handleDeployToCloud}
+                  disabled={isDeploying}
+                  className="w-full relative group overflow-hidden rounded-2xl p-[2px] cursor-pointer"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-500 to-cyan-400 opacity-70 group-hover:opacity-100 blur-md transition-opacity duration-500 animate-pulse"></div>
+                  <div className="relative bg-black/90 backdrop-blur-sm px-8 py-6 rounded-2xl flex items-center justify-center gap-4 border border-white/10 hover:bg-black/70 transition-all duration-300">
+                    {isDeploying ? (
+                      <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+                    ) : (
+                      <Zap className="w-8 h-8 text-cyan-400" />
+                    )}
+                    <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 tracking-tight">
+                      {isDeploying ? "Deploying..." : "🚀 Deploy to Cloud Sandbox"}
+                    </span>
+                  </div>
+                </button>
+
+                {e2bUrl && (
+                  <a
+                    href={e2bUrl.startsWith("http") ? e2bUrl : `https://${e2bUrl}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-center py-4 bg-emerald-500/20 border border-emerald-500/50 rounded-xl text-emerald-400 font-bold text-xl hover:bg-emerald-500/30 transition-colors shadow-[0_0_30px_rgba(16,185,129,0.2)]"
+                  >
+                    🎉 Deployment Success! Click to View Live App: {e2bUrl}
+                  </a>
+                )}
+
+                <div className="bg-black text-green-400 font-mono p-6 rounded-xl border border-zinc-800 h-[500px] overflow-y-auto flex flex-col gap-1 text-sm shadow-inner custom-scrollbar">
+                  <div className="text-zinc-500 mb-4 pb-4 border-b border-zinc-800">
+                    Welcome to the Autonomous Cloud Execution Engine.
+                    <br />
+                    System ready. Waiting for deployment trigger...
+                  </div>
+                  {e2bLogs.map((log, idx) => (
+                    <div key={idx} className="break-words">
+                      {log}
+                    </div>
+                  ))}
+                  {isDeploying && (
+                    <div className="flex items-center gap-2 mt-4 text-cyan-500 animate-pulse">
+                      <span className="w-2 h-2 bg-cyan-500 rounded-full"></span>
+                      Executing Agent directives...
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
           </div>
 
