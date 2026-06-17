@@ -18,7 +18,7 @@ export default async function Home(props: { searchParams: Promise<{ [key: string
 
       {/* Main Workspace */}
       <main className="flex-1 p-4 sm:p-4 flex flex-col gap-4 overflow-y-auto">
-        <div className="max-w-4xl mx-auto w-full flex flex-col items-center mt-0">
+        <div className="max-w-7xl mx-auto w-full flex flex-col items-center mt-0">
           
           <header className="mb-4 space-y-2 text-center flex flex-col items-center">
             <h1 className="text-4xl sm:text-5xl font-light tracking-tighter text-white">

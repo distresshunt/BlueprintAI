@@ -116,6 +116,14 @@ function VaultContent() {
       setE2bLogs([]);
       setE2bUrl("");
 
+      // Swarm Boot Sequence
+      setE2bLogs((prev) => [...prev, "> [@Architect] Initializing E2B cloud sandbox..."]);
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      setE2bLogs((prev) => [...prev, "> [@DB_Admin] Parsing Supabase schema requirements..."]);
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      setE2bLogs((prev) => [...prev, "> [@Frontend_Dev] Scaffolding Next.js 15 environment..."]);
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
       const res = await fetch("/api/execute", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -628,7 +636,7 @@ function VaultContent() {
     <div className="flex flex-col min-h-screen bg-[#050507] text-slate-300 font-sans overflow-hidden">
       <Navbar />
       <main className="flex-1 p-4 sm:p-4 flex flex-col gap-4 overflow-y-auto">
-        <div className="max-w-7xl mx-auto w-full">
+        <div className="max-w-none w-full px-4 lg:px-8 mx-auto">
       {/* Header */}
       {showBanner && (
         <header className="mb-8 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-between">
@@ -649,9 +657,9 @@ function VaultContent() {
 
 
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+      <div className="flex flex-col lg:flex-row gap-8 max-w-none w-full">
         {/* Left Column: Markdown Blueprint / Sandpack Workspace */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="flex-1 min-w-0 space-y-6 h-[calc(100vh-8rem)] overflow-y-auto pr-2 pb-32">
           <ResourceHub blueprintMarkdown={blueprintData} />
 
           <div className="flex items-center gap-2 mb-4">
@@ -681,7 +689,7 @@ function VaultContent() {
             {activeTab === "blueprint" ? (
               <div className="flex flex-col gap-4">
                 {/* Mode Switcher UI */}
-                <div className="flex flex-wrap items-center gap-4 bg-zinc-900/50 p-4 rounded-xl border border-zinc-800 mb-2">
+                <div className="flex flex-col lg:flex-row lg:items-center gap-4 bg-zinc-900/50 p-4 rounded-xl border border-zinc-800 mb-2">
                   <span className="text-zinc-400 text-sm font-semibold uppercase tracking-widest">Current Mode:</span>
                   <select 
                     value={techLevel}
@@ -815,7 +823,7 @@ function VaultContent() {
                     </details>
                   )}
                   <div 
-                    className={`prose prose-invert prose-cyan max-w-none prose-headings:font-bold prose-h1:text-cyan-400 prose-h2:text-zinc-200 prose-h3:text-cyan-500/80 prose-p:text-zinc-400 prose-p:leading-relaxed prose-li:text-zinc-400 prose-strong:text-zinc-300 bg-transparent transition-opacity duration-300 ${isRegenerating ? "opacity-50 pointer-events-none" : "opacity-100"}`}
+                    className={`prose prose-invert prose-cyan max-w-none prose-headings:font-bold prose-h1:text-cyan-400 prose-h2:text-zinc-200 prose-h3:text-cyan-500/80 prose-p:text-zinc-400 prose-p:leading-relaxed prose-p:max-w-full prose-li:text-zinc-400 prose-strong:text-zinc-300 bg-transparent transition-opacity duration-300 ${isRegenerating ? "opacity-50 pointer-events-none" : "opacity-100"}`}
                   onMouseUp={() => {
                     const selection = window.getSelection();
                     const text = selection?.toString().trim();
@@ -1108,12 +1116,39 @@ function VaultContent() {
                   ))
                 )}
               </div>
+            ) : (
+              <div className="flex flex-col gap-6">
+                <button
+                  onClick={handleDeployToCloud}
+                  disabled={isDeploying}
+                  className="w-full flex items-center justify-center gap-3 bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-6 rounded-xl text-xl shadow-[0_0_30px_rgba(6,182,212,0.3)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isDeploying ? (
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  ) : (
+                    <Zap className="w-6 h-6" />
+                  )}
+                  🚀 Deploy to Cloud Sandbox
+                </button>
+                
+                <div className="bg-[#0a0a0a] text-green-400 font-mono p-4 rounded-xl h-96 overflow-y-auto border border-zinc-800 shadow-inner flex flex-col gap-1">
+                  {e2bLogs.map((log, i) => (
+                    <div key={i} className="break-all">{log}</div>
+                  ))}
+                  {e2bUrl && (
+                    <div className="mt-4 text-cyan-400 break-all">
+                      <Zap className="w-4 h-4 inline mr-2" />
+                      Live URL: <a href={e2bUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-cyan-300">{e2bUrl}</a>
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
           </div>
         </div>
 
         {/* Right Column: AI Co-Founder Chat */}
-        <div className="lg:col-span-1">
+        <div className="w-full lg:w-[400px] xl:w-[450px] shrink-0 lg:border-l lg:border-zinc-800 lg:pl-8">
           <div className="sticky top-6 bg-slate-900/80 border border-cyan-500/30 rounded-2xl flex flex-col h-[calc(100vh-8rem)] overflow-hidden shadow-[0_0_30px_rgba(34,211,238,0.1)] backdrop-blur-xl">
             {/* Chat Header */}
             <div className="p-4 border-b border-slate-800 bg-slate-900 flex items-center justify-between">

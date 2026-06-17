@@ -657,7 +657,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
   return (
     <div className="w-full flex flex-col gap-8">
       {/* Input Section */}
-      <div className="w-full flex flex-col gap-4">
+      <div className="w-full max-w-4xl mx-auto flex flex-col gap-4">
         
         {/* Marquee Ticker */}
         <div className="overflow-hidden bg-zinc-900/50 border border-zinc-800/50 rounded-xl py-2.5 flex whitespace-nowrap shadow-inner w-full relative" style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}>
@@ -856,7 +856,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
           <button
             onClick={() => generateBlueprint()}
             disabled={loading}
-            className="w-full h-14 bg-cyan-500 hover:bg-cyan-400 disabled:bg-[#0D0D0D] disabled:border disabled:border-zinc-800 disabled:text-zinc-500 disabled:shadow-none text-black font-bold text-lg rounded-xl flex items-center justify-center gap-3 transition-colors shadow-[0_0_30px_-5px_rgba(34,211,238,0.4)] group overflow-hidden relative cursor-pointer disabled:cursor-not-allowed"
+            className="w-full h-14 bg-cyan-500 hover:bg-cyan-400 disabled:bg-[#0D0D0D] disabled:border disabled:border-zinc-800 disabled:text-zinc-500 disabled:shadow-none text-black font-bold text-lg md:text-sm rounded-xl flex items-center justify-center gap-3 transition-colors shadow-[0_0_30px_-5px_rgba(34,211,238,0.4)] group overflow-hidden relative cursor-pointer disabled:cursor-not-allowed"
           >
             {loading ? (
               <div className="flex items-center gap-3 w-full px-6 font-mono text-xs sm:text-sm">
