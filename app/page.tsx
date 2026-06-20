@@ -2,6 +2,7 @@
 import { Zap, Mic } from 'lucide-react';
 import { motion } from 'motion/react';
 import { LegalFooter } from '@/components/LegalFooter';
+import { SpaceBackground } from '@/components/SpaceBackground';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -67,13 +68,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-black text-white font-sans overflow-hidden">
       
-      {/* Background Layers */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Layer 1: The Grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
-        {/* Layer 2: The Ambient Breathe */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-amber-500/10 blur-[120px] rounded-full animate-pulse"></div>
-      </div>
+      <SpaceBackground />
 
       <main className="flex-1 flex flex-col items-center justify-center p-4 relative z-10">
         <motion.div 
@@ -83,13 +78,17 @@ export default function Home() {
           className="w-full max-w-3xl flex flex-col items-center -mt-20"
         >
           <header className="mb-8 text-center flex flex-col items-center">
-            <h1 className="text-6xl sm:text-7xl font-light tracking-tighter text-white">
-              <span className="font-bold text-zinc-50">Launch</span><span className="font-bold italic text-amber-500">Codes</span>
-            </h1>
+            <motion.h1 
+              animate={{ y: [0, -8, 0] }}
+              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+              className="text-6xl sm:text-7xl font-light tracking-tighter text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.4)]"
+            >
+              <span className="font-bold text-zinc-50">Launch</span><span className="font-bold italic text-amber-500 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]">Codes</span>
+            </motion.h1>
           </header>
 
           <form onSubmit={handleInitialize} className="w-full relative group">
-            <div className="relative flex flex-col bg-zinc-950/60 backdrop-blur-2xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.8)] rounded-xl focus-within:border-amber-500/50 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.2)] transition-all duration-500 p-4">
+            <div className="relative flex flex-col bg-black/20 backdrop-blur-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-2xl focus-within:border-amber-500/50 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.2)] transition-all duration-500 p-4">
               <textarea
                 ref={inputRef}
                 value={prompt}
@@ -101,7 +100,7 @@ export default function Home() {
                   }
                 }}
                 placeholder="What empire are we building today?"
-                className="w-full min-h-[160px] bg-transparent text-white text-lg placeholder-zinc-500 outline-none resize-y break-words whitespace-pre-wrap pb-16 overflow-y-auto custom-scrollbar"
+                className="w-full min-h-[160px] bg-transparent text-white font-semibold text-lg placeholder-zinc-400 outline-none resize-y break-words whitespace-pre-wrap pb-16 overflow-y-auto custom-scrollbar"
                 autoFocus
               />
               
@@ -146,7 +145,7 @@ export default function Home() {
                     inputRef.current.focus();
                   }
                 }}
-                className="px-4 py-2 bg-zinc-900/50 backdrop-blur-md hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/5 rounded-full text-sm transition-colors"
+                className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white backdrop-blur-md transition-all duration-300 rounded-full text-sm"
               >
                 {chip.label}
               </button>
