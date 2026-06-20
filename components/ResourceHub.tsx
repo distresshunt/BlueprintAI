@@ -46,22 +46,22 @@ export function ResourceHub({ blueprintMarkdown }: ResourceHubProps) {
   }
 
   return (
-    <details className="bg-slate-900/50 backdrop-blur-xl border border-zinc-800 rounded-2xl mb-8 group overflow-hidden shadow-2xl transition-all duration-300">
-      <summary className="p-5 cursor-pointer select-none flex items-center justify-between hover:bg-slate-800/40 transition-colors">
+    <details className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl border border-zinc-200 dark:border-zinc-800 rounded-2xl mb-8 group overflow-hidden shadow-2xl transition-all duration-300">
+      <summary className="p-5 cursor-pointer select-none flex items-center justify-between hover:bg-zinc-100/50 dark:hover:bg-slate-800/40 transition-colors">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-zinc-800 rounded-lg border border-zinc-700">
-            <LinkIcon className="w-5 h-5 text-zinc-300" />
+          <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700">
+            <LinkIcon className="w-5 h-5 text-zinc-600 dark:text-zinc-300" />
           </div>
           <div>
-            <h2 className="font-bold text-white tracking-tight">Project Toolkit</h2>
+            <h2 className="font-bold text-zinc-900 dark:text-white tracking-tight">Project Toolkit</h2>
             <p className="text-xs text-zinc-500 font-medium">Core infrastructure and developer tools required for this build.</p>
           </div>
         </div>
-        <div className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover:border-zinc-600 transition-colors">
+        <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center group-hover:border-zinc-300 dark:group-hover:border-zinc-600 transition-colors">
           <ChevronDown className="w-4 h-4 text-zinc-400 group-open:rotate-180 transition-transform duration-300" />
         </div>
       </summary>
-      <div className="p-5 pt-0 border-t border-zinc-800/50 bg-slate-900/20">
+      <div className="p-5 pt-0 border-t border-zinc-200 dark:border-zinc-800/50 bg-white/40 dark:bg-slate-900/20">
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
           {uniqueLinksList.map((link, idx) => (
             <a
@@ -69,12 +69,12 @@ export function ResourceHub({ blueprintMarkdown }: ResourceHubProps) {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group/link flex items-center justify-between bg-zinc-900/80 hover:bg-[#0D0D0D] border border-zinc-800 hover:border-zinc-700 px-4 py-3 rounded-xl transition-all duration-200 shadow-sm hover:"
+              className="group/link flex items-center justify-between bg-white hover:bg-zinc-50 dark:bg-zinc-900/80 dark:hover:bg-[#0D0D0D] border border-zinc-200 hover:border-zinc-300 dark:border-zinc-800 dark:hover:border-zinc-700 px-4 py-3 rounded-xl transition-all duration-200 shadow-sm hover:"
             >
-              <span className="text-sm font-medium text-zinc-300 group-hover/link:text-zinc-300 truncate pr-4 transition-colors">
+              <span className="text-sm font-medium text-zinc-600 dark:text-zinc-300 group-hover/link:text-zinc-900 dark:group-hover/link:text-zinc-300 truncate pr-4 transition-colors">
                 {link.label}
               </span>
-              <ExternalLink className="w-4 h-4 text-zinc-600 group-hover/link:text-zinc-300 shrink-0 transition-colors" />
+              <ExternalLink className="w-4 h-4 text-zinc-400 dark:text-zinc-600 group-hover/link:text-zinc-900 dark:group-hover/link:text-zinc-300 shrink-0 transition-colors" />
             </a>
           ))}
         </div>

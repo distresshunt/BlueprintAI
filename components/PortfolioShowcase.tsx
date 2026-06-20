@@ -4,15 +4,15 @@ import Link from 'next/link';
 
 export function PortfolioShowcase() {
   return (
-    <section className="w-full py-24 bg-[#050507] border-t border-slate-800/50 relative overflow-hidden">
+    <section className="w-full py-24 bg-zinc-50 dark:bg-[#050507] border-t border-zinc-200 dark:border-slate-800/50 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(132,204,22,0.03)_0%,transparent_70%)]" />
       
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight uppercase mb-4">
-            BUILT WITH <span className="text-zinc-300">LAUNCHCODES</span>
+          <h2 className="text-3xl md:text-5xl font-black text-zinc-900 dark:text-white tracking-tight uppercase mb-4">
+            BUILT WITH <span className="text-amber-500">LAUNCHCODES</span>
           </h2>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+          <p className="text-zinc-500 dark:text-slate-400 text-lg max-w-2xl mx-auto">
             Explore real, production-ready platforms architected using our AI Tech Lead.
           </p>
         </div>
@@ -26,11 +26,11 @@ export function PortfolioShowcase() {
             const accentText = isPurple ? 'text-purple-400' : isAmber ? 'text-zinc-300' : isEmerald ? 'text-emerald-400' : 'text-blue-400';
 
             return (
-              <div key={app.slug} className={`group flex flex-col bg-slate-900/40 border border-slate-800/50 ${accentBorder} rounded-2xl p-8 transition-all hover:shadow-xl`}>
-                <h3 className="text-2xl font-bold text-white mb-3 flex items-center justify-between">
+              <div key={app.slug} className={`group flex flex-col bg-white/60 dark:bg-slate-900/40 border border-zinc-200 dark:border-slate-800/50 ${accentBorder} rounded-2xl p-8 transition-all hover:shadow-xl`}>
+                <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-3 flex items-center justify-between">
                   {app.name}
                 </h3>
-                <p className="text-slate-400 text-sm mb-6 flex-1">
+                <p className="text-zinc-600 dark:text-slate-400 text-sm mb-6 flex-1">
                   {app.tagline}
                 </p>
                 <Link 
@@ -47,10 +47,10 @@ export function PortfolioShowcase() {
         <div className="flex justify-center">
           <a 
             href="mailto:support@yourlaunchcodes.com?subject=Portfolio Submission"
-            className="group flex items-center gap-3 px-8 py-4 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-zinc-700 text-white rounded-xl transition-all shadow-lg hover:"
+            className="group flex items-center gap-3 px-8 py-4 bg-zinc-200 hover:bg-zinc-300 dark:bg-slate-900 dark:hover:bg-slate-800 border border-zinc-300 dark:border-slate-800 dark:hover:border-zinc-700 text-zinc-900 dark:text-white rounded-xl transition-all shadow-lg hover:"
           >
             <span className="font-bold uppercase tracking-widest text-sm">Submit your project 🚀</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-zinc-300" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-zinc-600 dark:text-zinc-300" />
           </a>
         </div>
       </div>

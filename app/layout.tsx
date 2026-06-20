@@ -4,6 +4,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import './globals.css'; // Global styles
 import { LiveCounterBanner } from '@/components/LiveCounterBanner';
 import { Navbar } from '@/components/Navbar';
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`dark ${spaceGrotesk.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+      <html lang="en" className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
         <head>
           <script
             type="application/ld+json"
@@ -51,12 +52,19 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
             }}
           />
         </head>
-        <body className="bg-zinc-950 text-zinc-50 min-h-screen flex flex-col antialiased" suppressHydrationWarning>
-          <div className="flex flex-col min-h-screen">
-            <LiveCounterBanner />
-            <Navbar />
-            {children}
-          </div>
+        <body className="bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 min-h-screen flex flex-col antialiased" suppressHydrationWarning>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="flex flex-col min-h-screen">
+              <LiveCounterBanner />
+              <Navbar />
+              {children}
+            </div>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

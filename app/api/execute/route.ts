@@ -175,7 +175,11 @@ export async function POST(req: NextRequest) {
   }
   const { blueprintMarkdown = "" } = body;
 
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "dummy" });
+  const ai = new GoogleGenAI({ 
+    vertexai: true, 
+    project: process.env.GOOGLE_CLOUD_PROJECT_ID as string, 
+    location: 'us-central1' 
+  });
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({

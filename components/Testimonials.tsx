@@ -27,16 +27,16 @@ export function Testimonials() {
         {[...Array(2)].map((_, i) => (
           <div key={i} className="flex gap-6 shrink-0">
             {TESTIMONIALS.map((t, j) => (
-              <div key={j} className="w-[300px] sm:w-[350px] bg-slate-900/40 backdrop-blur-md border border-slate-800/50 rounded-2xl p-6 flex flex-col gap-4 shadow-xl shrink-0">
+              <div key={j} className="w-[300px] sm:w-[350px] bg-white/60 dark:bg-slate-900/40 backdrop-blur-md border border-zinc-200 dark:border-slate-800/50 rounded-2xl p-6 flex flex-col gap-4 shadow-xl shrink-0">
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, k) => (
-                    <Star key={k} className="w-4 h-4 fill-zinc-300 text-zinc-300" />
+                    <Star key={k} className="w-4 h-4 fill-amber-400 text-amber-400 dark:fill-zinc-300 dark:text-zinc-300" />
                   ))}
                 </div>
-                <p className="text-slate-300 font-serif text-sm italic leading-relaxed flex-1">"{t.quote}"</p>
+                <p className="text-zinc-700 dark:text-slate-300 font-serif text-sm italic leading-relaxed flex-1">"{t.quote}"</p>
                 <div className="flex items-center gap-3">
-                  <img src={t.avatar} alt={t.author} className="w-8 h-8 rounded-full border border-slate-700" />
-                  <span className="text-white font-sans font-semibold text-xs">{t.author}</span>
+                  <img src={t.avatar} alt={t.author} className="w-8 h-8 rounded-full border border-zinc-200 dark:border-slate-700" />
+                  <span className="text-zinc-900 dark:text-white font-sans font-semibold text-xs">{t.author}</span>
                 </div>
               </div>
             ))}

@@ -112,12 +112,12 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#050507] text-slate-300 font-sans">
+    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-slate-300 font-sans">
       
 
       <main className="flex-1 p-4 sm:p-8 max-w-6xl mx-auto w-full">
         <div className="mb-8 border-b border-slate-800 pb-4">
-          <h1 className="text-3xl font-black text-white tracking-tight flex items-center gap-3">
+          <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight flex items-center gap-3">
             <LayoutDashboard className="w-8 h-8 text-zinc-300" /> My Blueprints
           </h1>
           <p className="text-slate-400 mt-2">View and manage your generated architectural blueprints.</p>
@@ -145,7 +145,7 @@ export default function DashboardPage() {
         ) : (
           <div className="w-full flex flex-col gap-8">
             {/* Control Bar */}
-            <div className="flex flex-col sm:flex-row gap-4 p-6 bg-white/5 rounded-2xl backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+            <div className="flex flex-col sm:flex-row gap-4 p-6 bg-white/60 dark:bg-white/5 border border-zinc-200 dark:border-zinc-800/50 rounded-2xl backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.05)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
               <div className="relative flex-1">
                 <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input 
@@ -153,14 +153,14 @@ export default function DashboardPage() {
                   placeholder="Search blueprints..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-black/20 text-white rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:bg-white/5 transition-all placeholder:text-slate-500 backdrop-blur-md"
+                  className="w-full bg-white dark:bg-black/20 border border-zinc-200 dark:border-transparent text-zinc-900 dark:text-white rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:bg-zinc-50 dark:focus:bg-white/5 transition-all placeholder:text-slate-500 backdrop-blur-md"
                 />
               </div>
               <div className="flex gap-4">
                 <select 
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
-                  className="bg-black/20 text-white rounded-xl px-4 py-3 focus:outline-none focus:bg-white/5 transition-all cursor-pointer font-medium backdrop-blur-md"
+                  className="bg-white dark:bg-black/20 border border-zinc-200 dark:border-transparent text-zinc-900 dark:text-white rounded-xl px-4 py-3 focus:outline-none focus:bg-zinc-50 dark:focus:bg-white/5 transition-all cursor-pointer font-medium backdrop-blur-md"
                 >
                   <option value="All">All Blueprints</option>
                   <option value="Unlocked">Unlocked Only</option>
@@ -169,7 +169,7 @@ export default function DashboardPage() {
                 <select 
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value)}
-                  className="bg-black/20 text-white rounded-xl px-4 py-3 focus:outline-none focus:bg-white/5 transition-all cursor-pointer font-medium backdrop-blur-md"
+                  className="bg-white dark:bg-black/20 border border-zinc-200 dark:border-transparent text-zinc-900 dark:text-white rounded-xl px-4 py-3 focus:outline-none focus:bg-zinc-50 dark:focus:bg-white/5 transition-all cursor-pointer font-medium backdrop-blur-md"
                 >
                   <option value="Newest">Newest First</option>
                   <option value="Oldest">Oldest First</option>
@@ -188,7 +188,7 @@ export default function DashboardPage() {
                   const href = isUnlocked ? `/studio?id=${bp.id}` : `/?id=${bp.id}`;
 
                   return (
-                    <Link key={bp.id} href={href} className="group relative bg-white/5 hover:bg-white/10 rounded-2xl p-8 backdrop-blur-2xl transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex flex-col h-full overflow-hidden">
+                    <Link key={bp.id} href={href} className="group relative bg-white/60 dark:bg-zinc-900/40 hover:bg-white/80 dark:hover:bg-zinc-900/60 rounded-2xl p-8 backdrop-blur-2xl border border-zinc-200 dark:border-zinc-800/50 shadow-xl shadow-zinc-200/50 dark:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all hover:-translate-y-2 flex flex-col h-full overflow-hidden">
                       <div className="flex justify-between items-start mb-4 relative z-20">
                         <div className="flex-1">
                           <div className="text-xs font-mono text-slate-500 mb-2">
@@ -211,7 +211,7 @@ export default function DashboardPage() {
                       </div>
                       
                       <div className="flex-1 flex flex-col justify-center relative z-20">
-                        <h3 className="text-lg font-semibold text-white leading-snug line-clamp-4 group-hover:text-zinc-300 transition-colors">
+                        <h3 className="text-lg font-semibold text-zinc-900 dark:text-white leading-snug line-clamp-4 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
                           "{bp.idea_prompt}"
                         </h3>
                       </div>
@@ -221,8 +221,8 @@ export default function DashboardPage() {
                           <div className="text-[10px] uppercase font-mono tracking-widest text-slate-500 flex items-center justify-between">
                             <span>A2A Sync ID</span>
                           </div>
-                          <div className="flex items-center justify-between bg-black/40 rounded-xl p-2 pl-4 group/copy hover:bg-black/60 transition-colors backdrop-blur-md">
-                            <code className="text-[10px] font-mono text-zinc-300 truncate mr-2">npx launchcodes-cli@latest init --id {bp.id}</code>
+                          <div className="flex items-center justify-between bg-zinc-100 dark:bg-black/40 rounded-xl p-2 pl-4 group/copy hover:bg-zinc-200 dark:hover:bg-black/60 transition-colors backdrop-blur-md">
+                            <code className="text-[10px] font-mono text-zinc-600 dark:text-zinc-300 truncate mr-2">npx launchcodes-cli@latest init --id {bp.id}</code>
                             <button
                               onClick={(e) => {
                                 e.preventDefault();

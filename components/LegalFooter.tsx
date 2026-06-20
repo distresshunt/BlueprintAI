@@ -29,30 +29,30 @@ export function LegalFooter() {
   };
 
   return (
-    <footer className="h-12 bg-[#050507] border-t border-slate-900 px-4 sm:px-8 flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-slate-600 shrink-0">
+    <footer className="h-12 bg-zinc-100 dark:bg-[#050507] border-t border-zinc-200 dark:border-slate-900 px-4 sm:px-8 flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-zinc-500 dark:text-slate-600 shrink-0">
       <div>&copy; 2026 LAUNCHCODES</div>
       <div className="flex gap-4 sm:gap-6 items-center">
         <button 
-          className="hover:text-zinc-300 text-zinc-300 font-bold transition-colors"
+          className="text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-300 font-bold transition-colors"
           onClick={handleInstallClick}
         >
           ⬇️ Install App
         </button>
-        <a href="mailto:support@blueprintagent.dev" className="hover:text-zinc-300 transition-colors">
+        <a href="mailto:support@blueprintagent.dev" className="hover:text-zinc-900 dark:hover:text-zinc-300 transition-colors">
           Support
         </a>
-        <Link href="/terms" className="hover:text-zinc-300 transition-colors">
+        <Link href="/terms" className="hover:text-zinc-900 dark:hover:text-zinc-300 transition-colors">
           Terms of Service
         </Link>
-        <Link href="/privacy" className="hover:text-zinc-300 transition-colors">
+        <Link href="/privacy" className="hover:text-zinc-900 dark:hover:text-zinc-300 transition-colors">
           Privacy Policy
         </Link>
-        <Link href="/refund" className="hover:text-zinc-300 transition-colors">
+        <Link href="/refund" className="hover:text-zinc-900 dark:hover:text-zinc-300 transition-colors">
           Refund Policy
         </Link>
-        <Link href="/sitemap.xml" className="hover:text-zinc-300 transition-colors">
+        <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-zinc-900 dark:hover:text-zinc-300 transition-colors">
           Sitemap
-        </Link>
+        </a>
       </div>
     </footer>
   );

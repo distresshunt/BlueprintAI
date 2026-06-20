@@ -68,7 +68,7 @@ export function CommandPalette({ isOpen, setIsOpen }: { isOpen: boolean, setIsOp
           <input
             autoFocus
             className="flex-1 bg-transparent border-none outline-none text-white placeholder-zinc-600 text-lg"
-            placeholder="Search 100k+ blueprints... (e.g. 'I need a booking app for mechanics')"
+            placeholder="Search 100,000+ niches... (e.g., 'mobile pet groomers')"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />

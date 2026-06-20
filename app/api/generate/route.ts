@@ -6,7 +6,11 @@ import path from 'path';
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const ai = new GoogleGenAI({ 
+  vertexai: true, 
+  project: process.env.GOOGLE_CLOUD_PROJECT_ID as string, 
+  location: 'us-central1' 
+});
 
 const systemInstruction = `CRITICAL REASONING DIRECTIVE: Before you output the final Markdown blueprint, you MUST output your internal architectural reasoning wrapped entirely inside <think> and </think> tags. Inside this think block, rapidly outline your tech stack decisions, required MCP tools, and database schema logic. After the closing </think> tag, output the strict 6-Phase blueprint.
 

@@ -1,116 +1,72 @@
 import Link from 'next/link';
 import pseoData from '@/data/pseo.json';
-import learnPseoData from '@/data/learn-pseo.json';
 import { LegalFooter } from '@/components/LegalFooter';
+import { Navbar } from '@/components/Navbar';
 
-const ITEMS_PER_PAGE = 1000;
-
-interface DirectoryLink {
-  href: string;
-  label: string;
+function toTitleCase(str: string) {
+  return str.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
-function generateLinks(): DirectoryLink[] {
-  const links: DirectoryLink[] = [];
-  
-  // From pseo.json: models x niches
-  if (pseoData && Array.isArray(pseoData.models) && Array.isArray(pseoData.niches)) {
-    for (const model of pseoData.models) {
-      for (const niche of pseoData.niches) {
-        links.push({
-          href: `/build/${model}/${niche}`,
-          label: `Build a ${model.replace(/-/g, ' ')} for ${niche.replace(/-/g, ' ')}`
-        });
-      }
-    }
-  }
+export const metadata = {
+  title: 'Industry Architecture Directory | LaunchCodes',
+  description: 'Explore thousands of battle-tested SaaS models and architectural blueprints for any niche.',
+};
 
-  // From learn-pseo.json: skills x niches
-  if (learnPseoData && Array.isArray(learnPseoData.skills) && Array.isArray(learnPseoData.niches)) {
-    for (const skill of learnPseoData.skills) {
-      for (const niche of learnPseoData.niches) {
-        links.push({
-          href: `/learn/${skill}/${niche}`,
-          label: `Learn ${skill.replace(/-/g, ' ')} for ${niche.replace(/-/g, ' ')}`
-        });
-      }
-    }
-  }
-  
-  return links;
-}
+export default function DirectoryPage() {
+  const { models, niches } = pseoData;
 
-const allLinks = generateLinks();
-
-export default async function DirectoryPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
-  const params = await searchParams;
-  const pageParam = typeof params.page === 'string' ? params.page : '1';
-  let currentPage = parseInt(pageParam, 10);
-  if (isNaN(currentPage) || currentPage < 1) currentPage = 1;
-
-  const totalItems = allLinks.length;
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
-  
-  // Ensure currentPage doesn't exceed totalPages
-  if (currentPage > totalPages) currentPage = totalPages;
-
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentLinks = allLinks.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  // We limit to the first 100 niches per model to prevent massive DOM bloat
+  // The actual dynamic routes still mathematically support all niches
+  const limitedNiches = niches.slice(0, 100);
 
   return (
-    <div className="flex flex-col min-h-screen bg-zinc-950 text-slate-300 font-sans">
-            
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-12">
-        <header className="mb-12 border-b border-amber-/30 pb-6 relative group">
-          <div className="absolute bottom-0 left-0 h-[1px] w-full bg-gradient-to-r from-amber- to-transparent group-hover:from-amber- transition-colors"></div>
-          <h1 className="text-4xl font-bold text-white tracking-tight drop-">
-            LaunchCodes Architecture Directory
-          </h1>
-          <p className="text-zinc-400 mt-2">
-            Explore our massive index of {totalItems.toLocaleString()} SaaS models, niches, and architectures.
-          </p>
-        </header>
+    <div className="flex flex-col min-h-screen bg-black text-white font-sans">
+      <Navbar />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-12">
-          {currentLinks.map((link, idx) => (
-            <Link 
-              key={idx} 
-              href={link.href}
-              className="text-zinc-400 hover:text-amber- text-sm transition-colors truncate block capitalize"
-              title={link.label}
-            >
-              {link.label}
-            </Link>
-          ))}
+      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-20">
+        <div className="mb-16 border-b border-zinc-800 pb-8">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 text-white">
+            Industry Architecture Directory
+          </h1>
+          <p className="text-zinc-400 text-lg max-w-2xl">
+            A master directory of validated SaaS models and specialized niches. Select a model to instantly generate its complete Next.js architecture.
+          </p>
         </div>
 
-        {/* Pagination Controls */}
-        <div className="flex items-center justify-between border-t border-zinc-800 pt-6 mt-auto">
-          {currentPage > 1 ? (
-            <Link 
-              href={`/directory?page=${currentPage - 1}`}
-              className="px-6 py-2 rounded-full bg-zinc-900 border border-zinc-800 text-white hover:bg-zinc-800 hover:border-amber-/50 transition-all font-medium text-sm"
-            >
-              &larr; Previous 1000
-            </Link>
-          ) : (
-            <div></div> // Spacer
-          )}
-          
-          <span className="text-sm text-zinc-500 font-mono">
-            Page {currentPage} of {totalPages}
-          </span>
+        <div className="flex flex-col gap-16">
+          {models.map((model) => (
+            <section key={model} className="border border-zinc-800 bg-[#09090B] rounded-2xl p-8 sm:p-10">
+              <div className="mb-8 border-b border-zinc-800/50 pb-6">
+                <h2 className="text-3xl font-bold capitalize text-white">
+                  {toTitleCase(model)} Architectures
+                </h2>
+                <p className="text-zinc-500 mt-2">
+                  Top 100 pre-engineered blueprints for the {toTitleCase(model)} business model.
+                </p>
+              </div>
 
-          {currentPage < totalPages ? (
-            <Link 
-              href={`/directory?page=${currentPage + 1}`}
-              className="px-6 py-2 rounded-full bg-zinc-900 border border-zinc-800 text-white hover:bg-zinc-800 hover:border-amber-/50 transition-all font-medium text-sm"
-            >
-              Next 1000 &rarr;
-            </Link>
-          ) : (
-            <div></div>
-          )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-4">
+                {limitedNiches.map((niche) => (
+                  <Link 
+                    key={`${model}-${niche}`} 
+                    href={`/build/${model}/${niche}`}
+                    className="text-zinc-400 hover:text-white group flex items-start gap-3 transition-colors text-sm"
+                  >
+                    <span className="text-zinc-700 mt-0.5">↳</span>
+                    <span className="leading-snug truncate" title={toTitleCase(niche)}>
+                      {toTitleCase(niche)}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+              
+              {niches.length > 100 && (
+                <div className="mt-8 pt-6 border-t border-zinc-800/50 text-zinc-600 text-sm">
+                  Showing top 100 niches. Over {(niches.length - 100).toLocaleString()} additional niches are available dynamically via search.
+                </div>
+              )}
+            </section>
+          ))}
         </div>
       </main>
 

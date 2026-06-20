@@ -599,7 +599,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
   const loadingMessages = [
     "> [Arch-Agent] Mapping database relations...",
     "> [Sec-Agent] Writing RLS policies...",
-    "> [Dev-Agent] Generating .clinerules environment..."
+    "> [Dev-Agent] Generating OKF Bundle..."
   ];
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -653,7 +653,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const a2aTitle = aiBuilder === 'Decide for me ✨' ? 'A2A Tech Lead Configuration' : `A2A Tech Lead Configuration (${aiBuilder === 'Cursor' ? '.cursorrules' : aiBuilder === 'Windsurf' ? '.windsurfrules' : '.clinerules'})`;
+  const a2aTitle = aiBuilder === 'Decide for me ✨' ? 'A2A Tech Lead Configuration' : `A2A Tech Lead Configuration (${aiBuilder === 'Cursor' ? '.cursorrules' : aiBuilder === 'Windsurf' ? '.windsurfrules' : 'OKF Bundle'})`;
 
   return (
     <div className="w-full flex flex-col gap-8">
