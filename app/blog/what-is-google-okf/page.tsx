@@ -85,7 +85,7 @@ export default function BlogPost() {
             Once you download the ZIP file from BlueprintAI, simply drop the <code>.okf</code> folder into the root of your project. Cursor, Windsurf, and Antigravity will automatically detect the bundle, parse the YAML frontmatter, and instantly understand your entire application's architecture.
           </p>
           <p>
-            Stop wasting time writing <code>.cursorrules</code> files by hand. Let BlueprintAI generate your OKF bundle, and get back to actually building your product.
+            Stop wasting time writing <code>.cursorrules</code> files by hand. Get your LaunchCodes to generate your OKF bundle, and get back to actually building your product.
           </p>
 
           <h3>Generate OKF Bundles for your specific tech stack:</h3>
