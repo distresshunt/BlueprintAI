@@ -1,10 +1,6 @@
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
-  experimental: {
-    // @ts-ignore
-    allowedDevOrigins: ["192.168.8.136"],
-  },
   reactStrictMode: true,
   eslint: {
     ignoreDuringBuilds: true,

@@ -23,17 +23,17 @@ interface NeuralNodeMapProps {
 const CustomNode = ({ data, selected }: any) => {
   const Icon = data.icon || FileCode2;
   return (
-    <div className={`px-4 py-2 rounded-md border transition-all duration-300 bg-zinc-950 ${
+    <div className={`px-4 py-2 rounded-md border transition-all duration-300 bg-white dark:bg-zinc-950 ${
       selected 
-        ? 'border-zinc-500 bg-zinc-900' 
-        : 'border-zinc-800 hover:border-zinc-600'
+        ? 'border-cyan-500 dark:border-zinc-500 bg-zinc-50 dark:bg-zinc-900 shadow-[0_0_15px_rgba(6,182,212,0.3)] dark:shadow-none' 
+        : 'border-zinc-300 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600'
     }`}>
-      <Handle type="target" position={Position.Top} className="w-2 h-2 !bg-zinc-800 border-none" />
+      <Handle type="target" position={Position.Top} className="w-2 h-2 !bg-zinc-300 dark:!bg-zinc-800 border-none" />
       <div className="flex items-center gap-2">
-        <Icon className="w-4 h-4 text-zinc-400" />
-        <div className="text-sm font-medium text-white whitespace-nowrap">{data.label}</div>
+        <Icon className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
+        <div className="text-sm font-medium text-zinc-900 dark:text-white whitespace-nowrap">{data.label}</div>
       </div>
-      <Handle type="source" position={Position.Bottom} className="w-2 h-2 !bg-zinc-800 border-none" />
+      <Handle type="source" position={Position.Bottom} className="w-2 h-2 !bg-zinc-300 dark:!bg-zinc-800 border-none" />
     </div>
   );
 };
@@ -167,7 +167,7 @@ export function NeuralNodeMap({ blueprintData }: NeuralNodeMapProps) {
   return (
     <div className="flex flex-col h-full w-full">
       {/* Top half: React Flow Canvas */}
-      <div className="h-[50%] w-full border-b border-zinc-800 bg-zinc-950/50 relative">
+      <div className="h-[50%] w-full border-b border-zinc-300 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/50 relative">
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -176,27 +176,27 @@ export function NeuralNodeMap({ blueprintData }: NeuralNodeMapProps) {
           onNodeClick={onNodeClick}
           nodeTypes={nodeTypes}
           fitView
-          className="bg-grid-zinc-900/50"
+          className="bg-grid-zinc-200/50 dark:bg-grid-zinc-900/50"
         >
-          <Background color="#27272a" gap={20} size={1} />
-          <Controls className="!bg-zinc-900 !border-zinc-800 !text-zinc-400" />
+          <Background color="#71717a" gap={20} size={1} />
+          <Controls className="!bg-white dark:!bg-zinc-900 !border-zinc-300 dark:!border-zinc-800 !text-zinc-600 dark:!text-zinc-400" />
         </ReactFlow>
         <div className="absolute top-4 left-4 flex items-center gap-2">
-          <Workflow className="w-5 h-5 text-zinc-300" />
-          <span className="text-sm font-bold text-white tracking-widest uppercase">Neural Node Map</span>
+          <Workflow className="w-5 h-5 text-zinc-600 dark:text-zinc-300" />
+          <span className="text-sm font-bold text-zinc-900 dark:text-white tracking-widest uppercase">Neural Node Map</span>
         </div>
       </div>
 
       {/* Bottom half: Code/Content Viewer */}
-      <div className="h-[50%] w-full bg-[#0a0a0f] overflow-y-auto custom-scrollbar p-6">
+      <div className="h-[50%] w-full bg-white dark:bg-[#0a0a0f] overflow-y-auto custom-scrollbar p-6">
         {selectedTitle && (
           <div className="mb-4 flex items-center gap-2">
-            <FileCode2 className="w-4 h-4 text-zinc-300" />
-            <h3 className="text-sm font-bold text-white uppercase tracking-widest">{selectedTitle}</h3>
+            <FileCode2 className="w-4 h-4 text-zinc-600 dark:text-zinc-300" />
+            <h3 className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-widest">{selectedTitle}</h3>
           </div>
         )}
         {selectedContent ? (
-          <div className="prose prose-invert prose-sm max-w-none prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800">
+          <div className="prose dark:prose-invert prose-sm max-w-none prose-pre:bg-zinc-100 dark:prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-300 dark:prose-pre:border-zinc-800 prose-p:text-zinc-800 dark:prose-p:text-zinc-300 prose-headings:text-zinc-900 dark:prose-headings:text-white">
             <ReactMarkdown>{selectedContent}</ReactMarkdown>
           </div>
         ) : (

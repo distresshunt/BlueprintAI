@@ -5,13 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
-
-const ai = new GoogleGenAI({ 
-  vertexai: true, 
-  project: process.env.GOOGLE_CLOUD_PROJECT_ID as string, 
-  location: 'us-central1' 
-});
-
+const aiCentral = new GoogleGenAI({ vertexai: { project: process.env.GOOGLE_CLOUD_PROJECT_ID as string, location: 'us-central1' } });
 const systemInstruction = `CRITICAL REASONING DIRECTIVE: Before you output the final Markdown blueprint, you MUST output your internal architectural reasoning wrapped entirely inside <think> and </think> tags. Inside this think block, rapidly outline your tech stack decisions, required MCP tools, and database schema logic. After the closing </think> tag, output the strict 6-Phase blueprint.
 
 CRITICAL IDENTITY OVERRIDE: You are the proprietary architecture engine of BlueprintAI. Act as a highly intelligent, street-smart Senior Tech Lead and Co-Founder. 
@@ -33,7 +27,7 @@ CRITICAL TECH STACK RULE: You are operating in the year 2026. You must NEVER rec
 Explain how to build the front-end dashboard and the exact dummy JSON data.
 
 **Phase 2: The Open Knowledge Format (OKF) Bundle**
-CRITICAL INSTRUCTION: Instruct the AI to generate a standardized OKF v0.1 directory structure. It MUST output the structure as multiple distinct markdown files with YAML frontmatter. Tell the AI to output this in a format that the user can easily copy or download.
+CRITICAL INSTRUCTION: Instruct the AI to generate a standardized OKF v0.1 directory structure. It MUST output the structure as multiple distinct markdown files with YAML frontmatter. Tell the AI to output this in a format that the user can easily copy or download. NEVER generate a .clinerules or .cursorrules file.
 Example structure to generate:
 - \`/knowledge-bundle/index.md\` (Main entry point with frontmatter: \`type: Index\`, \`title: Project Architecture\`)
 - \`/knowledge-bundle/database/schema.md\` (Raw SQL and RLS policies)
@@ -207,7 +201,7 @@ ${prompt}
     
     while (retries > 0) {
       try {
-        responseStream = await ai.models.generateContentStream({
+        responseStream = await aiCentral.models.generateContentStream({
           model: "gemini-3.1-pro-preview",
           contents: finalPrompt,
           config: {

@@ -72,8 +72,13 @@ function VaultContent() {
   const [isHighlightCopied, setIsHighlightCopied] = useState(false);
   const [isNewGeneration, setIsNewGeneration] = useState(false);
   const [ideaPrompt, setIdeaPrompt] = useState<string>("");
-  const [techLevel, setTechLevel] = useState<string>("No-Code");
-  const [aiBuilder, setAiBuilder] = useState<string>("Cursor");
+  const [techLevel, setTechLevel] = useState<string>("AI Developer");
+  const [aiBuilder, setAiBuilder] = useState<string>("Native Swarm");
+  const [paymentGateway, setPaymentGateway] = useState<string>("Decide for me ✨");
+  const [showSettings, setShowSettings] = useState<boolean>(false);
+  const [pendingTechLevel, setPendingTechLevel] = useState<string>("AI Developer");
+  const [pendingAiBuilder, setPendingAiBuilder] = useState<string>("Native Swarm");
+  const [pendingPaymentGateway, setPendingPaymentGateway] = useState<string>("Decide for me ✨");
   const [e2bLogs, setE2bLogs] = useState<string[]>([]);
   const [e2bUrl, setE2bUrl] = useState<string>("");
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
@@ -384,11 +389,12 @@ function VaultContent() {
     window.addEventListener('mousedown', handleGlobalClick);
     return () => window.removeEventListener('mousedown', handleGlobalClick);
   }, []);
-  const handlePivot = async (newTechLevel: string, newAiBuilder: string, promptOverride?: string) => {
-    if (newTechLevel === techLevel && newAiBuilder === aiBuilder && !promptOverride) return;
+  const handlePivot = async (newTechLevel: string, newAiBuilder: string, promptOverride?: string, newPaymentGateway?: string) => {
+    if (newTechLevel === techLevel && newAiBuilder === aiBuilder && (!newPaymentGateway || newPaymentGateway === paymentGateway) && !promptOverride) return;
     
     setTechLevel(newTechLevel);
     setAiBuilder(newAiBuilder);
+    if (newPaymentGateway) setPaymentGateway(newPaymentGateway);
     setIsRegenerating(true);
     
     const bridgeMessage = `Got it. Branching a new architecture for **${newTechLevel}**${newTechLevel === "AI Developer" ? ` using ${newAiBuilder}` : ""}. Give me 15 seconds...`;
@@ -403,7 +409,8 @@ function VaultContent() {
         body: JSON.stringify({ 
           prompt: promptToUse, 
           techLevel: newTechLevel, 
-          aiBuilder: newAiBuilder 
+          aiBuilder: newAiBuilder,
+          paymentGateway: newPaymentGateway || paymentGateway
         }),
       });
 
@@ -665,20 +672,20 @@ function VaultContent() {
   }
 
   return (
-    <div className="w-screen h-screen fixed inset-0 z-0 bg-zinc-950 font-sans overflow-hidden">
+    <div className="w-screen h-screen fixed inset-0 z-0 bg-zinc-50 dark:bg-black font-sans overflow-hidden">
       
 
       {/* Floating View Toggle Pill */}
-      <div className="fixed top-6 left-1/2 -translate-x-1/2 z-40 bg-zinc-900/50 backdrop-blur-md border border-zinc-700 p-1 rounded-full flex gap-1 shadow-2xl">
+      <div className="fixed top-32 left-1/2 -translate-x-1/2 z-[100] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-2xl p-1 rounded-full flex gap-1">
         <button
           onClick={() => setViewMode('architecture')}
-          className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${viewMode === 'architecture' ? 'bg-zinc-800 text-zinc-300 shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
+          className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${viewMode === 'architecture' ? 'bg-zinc-200 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-300 shadow-md' : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200'}`}
         >
           🧠 Architecture
         </button>
         <button
           onClick={() => setViewMode('app')}
-          className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${viewMode === 'app' ? 'bg-zinc-800 text-zinc-300 shadow-md' : 'text-zinc-400 hover:text-zinc-200'}`}
+          className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${viewMode === 'app' ? 'bg-zinc-200 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-300 shadow-md' : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200'}`}
         >
           🚀 Live App
         </button>
@@ -742,6 +749,7 @@ function VaultContent() {
                              <h3 className="text-xl font-bold text-zinc-300 mb-2">Sandbox Offline</h3>
                              <p className="text-zinc-500 text-sm max-w-sm mx-auto">The environment is sleeping. Click the Boot button above to spin up the cloud container.</p>
                            </div>
+                           <button onClick={handleDeployToCloud} className="bg-lime-400 hover:bg-lime-500 text-black font-black uppercase tracking-widest px-8 py-4 rounded-xl shadow-[0_0_30px_rgba(163,230,53,0.3)] hover:scale-105 transition-all">🚀 Deploy to Cloud Sandbox</button>
                            <a href="https://distresshunter.gumroad.com/l/pbhwbn?wanted=true" target="_blank" rel="noopener noreferrer" className="mt-4 text-xs font-mono text-zinc-300 hover:text-zinc-300 border border-zinc-700 px-4 py-2 rounded-full hover:bg-zinc-800 transition-all">
                              Unlock Premium Compute Quotas
                            </a>
@@ -769,29 +777,36 @@ function VaultContent() {
 
       {/* Layer 1: Hovering AI Co-Founder Chat */}
       {isChatOpen ? (
-        <div className="fixed right-0 top-0 bottom-0 w-[400px] z-50 transition-all duration-300 bg-black border-l border-zinc-800 flex flex-col overflow-hidden">
+        <div className="fixed right-0 top-0 bottom-0 w-[400px] z-50 transition-all duration-300 bg-white/60 dark:bg-zinc-950/40 backdrop-blur-xl border-l border-zinc-300 dark:border-zinc-800 flex flex-col overflow-hidden">
           {/* Chat Header */}
-          <div className="p-4 border-b border-white/10 bg-black/40 flex items-center justify-between">
+          <div className="p-4 border-b border-zinc-300 dark:border-white/10 bg-white/40 dark:bg-black/40 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded bg-zinc-800 flex items-center justify-center">
                 <Bot className="w-5 h-5 text-zinc-300" />
               </div>
               <div>
-                <h3 className="font-bold text-white tracking-tight">AI Co-Founder</h3>
-                <p className="text-[10px] uppercase font-mono tracking-widest text-emerald-400">Online & Ready</p>
+                <h3 className="font-bold text-zinc-900 dark:text-white tracking-tight">AI Co-Founder</h3>
+                <p className="text-[10px] uppercase font-mono tracking-widest text-emerald-500 dark:text-emerald-400">Online & Ready</p>
               </div>
             </div>
             <div className="flex items-center gap-1">
               <button 
+                onClick={() => setShowSettings(!showSettings)}
+                className="p-2 rounded-lg text-slate-400 hover:text-zinc-900 dark:hover:text-zinc-300 hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+                title="Configuration"
+              >
+                <Settings className="w-4 h-4" />
+              </button>
+              <button 
                 onClick={() => setIsSettingsOpen(true)}
-                className="p-2 rounded-lg text-slate-400 hover:text-zinc-300 hover:bg-white/10 transition-colors"
+                className="p-2 rounded-lg text-slate-400 hover:text-zinc-900 dark:hover:text-zinc-300 hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
                 title="Local API Keys"
               >
                 <Settings className="w-4 h-4" />
               </button>
               <button 
                 onClick={() => setIsChatOpen(false)}
-                className="p-2 rounded-lg text-slate-400 hover:text-zinc-300 hover:bg-white/10 transition-colors"
+                className="p-2 rounded-lg text-slate-400 hover:text-zinc-900 dark:hover:text-zinc-300 hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
                 title="Minimize Chat"
               >
                 <ChevronDown className="w-4 h-4" />
@@ -799,8 +814,68 @@ function VaultContent() {
             </div>
           </div>
 
-          {/* Chat History */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4">
+          {/* Chat History or Configuration */}
+          {showSettings ? (
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-6 flex flex-col gap-6">
+              <h4 className="text-xs font-bold text-zinc-900 dark:text-white uppercase tracking-widest border-b border-zinc-200 dark:border-zinc-800 pb-2">Configuration</h4>
+              
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Technical Level</label>
+                <select 
+                  value={pendingTechLevel} 
+                  onChange={e => setPendingTechLevel(e.target.value)}
+                  className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                >
+                  <option value="No-Code">No-Code</option>
+                  <option value="AI Developer">AI Developer</option>
+                  <option value="Pro Developer">Pro Developer</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">AI Builder</label>
+                <select 
+                  value={pendingAiBuilder} 
+                  onChange={e => setPendingAiBuilder(e.target.value)}
+                  className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                >
+                  <option value="Native Swarm">Native Swarm</option>
+                  <option value="Cursor">Cursor</option>
+                  <option value="Windsurf">Windsurf</option>
+                  <option value="Bolt.new">Bolt.new</option>
+                  <option value="Lovable">Lovable</option>
+                  <option value="Decide for me ✨">Decide for me ✨</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Payment Gateway</label>
+                <select 
+                  value={pendingPaymentGateway} 
+                  onChange={e => setPendingPaymentGateway(e.target.value)}
+                  className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                >
+                  <option value="Stripe">Stripe</option>
+                  <option value="LemonSqueezy">LemonSqueezy</option>
+                  <option value="Polar">Polar</option>
+                  <option value="Decide for me ✨">Decide for me ✨</option>
+                </select>
+              </div>
+
+              <div className="mt-auto pt-6">
+                 <button 
+                   onClick={() => {
+                     setShowSettings(false);
+                     handlePivot(pendingTechLevel, pendingAiBuilder, undefined, pendingPaymentGateway);
+                   }}
+                   className="w-full bg-zinc-900 dark:bg-white text-white dark:text-black font-bold uppercase tracking-widest text-sm py-4 rounded-xl hover:scale-[1.02] transition-transform"
+                 >
+                   Save & Apply
+                 </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-4">
             {chatHistory.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 {msg.type === "thought" ? (
@@ -808,12 +883,13 @@ function VaultContent() {
                     &gt; {msg.content}_
                   </div>
                 ) : (
-                  <div className={`max-w-[85%] rounded-xl p-3 text-sm text-white ${msg.role === "user" ? "bg-zinc-800" : "bg-zinc-900"}`}>
+                  <div className="max-w-[85%] rounded-xl p-3 text-sm bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-sm break-words whitespace-pre-wrap">
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
                       components={{
-                        pre: CodeBlock,
-                        a: ({ node, ...props }: any) => <a {...props} target="_blank" rel="noopener noreferrer" className="text-zinc-300 hover:underline" />
+                        pre: ({ node, ...props }: any) => <pre className="!bg-[#09090B] !text-zinc-100 overflow-x-auto p-6 rounded-xl border !border-zinc-800 my-4 text-sm font-mono" {...props} />,
+                        code: ({ node, inline, ...props }: any) => inline ? <code className="!bg-[#09090B] !text-zinc-100 px-1 py-0.5 rounded text-sm font-mono" {...props} /> : <code className="!bg-[#09090B] !text-zinc-100 overflow-x-auto p-6 rounded-xl border !border-zinc-800 my-4 text-sm font-mono" {...props} />,
+                        a: ({ node, ...props }: any) => <a {...props} target="_blank" rel="noopener noreferrer" className="text-cyan-600 dark:text-cyan-400 hover:underline" />
                       }}
                     >
                       {msg.content}
@@ -823,15 +899,16 @@ function VaultContent() {
               </div>
             ))}
             <div ref={chatEndRef} />
-          </div>
+            </div>
+          )}
           
           {/* Chat Input */}
-          <div className="p-4 border-t border-white/10 bg-black/40 flex flex-col gap-2">
+          <div className="p-4 border-t border-zinc-300 dark:border-white/10 bg-white/40 dark:bg-black/40 flex flex-col gap-2">
             <form onSubmit={handleSendMessage} className="relative w-full">
               <button
                 type="button"
                 onClick={() => setCmdOpen(true)}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors"
                 title="Open Command Palette (Cmd+K)"
               >
                 <CmdIcon className="w-4 h-4" />
@@ -842,7 +919,7 @@ function VaultContent() {
                 value={chatMessage}
                 onChange={(e) => setChatMessage(e.target.value)}
                 placeholder="Message your Co-Founder..."
-                className="w-full bg-black/50 border border-white/10 rounded-xl py-3 pl-10 pr-12 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-700 focus:ring-1 focus:ring-zinc-500 transition-all shadow-inner"
+                className="w-full bg-white/50 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl py-3 pl-10 pr-12 text-sm text-zinc-900 dark:text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-700 focus:ring-1 focus:ring-zinc-500 transition-all shadow-inner"
               />
               
               <button

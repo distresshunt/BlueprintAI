@@ -175,11 +175,8 @@ export async function POST(req: NextRequest) {
   }
   const { blueprintMarkdown = "" } = body;
 
-  const ai = new GoogleGenAI({ 
-    vertexai: true, 
-    project: process.env.GOOGLE_CLOUD_PROJECT_ID as string, 
-    location: 'us-central1' 
-  });
+  const aiGemini = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const aiVertexGlobal = new GoogleGenAI({ vertexai: { project: process.env.GOOGLE_CLOUD_PROJECT_ID as string, location: 'global' } });
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
@@ -205,20 +202,20 @@ export async function POST(req: NextRequest) {
         let executionMemory = "";
 
         // PHASE 1: Architect
-        sendLog("> [@Architect] Activated (claude-opus-4.7)...");
+        sendLog("> [@Architect] Activated (publishers/anthropic/models/claude-opus-4-8)...");
         const architectMessages = [
           { role: "user", parts: [{ text: `Blueprint:\n${blueprintMarkdown}` }] }
         ];
         const { phaseSummary: architectSummary } = await runAgentLoop({
-          model: "claude-opus-4.7",
-          systemPrompt: "You are the Architect. Focus: Next.js folder scaffolding and strict architectural rules. Use `execute_terminal_command` and `install_dependencies` to initialize the project architecture, install required packages, and create necessary folders. DO NOT write specific UI code yet. When done, call `finish_phase` with a summary of what you did.",
+          model: "publishers/anthropic/models/claude-opus-4-8",
+          systemPrompt: "You are the Architect. Focus: Next.js folder scaffolding and strict architectural rules. NEVER generate a .clinerules or .cursorrules file. Your primary architectural output MUST be a Google Open Knowledge Format (OKF) Bundle. You must generate a standardized OKF v0.1 directory structure (e.g., /knowledge-bundle/index.md, /knowledge-bundle/database.md) using strict YAML frontmatter. Use the `write_file` tool to physically create this OKF folder structure in the E2B sandbox before handing the context over to @DB_Admin. Use `execute_terminal_command` and `install_dependencies` to initialize the project architecture, install required packages, and create necessary folders. DO NOT write specific UI code yet. When done, call `finish_phase` with a summary of what you did.",
           messages: architectMessages,
           sandbox,
           sendLog,
           agentName: "@Architect",
           controller,
           encoder,
-          ai
+          ai: aiVertexGlobal
         });
         
         executionMemory += `Architect Actions:\n${architectSummary}\n\n`;
@@ -237,18 +234,18 @@ export async function POST(req: NextRequest) {
           agentName: "@DB_Admin",
           controller,
           encoder,
-          ai
+          ai: aiGemini
         });
         
         executionMemory += `DB Admin Actions:\n${dbSummary}\n\n`;
 
         // PHASE 3: Frontend Dev
-        sendLog("> [@Frontend_Dev] Activated (grok-4.20)...");
+        sendLog("> [@Frontend_Dev] Activated (publishers/xai/models/grok-4.3)...");
         const frontendMessages = [
           { role: "user", parts: [{ text: `Blueprint:\n${blueprintMarkdown}\n\nExecution Memory so far:\n${executionMemory}` }] }
         ];
         const { phaseSummary: frontendSummary, url: devUrl } = await runAgentLoop({
-          model: "grok-4.20",
+          model: "publishers/xai/models/grok-4.3",
           systemPrompt: "You are the Frontend Developer agent. Focus: Uncensored, bleeding-edge React 19/Tailwind UI component generation. Attached is the UI architecture. Strictly adhere to modern Next.js App Router and Tailwind CSS standards. Use `write_file` to write the UI components based on the blueprint and memory. Finally, use `start_dev_server` to launch the app. Then call `finish_phase` with a summary.",
           messages: frontendMessages,
           sandbox,
@@ -256,7 +253,7 @@ export async function POST(req: NextRequest) {
           agentName: "@Frontend_Dev",
           controller,
           encoder,
-          ai
+          ai: aiVertexGlobal
         });
 
         if (devUrl) {
