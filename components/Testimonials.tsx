@@ -30,7 +30,7 @@ export function Testimonials() {
               <div key={j} className="w-[300px] sm:w-[350px] bg-slate-900/40 backdrop-blur-md border border-slate-800/50 rounded-2xl p-6 flex flex-col gap-4 shadow-xl shrink-0">
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, k) => (
-                    <Star key={k} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <Star key={k} className="w-4 h-4 fill-zinc-300 text-zinc-300" />
                   ))}
                 </div>
                 <p className="text-slate-300 font-serif text-sm italic leading-relaxed flex-1">"{t.quote}"</p>

@@ -67,11 +67,11 @@ export function HypePoll() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className={`flex items-start justify-between gap-4 p-4 rounded-xl border transition-all ${
-                  feature.upvoted ? 'bg-cyan-900/20 border-cyan-800/50' : 'bg-slate-800/30 border-slate-700/50 hover:bg-slate-800/50'
+                  feature.upvoted ? 'bg-zinc-800 border-zinc-700' : 'bg-slate-800/30 border-slate-700/50 hover:bg-slate-800/50'
                 }`}
               >
                 <div className="flex flex-col gap-1 pr-2">
-                  <span className={`text-sm font-semibold transition-colors ${feature.upvoted ? 'text-cyan-400' : 'text-slate-300'}`}>
+                  <span className={`text-sm font-semibold transition-colors ${feature.upvoted ? 'text-zinc-300' : 'text-slate-300'}`}>
                     {feature.title}
                   </span>
                   {feature.description && (
@@ -84,7 +84,7 @@ export function HypePoll() {
                   onClick={() => handleUpvote(feature.id)}
                   className={`shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all mt-1 ${
                     feature.upvoted 
-                      ? 'bg-cyan-500 text-slate-950 shadow-[0_0_10px_rgba(34,211,238,0.3)]' 
+                      ? 'bg-zinc-800 text-slate-950' 
                       : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'
                   }`}
                 >
@@ -105,12 +105,12 @@ export function HypePoll() {
                 value={newIdea}
                 onChange={(e) => setNewIdea(e.target.value)}
                 placeholder="e.g. Export to PDF"
-                className="w-full bg-slate-800/50 border border-slate-700 text-white text-sm rounded-xl py-3 pl-4 pr-10 focus:outline-none focus:border-cyan-500/50 transition-colors placeholder:text-slate-600"
+                className="w-full bg-slate-800/50 border border-slate-700 text-white text-sm rounded-xl py-3 pl-4 pr-10 focus:outline-none focus:border-zinc-700 transition-colors placeholder:text-slate-600"
               />
               <button 
                 type="submit"
                 disabled={!newIdea.trim()}
-                className="absolute right-2 top-2 p-1.5 text-slate-400 hover:text-cyan-400 disabled:opacity-50 disabled:hover:text-slate-400 transition-colors bg-slate-900 rounded-lg border border-slate-700"
+                className="absolute right-2 top-2 p-1.5 text-slate-400 hover:text-zinc-300 disabled:opacity-50 disabled:hover:text-slate-400 transition-colors bg-slate-900 rounded-lg border border-slate-700"
               >
                 <Send className="w-4 h-4" />
               </button>

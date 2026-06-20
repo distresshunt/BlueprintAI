@@ -9,6 +9,7 @@ import { useAuth, SignInButton, useUser } from '@clerk/nextjs';
 import { supabase } from '@/lib/supabase';
 import { CodeBlock } from './CodeBlock';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import businessModels from '@/data/business-models.json';
 
 const ExpandableBlockquote = ({ children }: any) => {
@@ -19,11 +20,11 @@ const ExpandableBlockquote = ({ children }: any) => {
         onClick={() => setIsOpen(!isOpen)} 
         className="w-full flex items-center justify-between p-4 bg-slate-800/50 hover:bg-slate-800/80 transition-colors text-left cursor-pointer"
       >
-        <div className="flex items-center gap-2 text-cyan-400 font-sans font-semibold text-sm uppercase tracking-widest">
+        <div className="flex items-center gap-2 text-zinc-300 font-sans font-semibold text-sm uppercase tracking-widest">
           <Info className="w-4 h-4" />
           Implementation Notes & Key Features
         </div>
-        {isOpen ? <ChevronDown className="w-4 h-4 text-cyan-400" /> : <ChevronRight className="w-4 h-4 text-cyan-400" />}
+        {isOpen ? <ChevronDown className="w-4 h-4 text-zinc-300" /> : <ChevronRight className="w-4 h-4 text-zinc-300" />}
       </button>
       <AnimatePresence>
         {isOpen && (
@@ -684,15 +685,15 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
 
         {learnSkill && learnNiche ? (
           <h1 className="text-3xl sm:text-4xl font-black font-sans tracking-tight mt-4 mb-2 text-center sm:text-left">
-            Learn <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{learnSkill}</span> by building a digital business for <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{learnNiche}</span>
+            Learn <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-800 to-blue-500">{learnSkill}</span> by building a digital business for <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-800 to-blue-500">{learnNiche}</span>
           </h1>
         ) : pSeoModel && pSeoNiche ? (
           <h1 className="text-3xl sm:text-4xl font-black font-sans tracking-tight mt-4 mb-2 text-center sm:text-left">
-            Build a <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{pSeoModel}</span> for <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{pSeoNiche}</span>
+            Build a <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-800 to-blue-500">{pSeoModel}</span> for <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-800 to-blue-500">{pSeoNiche}</span>
           </h1>
         ) : null}
         {!pSeoModel && !pSeoNiche && !learnSkill && !learnNiche && (
-          <span className="font-mono text-[10px] uppercase tracking-widest text-cyan-500/70 mb-2 block ml-1">&gt; INPUT_ARCHITECTURE_PARAMETERS_</span>
+          <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-300 mb-2 block ml-1">&gt; INPUT_ARCHITECTURE_PARAMETERS_</span>
         )}
         
         {/* Project Type Tabs */}
@@ -703,7 +704,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               onClick={() => setActiveProjectType(type)}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all backdrop-blur-md ${
                 activeProjectType === type
-                  ? 'bg-cyan-950/30 text-cyan-400 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+                  ? 'bg-zinc-800 text-zinc-300 border border-zinc-700'
                   : 'bg-zinc-900/50 text-zinc-400 border border-zinc-800 hover:text-zinc-200'
               }`}
             >
@@ -726,7 +727,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               id="business-model-select"
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
-              className="w-full bg-slate-950/80 border border-slate-800 text-zinc-300 text-xs rounded-xl p-3 focus:border-cyan-500/50 focus:outline-none transition-all cursor-pointer appearance-none pr-10 shadow-inner"
+              className="w-full bg-slate-950/80 border border-slate-800 text-zinc-300 text-xs rounded-xl p-3 focus:border-zinc-700 focus:outline-none transition-all cursor-pointer appearance-none pr-10 shadow-inner"
             >
               <option value="">-- No Specific Model --</option>
               {businessModels.map((model) => (
@@ -742,11 +743,11 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
         </div>
 
         <div 
-          className="relative group bg-slate-900/50 border-2 border-slate-800 focus-within:border-cyan-500/50 rounded-xl shadow-2xl transition-all w-full flex flex-col overflow-hidden"
+          className="relative group bg-slate-900/50 border-2 border-slate-800 focus-within:border-zinc-700 rounded-xl shadow-2xl transition-all w-full flex flex-col overflow-hidden"
           onCopy={handleCopyTrap}
         >
           <div className={`absolute top-0 left-0 w-full h-full p-6 pb-24 pointer-events-none text-zinc-500 overflow-hidden break-words whitespace-pre-wrap text-lg ${idea.length > 0 ? 'opacity-0' : 'opacity-100'}`} aria-hidden="true">
-            <span ref={placeholderRef}></span><span className="animate-pulse text-cyan-400 font-bold ml-0.5">|</span>
+            <span ref={placeholderRef}></span><span className="animate-pulse text-zinc-300 font-bold ml-0.5">|</span>
           </div>
           <textarea
             value={idea}
@@ -764,7 +765,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
             <div className="flex items-center gap-2 pointer-events-auto">
               <button
                 onClick={startRecording}
-                className={`p-2 rounded-lg transition-all ${isRecording ? 'text-red-500 bg-red-900/20 animate-pulse' : 'text-slate-400 hover:text-cyan-400 hover:bg-slate-800'}`}
+                className={`p-2 rounded-lg transition-all ${isRecording ? 'text-red-500 bg-red-900/20 animate-pulse' : 'text-slate-400 hover:text-zinc-300 hover:bg-slate-800'}`}
                 title="Use Voice Input"
                 aria-label="Start voice typing"
               >
@@ -790,7 +791,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
             <div className="flex items-center pointer-events-auto">
               <button
                 onClick={openBrainstormModal}
-                className="px-3 py-1.5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 hover:from-cyan-500/20 hover:to-blue-500/20 border border-cyan-500/30 hover:border-cyan-500/60 text-cyan-400 text-xs font-semibold rounded-lg transition-all flex items-center shadow-[0_0_15px_rgba(6,182,212,0.1)] hover:shadow-[0_0_20px_rgba(6,182,212,0.25)] backdrop-blur-sm"
+                className="px-3 py-1.5 bg-gradient-to-r from-zinc-800 to-blue-500/10 hover:from-zinc-800 hover:to-blue-500/20 border border-zinc-700 hover:border-zinc-700 text-zinc-300 text-xs font-semibold rounded-lg transition-all flex items-center hover: backdrop-blur-sm"
               >
                 <span><span className="hidden sm:inline">Need an idea? </span>Brainstorm with AI 🧠</span>
               </button>
@@ -800,7 +801,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
 
         {/* Advanced Controls Drawer */}
         <details className="group w-full bg-slate-900/40 rounded-xl border border-slate-800 mt-2">
-          <summary className="flex items-center justify-between p-4 cursor-pointer list-none outline-none text-xs font-mono text-slate-400 uppercase tracking-widest hover:text-cyan-400 transition-colors">
+          <summary className="flex items-center justify-between p-4 cursor-pointer list-none outline-none text-xs font-mono text-slate-400 uppercase tracking-widest hover:text-zinc-300 transition-colors">
             <div className="flex items-center gap-2">
               <span>⚙️ Advanced Controls</span>
             </div>
@@ -813,7 +814,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               <select 
                 value={llmCore}
                 onChange={(e) => setLlmCore(e.target.value)}
-                className="bg-slate-900 border border-slate-700 text-slate-300 text-sm rounded-lg p-2.5 focus:border-cyan-500 outline-none"
+                className="bg-slate-900 border border-slate-700 text-slate-300 text-sm rounded-lg p-2.5 focus:border-zinc-700 outline-none"
               >
                 <option>Gemini 3.1 Pro (Default)</option>
                 <option>Claude 3.5 Sonnet</option>
@@ -826,7 +827,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               <select 
                 value={mcpTools}
                 onChange={(e) => setMcpTools(e.target.value)}
-                className="bg-slate-900 border border-slate-700 text-slate-300 text-sm rounded-lg p-2.5 focus:border-cyan-500 outline-none"
+                className="bg-slate-900 border border-slate-700 text-slate-300 text-sm rounded-lg p-2.5 focus:border-zinc-700 outline-none"
               >
                 <option>None</option>
                 <option>Firecrawl (Web Scraper)</option>
@@ -841,7 +842,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               <select 
                 value={baseTemplate}
                 onChange={(e) => setBaseTemplate(e.target.value)}
-                className="bg-slate-900 border border-slate-700 text-slate-300 text-sm rounded-lg p-2.5 focus:border-cyan-500 outline-none"
+                className="bg-slate-900 border border-slate-700 text-slate-300 text-sm rounded-lg p-2.5 focus:border-zinc-700 outline-none"
               >
                 <option>Next.js + Supabase (Default)</option>
                 <option>React + Firebase</option>
@@ -855,15 +856,15 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
           <button
             onClick={() => generateBlueprint()}
             disabled={loading}
-            className="w-full h-14 bg-cyan-500 hover:bg-cyan-400 disabled:bg-[#0D0D0D] disabled:border disabled:border-zinc-800 disabled:text-zinc-500 disabled:shadow-none text-black font-bold text-lg md:text-sm rounded-xl flex items-center justify-center gap-3 transition-colors shadow-[0_0_30px_-5px_rgba(34,211,238,0.4)] group overflow-hidden relative cursor-pointer disabled:cursor-not-allowed"
+            className="w-full h-14 bg-zinc-800 hover:bg-zinc-800 text-black font-black uppercase tracking-widest disabled:bg-[#0D0D0D] disabled:border disabled:border-zinc-800 disabled:text-zinc-500 disabled:shadow-none text-lg md:text-sm rounded-xl flex items-center justify-center gap-3 transition-all group overflow-hidden relative cursor-pointer disabled:cursor-not-allowed"
           >
             {loading ? (
               <div className="flex items-center gap-3 w-full px-6 font-mono text-xs sm:text-sm">
-                <Loader2 className="w-5 h-5 animate-spin text-cyan-500 shrink-0" />
+                <Loader2 className="w-5 h-5 animate-spin text-zinc-300 shrink-0" />
                 <span className="text-zinc-400 whitespace-nowrap overflow-hidden text-ellipsis flex-1 text-left">
                   {isPivoting ? loadingMessage : loadingMessages[loadingStep]}
                 </span>
-                <span className="w-2 h-4 bg-cyan-500 animate-pulse shrink-0"></span>
+                <span className="w-2 h-4 bg-zinc-800 animate-pulse shrink-0"></span>
               </div>
             ) : (
               <>
@@ -899,12 +900,12 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
           >
             {isPivoting && (
               <div className="absolute inset-0 flex items-center justify-center z-50">
-                <Loader2 className="w-12 h-12 animate-spin text-cyan-500" />
+                <Loader2 className="w-12 h-12 animate-spin text-zinc-300" />
               </div>
             )}
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800/50">
               <div className="flex items-center gap-3">
-                <Terminal className="w-5 h-5 text-cyan-500" />
+                <Terminal className="w-5 h-5 text-zinc-300" />
                 <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] text-slate-400">Latest Architecture: mvp-blueprint.md</span>
               </div>
               <div className="flex gap-4">
@@ -919,7 +920,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               <details className="group mb-6 border border-zinc-800/80 rounded-xl overflow-hidden bg-zinc-950/40 backdrop-blur-md">
                 <summary className="flex items-center justify-between p-3 text-[11px] font-semibold text-zinc-400 uppercase tracking-widest cursor-pointer hover:bg-zinc-900/50 transition-colors list-none outline-none">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-cyan-500 animate-pulse" />
+                    <Sparkles className="w-4 h-4 text-zinc-300 animate-pulse" />
                     ✨ Agent Reasoning Process
                   </div>
                   <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
@@ -930,7 +931,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               </details>
             )}
 
-            <div className="prose prose-invert prose-cyan max-w-none prose-headings:font-bold prose-h1:text-cyan-400 prose-h2:text-zinc-200 prose-h3:text-cyan-500/80 prose-p:text-zinc-400 prose-p:leading-relaxed prose-li:text-zinc-400 prose-strong:text-zinc-300 bg-transparent"
+            <div className="prose prose-invert prose-invert max-w-none prose-headings:font-bold prose-h1:text-zinc-300 prose-h2:text-zinc-200 prose-h3:text-zinc-300 prose-p:text-zinc-400 prose-p:leading-relaxed prose-li:text-zinc-400 prose-strong:text-zinc-300 bg-transparent"
               onCopy={handleCopyTrap}
             >
               <ReactMarkdown 
@@ -953,7 +954,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                       {...props}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-cyan-400 hover:text-cyan-300 underline font-medium"
+                      className="text-zinc-300 hover:text-zinc-300 underline font-medium"
                     />
                   ),
                   input: ({ node, checked, ...props }: any) => {
@@ -962,7 +963,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                         <input 
                           type="checkbox" 
                           defaultChecked={checked}
-                          className="w-4 h-4 text-cyan-500 rounded border-slate-700 bg-slate-800 focus:ring-cyan-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1" 
+                          className="w-4 h-4 text-zinc-300 rounded border-slate-700 bg-slate-800 focus:ring-zinc-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1" 
                         />
                       );
                     }
@@ -998,93 +999,22 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
             {premium && (
               <div className="relative mt-12 rounded-xl group overflow-hidden">
                 {!isUnlocked && (
-                  <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none p-4 pb-20">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-full max-w-4xl pointer-events-auto">
-                    {/* Left Card */}
-                    <div className="border border-slate-700 bg-slate-900/90 rounded-2xl p-6 sm:p-8 flex flex-col backdrop-blur-xl">
-                      <h3 className="text-xl font-bold text-white font-sans uppercase tracking-tight">The Hustler Tier</h3>
-                      <div className="text-3xl font-bold mt-2 mb-6 text-white">$29 <span className="text-sm font-normal text-slate-400">One-Time</span></div>
-                      
-                      <ul className="space-y-4 mb-8 flex-1">
-                        <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                          <span>Instant .cursorrules & .clinerules Files</span>
-                        </li>
-                        <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                          <span>Copy & Paste AI Developer Prompts</span>
-                        </li>
-                        <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                          <span>Stripe-Ready Legal Compliance Pack</span>
-                        </li>
-                        <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                          <span>The 'First 10 Customers' GTM Script</span>
-                        </li>
-                        <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                          <span>Database Schemas & RLS Policies</span>
-                        </li>
-                      </ul>
-                      
-                      <button onClick={() => window.location.href = "https://distresshunter.gumroad.com/l/vjowjj?wanted=true"} className="w-full py-3 sm:py-4 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl transition-colors border border-slate-700">
-                        Unlock Basic
-                      </button>
-                    </div>
-
-                    {/* Right Card */}
-                    <div className="border-2 border-cyan-500 bg-slate-900/90 rounded-2xl p-6 sm:p-8 flex flex-col relative shadow-[0_0_30px_rgba(34,211,238,0.2)] backdrop-blur-xl">
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-cyan-500 text-black text-[10px] sm:text-xs font-bold uppercase tracking-widest px-4 py-1 rounded-full whitespace-nowrap shadow-[0_0_15px_rgba(34,211,238,0.8)]">
-                        Most Popular
-                      </div>
-                      <h3 className="text-xl font-bold text-white font-sans uppercase tracking-tight">The Founder Tier</h3>
-                      <div className="text-3xl font-bold mt-2 mb-6 text-white">$19<span className="text-sm font-normal text-slate-400">/Month</span></div>
-                      
-                      <ul className="space-y-4 mb-8 flex-1">
-                        <li className="flex items-start gap-3 font-semibold text-white text-sm">
-                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                          <span>Everything in Hustler, PLUS:</span>
-                        </li>
-                        <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                          <span>24/7 Context-Aware AI Tech Lead (Chat)</span>
-                        </li>
-                        <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                          <span>Live 'Vision' Debugging (Paste Screenshots)</span>
-                        </li>
-                        <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                          <span>Unlimited Blueprint Generations</span>
-                        </li>
-                        <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                          <span>Auto-Save to Secure Cloud Vault</span>
-                        </li>
-                        <li className="flex items-start gap-3 text-slate-300 text-sm">
-                          <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                          <span>CI/CD Pipelines & Architecture Diagrams</span>
-                        </li>
-                      </ul>
-                      
-                      <button onClick={() => window.location.href = "https://distresshunter.gumroad.com/l/pbhwbn?wanted=true"} className="w-full py-3 sm:py-4 bg-cyan-500 hover:bg-cyan-400 text-black font-bold rounded-xl transition-colors shadow-[0_0_15px_rgba(34,211,238,0.4)] hover:shadow-[0_0_25px_rgba(34,211,238,0.6)]">
-                        Start Subscription
-                      </button>
-                    </div>
+                  <div className="absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none p-4 pb-20">
+                    <Link href="/pricing" className="px-8 py-4 bg-white text-black font-black uppercase tracking-widest rounded-xl hover:bg-zinc-200 transition-colors pointer-events-auto shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+                      View Unlock Plans ⚡
+                    </Link>
                   </div>
-                </div>
                 )}
                 
                 {!isUnlocked && <div className="absolute inset-0 z-10 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-transparent"></div>}
                 
-                <div className={`prose prose-invert prose-cyan max-w-none p-4 ${!isUnlocked ? 'blur-md select-none opacity-60 pointer-events-none' : ''}
+                <div className={`prose prose-invert prose-invert max-w-none p-4 ${!isUnlocked ? 'blur-md select-none opacity-60 pointer-events-none' : ''}
                   prose-headings:font-sans prose-headings:font-bold prose-headings:tracking-tight 
-                  prose-h2:border-l-4 prose-h2:border-cyan-500 prose-h2:pl-4 prose-h2:mb-4 prose-h2:text-2xl prose-h2:text-white
+                  prose-h2:border-l-4 prose-h2:border-zinc-700 prose-h2:pl-4 prose-h2:mb-4 prose-h2:text-2xl prose-h2:text-white
                   prose-p:text-slate-300 prose-p:font-serif prose-p:text-sm prose-p:leading-relaxed
                   prose-li:text-slate-400 prose-li:font-mono prose-li:text-xs
-                  prose-strong:text-cyan-400 prose-strong:uppercase prose-strong:font-sans prose-strong:text-xs prose-strong:tracking-widest
-                  prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline hover:prose-a:text-cyan-300 transition-colors`}
+                  prose-strong:text-zinc-300 prose-strong:uppercase prose-strong:font-sans prose-strong:text-xs prose-strong:tracking-widest
+                  prose-a:text-zinc-300 prose-a:no-underline hover:prose-a:underline hover:prose-a:text-zinc-300 transition-colors`}
                 >
                   <ReactMarkdown 
                     remarkPlugins={[remarkGfm]}
@@ -1096,7 +1026,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                           {...props}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-cyan-400 hover:text-cyan-300 underline font-medium"
+                          className="text-zinc-300 hover:text-zinc-300 underline font-medium"
                         />
                       ),
                       input: ({ node, checked, ...props }: any) => {
@@ -1105,7 +1035,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                             <input 
                               type="checkbox" 
                               defaultChecked={checked}
-                              className="w-4 h-4 text-cyan-500 rounded border-slate-700 bg-slate-800 focus:ring-cyan-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1" 
+                              className="w-4 h-4 text-zinc-300 rounded border-slate-700 bg-slate-800 focus:ring-zinc-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1" 
                             />
                           );
                         }
@@ -1147,12 +1077,12 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-3xl max-h-[85vh] overflow-y-auto bg-slate-900/80 border border-slate-800 rounded-2xl shadow-[0_0_50px_-10px_rgba(6,182,212,0.25)] backdrop-blur-xl z-10"
+              className="relative w-full max-w-3xl max-h-[85vh] overflow-y-auto bg-slate-900/80 border border-slate-800 rounded-2xl backdrop-blur-xl z-10"
             >
               <div className="p-4 sm:p-6 border-b border-slate-800 flex justify-between items-center sticky top-0 bg-slate-900/95 backdrop-blur z-20">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-cyan-500/10 rounded-lg border border-cyan-500/30">
-                    <Info className="w-5 h-5 text-cyan-400" />
+                  <div className="p-2 bg-zinc-800 rounded-lg border border-zinc-700">
+                    <Info className="w-5 h-5 text-zinc-300" />
                   </div>
                   <div>
                     <h3 className="text-sm sm:text-base font-bold text-white uppercase tracking-tight">BlueprintAI Best Practices</h3>
@@ -1166,21 +1096,21 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <div className="p-6 sm:p-8 space-y-8 prose prose-invert prose-cyan max-w-none">
+              <div className="p-6 sm:p-8 space-y-8 prose prose-invert prose-invert max-w-none">
                 <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
                   BlueprintAI is powered by an elite System Architecture prompt. To get the most lucrative, production-ready blueprint, you shouldn't just type a 5-word idea. You need to feed the engine context.
                 </p>
-                <p className="text-slate-300 text-sm sm:text-base leading-relaxed bg-cyan-950/30 p-4 rounded-lg border border-cyan-900/50">
+                <p className="text-slate-300 text-sm sm:text-base leading-relaxed bg-zinc-800 p-4 rounded-lg border border-zinc-700">
                   <strong className="text-pink-400 font-bold">Don't want to write it yourself?</strong><br />
                   Click the pink <em>Brainstorm with AI</em> button on the main dashboard. You can casually discuss your vision with your AI Co-Founder, and it will dynamically ghostwrite the perfect architectural prompt for you in real-time.
                 </p>
-                <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-semibold text-cyan-400">
+                <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-semibold text-zinc-300">
                   Otherwise, if you prefer to write it manually, structure your idea using the "4 Pillars":
                 </p>
 
                 <div className="space-y-6">
                   <div className="bg-slate-800/50 border border-slate-700/50 p-5 rounded-xl">
-                    <h4 className="text-white font-bold mb-2 flex items-center gap-2"><span className="bg-cyan-500 text-black w-6 h-6 rounded-full flex items-center justify-center text-xs font-black">1</span> THE IDENTITY & THE AUDIENCE</h4>
+                    <h4 className="text-white font-bold mb-2 flex items-center gap-2"><span className="bg-zinc-800 text-black w-6 h-6 rounded-full flex items-center justify-center text-xs font-black">1</span> THE IDENTITY & THE AUDIENCE</h4>
                     <p className="text-sm text-slate-400 mb-2">Who are you building this for? Be hyper-specific.</p>
                     <div className="text-sm">
                       <span className="text-red-400 font-semibold mr-2">Bad:</span><span className="text-slate-300">"An app for mechanics."</span><br/>
@@ -1189,32 +1119,32 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                   </div>
 
                   <div className="bg-slate-800/50 border border-slate-700/50 p-5 rounded-xl">
-                    <h4 className="text-white font-bold mb-2 flex items-center gap-2"><span className="bg-cyan-500 text-black w-6 h-6 rounded-full flex items-center justify-center text-xs font-black">2</span> THE CORE MECHANICS</h4>
+                    <h4 className="text-white font-bold mb-2 flex items-center gap-2"><span className="bg-zinc-800 text-black w-6 h-6 rounded-full flex items-center justify-center text-xs font-black">2</span> THE CORE MECHANICS</h4>
                     <p className="text-sm text-slate-400 mb-2">What is the primary action the user takes?</p>
                     <div className="text-sm">
-                      <span className="text-cyan-400 font-semibold mr-2">Example:</span><span className="text-slate-300">"The mechanic scans a VIN barcode with their phone, and the app automatically pulls the required oil type and filter size from an API."</span>
+                      <span className="text-zinc-300 font-semibold mr-2">Example:</span><span className="text-slate-300">"The mechanic scans a VIN barcode with their phone, and the app automatically pulls the required oil type and filter size from an API."</span>
                     </div>
                   </div>
 
                   <div className="bg-slate-800/50 border border-slate-700/50 p-5 rounded-xl">
-                    <h4 className="text-white font-bold mb-2 flex items-center gap-2"><span className="bg-cyan-500 text-black w-6 h-6 rounded-full flex items-center justify-center text-xs font-black">3</span> THE "UNFAIR ADVANTAGE" (The Data)</h4>
+                    <h4 className="text-white font-bold mb-2 flex items-center gap-2"><span className="bg-zinc-800 text-black w-6 h-6 rounded-full flex items-center justify-center text-xs font-black">3</span> THE "UNFAIR ADVANTAGE" (The Data)</h4>
                     <p className="text-sm text-slate-400 mb-2">Where is your data coming from? BlueprintAI needs to know your constraints.</p>
                     <div className="text-sm">
-                      <span className="text-cyan-400 font-semibold mr-2">Example:</span><span className="text-slate-300">"We are using a public government database" or "We are using user-uploaded PDF files."</span>
+                      <span className="text-zinc-300 font-semibold mr-2">Example:</span><span className="text-slate-300">"We are using a public government database" or "We are using user-uploaded PDF files."</span>
                     </div>
                   </div>
 
                   <div className="bg-slate-800/50 border border-slate-700/50 p-5 rounded-xl">
-                    <h4 className="text-white font-bold mb-2 flex items-center gap-2"><span className="bg-cyan-500 text-black w-6 h-6 rounded-full flex items-center justify-center text-xs font-black">4</span> YOUR ENDGAME</h4>
+                    <h4 className="text-white font-bold mb-2 flex items-center gap-2"><span className="bg-zinc-800 text-black w-6 h-6 rounded-full flex items-center justify-center text-xs font-black">4</span> YOUR ENDGAME</h4>
                     <p className="text-sm text-slate-400 mb-2">How do you plan to scale it?</p>
                     <div className="text-sm">
-                      <span className="text-cyan-400 font-semibold mr-2">Example:</span><span className="text-slate-300">"I want to start by manually selling this to 10 local shops, but eventually want to charge a $49/month SaaS subscription."</span>
+                      <span className="text-zinc-300 font-semibold mr-2">Example:</span><span className="text-slate-300">"I want to start by manually selling this to 10 local shops, but eventually want to charge a $49/month SaaS subscription."</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-cyan-900/20 border border-cyan-500/30 p-5 rounded-xl mt-8">
-                  <h4 className="text-cyan-400 font-bold mb-2 flex items-center gap-2"><Zap className="w-4 h-4"/> PRO-TIP</h4>
+                <div className="bg-zinc-800 border border-zinc-700 p-5 rounded-xl mt-8">
+                  <h4 className="text-zinc-300 font-bold mb-2 flex items-center gap-2"><Zap className="w-4 h-4"/> PRO-TIP</h4>
                   <p className="text-sm text-slate-300 leading-relaxed m-0">
                     If you are an experienced developer, make sure you select your preferred AI IDE (Cursor, Windsurf, Antigravity) before generating. BlueprintAI will output the exact hidden configuration files (.cursorrules / .clinerules) you need to drop into your workspace to keep your AI coding agents from getting lazy.
                   </p>
@@ -1239,12 +1169,12 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-5xl h-[80vh] flex flex-col lg:flex-row bg-slate-900/80 border border-slate-800 rounded-2xl shadow-2xl backdrop-blur-xl overflow-hidden z-10 shadow-[0_0_50px_-10px_rgba(6,182,212,0.25)]"
+              className="relative w-full max-w-5xl h-[80vh] flex flex-col lg:flex-row bg-slate-900/80 border border-slate-800 rounded-2xl shadow-2xl backdrop-blur-xl overflow-hidden z-10"
             >
               {/* Left Column: Live Draft */}
               <div className="w-full lg:w-1/2 flex flex-col border-b lg:border-b-0 lg:border-r border-slate-800 bg-slate-950/40">
                 <div className="p-4 sm:p-6 border-b border-slate-800 bg-slate-950/60">
-                  <h3 className="text-sm sm:text-base font-bold text-cyan-400 uppercase tracking-tight flex items-center gap-2">
+                  <h3 className="text-sm sm:text-base font-bold text-zinc-300 uppercase tracking-tight flex items-center gap-2">
                     <Sparkles className="w-4 h-4" /> Live Blueprint Prompt
                   </h3>
                   <p className="text-[10px] text-slate-500 font-mono mt-1">CONTINUOUSLY UPDATING...</p>
@@ -1254,7 +1184,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                   onCopy={handleCopyTrap}
                 >
                   <textarea 
-                    className="w-full h-full min-h-[300px] bg-slate-900/50 border border-cyan-500/30 rounded-xl p-4 text-sm leading-relaxed text-cyan-50 font-mono resize-y focus:outline-none focus:border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.05)] transition-colors"
+                    className="w-full h-full min-h-[300px] bg-slate-900/50 border border-zinc-700 rounded-xl p-4 text-sm leading-relaxed text-zinc-300 font-mono resize-y focus:outline-none focus:border-zinc-700 transition-colors"
                     value={liveDraft}
                     onChange={(e) => setLiveDraft(e.target.value)}
                     placeholder="Chat with your AI Co-Founder to engineer the perfect 6-Pillar prompt..."
@@ -1264,7 +1194,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                   <button
                     onClick={() => handleApproveIdea(liveDraft)}
                     disabled={!liveDraft.trim()}
-                    className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-all shadow-[0_0_15px_rgba(34,211,238,0.4)] hover:shadow-[0_0_25px_rgba(34,211,238,0.6)] uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full py-3 bg-gradient-to-r from-zinc-800 to-blue-500 hover:from-zinc-800 hover:to-blue-400 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold rounded-xl transition-all hover: uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <span>Approve This Draft</span>
                     <Check className="w-5 h-5" />
@@ -1277,8 +1207,8 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                 {/* Header */}
                 <div className="p-4 sm:p-6 border-b border-slate-800 flex justify-between items-center bg-slate-950/50">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-cyan-500/10 rounded-lg border border-cyan-500/30">
-                      <Bot className="w-5 h-5 text-cyan-400" />
+                    <div className="p-2 bg-zinc-800 rounded-lg border border-zinc-700">
+                      <Bot className="w-5 h-5 text-zinc-300" />
                     </div>
                     <div>
                       <h3 className="text-sm sm:text-base font-bold text-white uppercase tracking-tight">Co-Founder Chat</h3>
@@ -1302,19 +1232,19 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                   >
                     <div className="flex items-start gap-3 max-w-[85%]">
                       {msg.sender === 'ai' && (
-                        <div className="w-7 h-7 bg-cyan-500/10 rounded-full border border-cyan-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                          <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                        <div className="w-7 h-7 bg-zinc-800 rounded-full border border-zinc-700 flex items-center justify-center shrink-0 mt-0.5">
+                          <Sparkles className="w-3.5 h-3.5 text-zinc-300" />
                         </div>
                       )}
                       <div
                         className={`p-4 rounded-2xl text-sm leading-relaxed shadow-lg ${
                           msg.sender === 'user'
-                            ? 'bg-cyan-500/10 border border-cyan-500/20 text-cyan-200 rounded-tr-none ml-auto'
+                            ? 'bg-zinc-800 border border-zinc-700 text-zinc-300 rounded-tr-none ml-auto'
                             : 'bg-slate-900/80 border border-slate-800 text-slate-300 rounded-tl-none'
                         }`}
                       >
                         {msg.sender === 'ai' ? (
-                          <div className="prose prose-invert prose-cyan max-w-none text-xs sm:text-sm prose-p:my-1 prose-strong:text-cyan-400">
+                          <div className="prose prose-invert prose-invert max-w-none text-xs sm:text-sm prose-p:my-1 prose-strong:text-zinc-300">
                             <ReactMarkdown 
                               remarkPlugins={[remarkGfm]}
                               components={{ 
@@ -1324,7 +1254,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                                     {...props}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-cyan-400 hover:text-cyan-300 underline font-medium"
+                                    className="text-zinc-300 hover:text-zinc-300 underline font-medium"
                                   />
                                 ),
                                 input: ({ node, checked, ...props }: any) => {
@@ -1333,7 +1263,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                                       <input 
                                         type="checkbox" 
                                         defaultChecked={checked}
-                                        className="w-4 h-4 text-cyan-500 rounded border-slate-700 bg-slate-800 focus:ring-cyan-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1" 
+                                        className="w-4 h-4 text-zinc-300 rounded border-slate-700 bg-slate-800 focus:ring-zinc-500 focus:ring-offset-slate-900 cursor-pointer mr-2 mt-1" 
                                       />
                                     );
                                   }
@@ -1354,13 +1284,13 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                 
                 {isBrainstormTyping && (
                   <div className="flex items-start gap-3 max-w-[85%]">
-                    <div className="w-7 h-7 bg-cyan-500/10 rounded-full border border-cyan-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                      <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
+                    <div className="w-7 h-7 bg-zinc-800 rounded-full border border-zinc-700 flex items-center justify-center shrink-0 mt-0.5">
+                      <Sparkles className="w-3.5 h-3.5 text-zinc-300 animate-spin" />
                     </div>
                     <div className="bg-slate-900/80 border border-slate-800 text-slate-400 rounded-2xl rounded-tl-none px-4 py-3 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                      <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                      <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                      <span className="w-1.5 h-1.5 bg-zinc-800 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                      <span className="w-1.5 h-1.5 bg-zinc-800 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                      <span className="w-1.5 h-1.5 bg-zinc-800 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
                     </div>
                   </div>
                 )}
@@ -1443,7 +1373,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                 }}
                 className="p-4 border-t border-slate-800 bg-slate-950/80 flex gap-2 items-end"
               >
-                <div className="flex-1 bg-slate-900/50 border border-slate-800 focus-within:border-cyan-500/50 rounded-xl px-4 min-h-[44px] flex items-center">
+                <div className="flex-1 bg-slate-900/50 border border-slate-800 focus-within:border-zinc-700 rounded-xl px-4 min-h-[44px] flex items-center">
                   <textarea
                     ref={textareaRef}
                     value={brainstormInput}
@@ -1459,7 +1389,7 @@ export function BlueprintGenerator({ initialIdea, pSeoModel, pSeoNiche, initialI
                 <button
                   type="submit"
                   disabled={isBrainstormTyping || !brainstormInput.trim()}
-                  className="p-3 bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-800 disabled:text-slate-600 text-black rounded-xl transition-colors cursor-pointer shrink-0 mb-0.5"
+                  className="p-3 bg-zinc-800 hover:bg-zinc-800 disabled:bg-slate-800 disabled:text-slate-600 text-black rounded-xl transition-colors cursor-pointer shrink-0 mb-0.5"
                 >
                   <Send className="w-4 h-4" />
                 </button>

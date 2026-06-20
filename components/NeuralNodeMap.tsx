@@ -23,22 +23,17 @@ interface NeuralNodeMapProps {
 const CustomNode = ({ data, selected }: any) => {
   const Icon = data.icon || FileCode2;
   return (
-    <div className={`px-4 py-3 shadow-lg rounded-xl border-2 transition-all duration-300 bg-zinc-900 ${
+    <div className={`px-4 py-2 rounded-md border transition-all duration-300 bg-zinc-950 ${
       selected 
-        ? 'border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)]' 
-        : 'border-zinc-700 hover:border-cyan-500/50'
+        ? 'border-zinc-500 bg-zinc-900' 
+        : 'border-zinc-800 hover:border-zinc-600'
     }`}>
-      <Handle type="target" position={Position.Top} className="w-2 h-2 !bg-cyan-500 border-none" />
-      <div className="flex items-center gap-3">
-        <div className={`p-2 rounded-lg ${data.color || 'bg-cyan-500/20 text-cyan-400'}`}>
-          <Icon className="w-5 h-5" />
-        </div>
-        <div>
-          <div className="text-sm font-bold text-white whitespace-nowrap">{data.label}</div>
-          <div className="text-[10px] text-zinc-400 uppercase tracking-widest">{data.typeLabel}</div>
-        </div>
+      <Handle type="target" position={Position.Top} className="w-2 h-2 !bg-zinc-800 border-none" />
+      <div className="flex items-center gap-2">
+        <Icon className="w-4 h-4 text-zinc-400" />
+        <div className="text-sm font-medium text-white whitespace-nowrap">{data.label}</div>
       </div>
-      <Handle type="source" position={Position.Bottom} className="w-2 h-2 !bg-cyan-500 border-none" />
+      <Handle type="source" position={Position.Bottom} className="w-2 h-2 !bg-zinc-800 border-none" />
     </div>
   );
 };
@@ -117,9 +112,9 @@ export function NeuralNodeMap({ blueprintData }: NeuralNodeMapProps) {
       } else if (section.type === 'frontend') {
         icon = Layout; color = 'bg-blue-500/20 text-blue-400'; typeLabel = 'Frontend';
       } else if (section.type === 'backend') {
-        icon = Server; color = 'bg-amber-500/20 text-amber-400'; typeLabel = 'Backend';
+        icon = Server; color = 'bg-zinc-800 text-zinc-300'; typeLabel = 'Backend';
       } else if (section.type === 'workflow') {
-        icon = Workflow; color = 'bg-cyan-500/20 text-cyan-400'; typeLabel = 'Workflow';
+        icon = Workflow; color = 'bg-zinc-800 text-zinc-300'; typeLabel = 'Workflow';
       }
 
       newNodes.push({
@@ -141,8 +136,8 @@ export function NeuralNodeMap({ blueprintData }: NeuralNodeMapProps) {
         source: 'root',
         target: id,
         animated: true,
-        style: { stroke: '#06b6d4', strokeWidth: 2, opacity: 0.5 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: '#06b6d4' }
+        style: { stroke: '#52525b', strokeWidth: 2, opacity: 0.5 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: '#52525b' }
       });
 
       // Wrap layout
@@ -187,7 +182,7 @@ export function NeuralNodeMap({ blueprintData }: NeuralNodeMapProps) {
           <Controls className="!bg-zinc-900 !border-zinc-800 !text-zinc-400" />
         </ReactFlow>
         <div className="absolute top-4 left-4 flex items-center gap-2">
-          <Workflow className="w-5 h-5 text-cyan-400" />
+          <Workflow className="w-5 h-5 text-zinc-300" />
           <span className="text-sm font-bold text-white tracking-widest uppercase">Neural Node Map</span>
         </div>
       </div>
@@ -196,7 +191,7 @@ export function NeuralNodeMap({ blueprintData }: NeuralNodeMapProps) {
       <div className="h-[50%] w-full bg-[#0a0a0f] overflow-y-auto custom-scrollbar p-6">
         {selectedTitle && (
           <div className="mb-4 flex items-center gap-2">
-            <FileCode2 className="w-4 h-4 text-cyan-400" />
+            <FileCode2 className="w-4 h-4 text-zinc-300" />
             <h3 className="text-sm font-bold text-white uppercase tracking-widest">{selectedTitle}</h3>
           </div>
         )}

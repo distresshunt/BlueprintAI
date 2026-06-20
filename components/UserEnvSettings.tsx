@@ -54,12 +54,12 @@ export function UserEnvSettings({ isOpen, onClose }: UserEnvSettingsProps) {
       onClick={onClose}
     >
       <div 
-        className="bg-slate-900 border border-cyan-900/50 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200"
+        className="bg-slate-900 border border-zinc-700 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-4 border-b border-slate-800 bg-slate-900">
           <div className="flex items-center gap-2">
-            <Settings className="w-5 h-5 text-cyan-400" />
+            <Settings className="w-5 h-5 text-zinc-300" />
             <h3 className="font-bold text-white tracking-tight">Local API Keys</h3>
           </div>
           <button
@@ -71,10 +71,10 @@ export function UserEnvSettings({ isOpen, onClose }: UserEnvSettingsProps) {
         </div>
 
         <div className="p-6 space-y-6">
-          <div className="flex items-start gap-3 p-3 bg-amber-950/20 border border-amber-900/30 rounded-lg">
-            <ShieldAlert className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-            <div className="text-xs text-amber-200/70">
-              <span className="font-semibold text-amber-400">Secure Storage:</span> Your keys are stored securely in your browser's local storage. They are never saved to our database.
+          <div className="flex items-start gap-3 p-3 bg-zinc-800 border border-zinc-700 rounded-lg">
+            <ShieldAlert className="w-5 h-5 text-zinc-300 shrink-0 mt-0.5" />
+            <div className="text-xs text-zinc-300">
+              <span className="font-semibold text-zinc-300">Secure Storage:</span> Your keys are stored securely in your browser's local storage. They are never saved to our database.
             </div>
           </div>
 
@@ -86,7 +86,7 @@ export function UserEnvSettings({ isOpen, onClose }: UserEnvSettingsProps) {
                 value={firecrawlKey}
                 onChange={(e) => setFirecrawlKey(e.target.value)}
                 placeholder="fc-..."
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-zinc-700 focus:ring-1 focus:ring-zinc-500 transition-all"
               />
               <p className="text-[10px] text-slate-500">Required for web scraping and live analysis.</p>
             </div>
@@ -98,7 +98,7 @@ export function UserEnvSettings({ isOpen, onClose }: UserEnvSettingsProps) {
                 value={apifyKey}
                 onChange={(e) => setApifyKey(e.target.value)}
                 placeholder="apify_api_..."
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-zinc-700 focus:ring-1 focus:ring-zinc-500 transition-all"
               />
             </div>
 
@@ -109,7 +109,7 @@ export function UserEnvSettings({ isOpen, onClose }: UserEnvSettingsProps) {
                 value={openaiKey}
                 onChange={(e) => setOpenaiKey(e.target.value)}
                 placeholder="sk-..."
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-zinc-700 focus:ring-1 focus:ring-zinc-500 transition-all"
               />
             </div>
 
@@ -120,7 +120,7 @@ export function UserEnvSettings({ isOpen, onClose }: UserEnvSettingsProps) {
                 value={anthropicKey}
                 onChange={(e) => setAnthropicKey(e.target.value)}
                 placeholder="sk-ant-..."
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-zinc-700 focus:ring-1 focus:ring-zinc-500 transition-all"
               />
             </div>
           </div>
@@ -128,7 +128,7 @@ export function UserEnvSettings({ isOpen, onClose }: UserEnvSettingsProps) {
           <div className="pt-2">
             <button
               onClick={handleSave}
-              className="w-full flex items-center justify-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2.5 px-4 rounded-lg transition-all"
+              className="w-full flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-800 text-black font-bold py-2.5 px-4 rounded-lg transition-all"
             >
               {isSaved ? (
                 <>

@@ -21,17 +21,17 @@ export default async function ShowcasePage({ params }: { params: Promise<{ slug:
   const isAmber = app.theme.includes('amber');
   const isEmerald = app.theme.includes('emerald');
 
-  const accentColorText = isPurple ? 'text-purple-500' : isAmber ? 'text-amber-500' : isEmerald ? 'text-emerald-400' : 'text-blue-500';
-  const accentColorBg = isPurple ? 'bg-purple-600 hover:bg-purple-700' : isAmber ? 'bg-amber-600 hover:bg-amber-700' : isEmerald ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-blue-600 hover:bg-blue-700';
-  const accentBorder = isPurple ? 'border-purple-500/30' : isAmber ? 'border-amber-500/30' : isEmerald ? 'border-emerald-400/30' : 'border-blue-500/30';
-  const accentGlow = isPurple ? 'shadow-[0_0_30px_rgba(168,85,247,0.15)]' : isAmber ? 'shadow-[0_0_30px_rgba(245,158,11,0.15)]' : isEmerald ? 'shadow-[0_0_30px_rgba(52,211,153,0.15)]' : 'shadow-lg';
+  const accentColorText = isPurple ? 'text-purple-500' : isAmber ? 'text-zinc-300' : isEmerald ? 'text-emerald-400' : 'text-blue-500';
+  const accentColorBg = isPurple ? 'bg-purple-600 hover:bg-purple-700' : isAmber ? 'bg-zinc-800 hover:bg-zinc-800' : isEmerald ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-blue-600 hover:bg-blue-700';
+  const accentBorder = isPurple ? 'border-purple-500/30' : isAmber ? 'border-zinc-700' : isEmerald ? 'border-emerald-400/30' : 'border-blue-500/30';
+  const accentGlow = isPurple ? '' : isAmber ? '' : isEmerald ? '' : 'shadow-lg';
 
   const bgStyle = isPurple ? 'bg-zinc-950' : isAmber ? 'bg-slate-900' : isEmerald ? 'bg-zinc-900' : 'bg-[#050507]';
 
   return (
-    <div className={`min-h-screen flex flex-col ${bgStyle} text-white font-sans selection:bg-cyan-500/30`}>
+    <div className={`min-h-screen flex flex-col ${bgStyle} text-white font-sans selection:bg-zinc-800`}>
       <header className="flex items-center justify-between p-6 sm:px-12 border-b border-white/5">
-        <Link href="/" className="text-xl font-bold tracking-tighter hover:text-cyan-400 transition-colors">
+        <Link href="/" className="text-xl font-bold tracking-tighter hover:text-zinc-300 transition-colors">
           BlueprintAI <span className="text-white/40">Ecosystem</span>
         </Link>
         <a 

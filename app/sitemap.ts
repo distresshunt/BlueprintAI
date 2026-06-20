@@ -3,7 +3,7 @@ import pseoData from '@/data/pseo.json';
 import learnPseoData from '@/data/learn-pseo.json';
 
 const SITEMAP_LIMIT = 40000;
-const baseUrl = 'https://blueprintagent.dev';
+const baseUrl = 'https://yourlaunchcodes.com';
 
 export async function generateSitemaps() {
   if (!pseoData || !pseoData.models || !pseoData.niches) return [{ id: 0 }];

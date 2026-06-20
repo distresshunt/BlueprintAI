@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Navbar } from '@/components/Navbar';
+
 import { Zap } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -11,12 +11,12 @@ export const metadata: Metadata = {
 export default function BlogPost() {
   return (
     <div className="min-h-screen bg-[#050505] text-zinc-200">
-      <Navbar />
+      
       
       <main className="max-w-7xl mx-auto px-4 sm:px-8 py-16">
-        <article className="prose prose-invert prose-cyan prose-lg max-w-3xl mx-auto">
+        <article className="prose prose-invert prose-invert prose-lg max-w-3xl mx-auto">
           <header className="mb-12 text-center not-prose">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold uppercase tracking-widest mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-zinc-300 text-xs font-bold uppercase tracking-widest mb-6">
               <Zap className="w-4 h-4" />
               Latest Intel
             </div>
@@ -53,7 +53,7 @@ export default function BlogPost() {
           <div className="not-prose my-12 flex justify-center">
             <Link 
               href="/"
-              className="inline-flex items-center justify-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-black px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:shadow-[0_0_40px_rgba(6,182,212,0.5)] hover:-translate-y-1"
+              className="inline-flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-800 text-black px-8 py-4 rounded-xl font-bold text-lg transition-all hover: hover:-translate-y-1"
             >
               <Zap className="w-5 h-5" />
               Generate your OKF Bundle Now ⚡
@@ -90,22 +90,22 @@ export default function BlogPost() {
 
           <h3>Generate OKF Bundles for your specific tech stack:</h3>
           <ul className="not-prose list-none pl-0">
-            <li><Link href="/build/okf-bundle-builder/nextjs-developers" className="text-cyan-400 hover:text-cyan-300 underline mb-2 block">OKF Bundle Builder for Next.js Developers</Link></li>
-            <li><Link href="/build/open-knowledge-format-generator/python-backends" className="text-cyan-400 hover:text-cyan-300 underline mb-2 block">Open Knowledge Format Generator for Python Backends</Link></li>
-            <li><Link href="/build/okf-architecture-exporter/b2b-saas-founders" className="text-cyan-400 hover:text-cyan-300 underline mb-2 block">OKF Architecture Exporter for B2B SaaS Founders</Link></li>
-            <li><Link href="/build/okf-bundle-builder/indie-hackers" className="text-cyan-400 hover:text-cyan-300 underline mb-2 block">OKF Bundle Builder for Indie Hackers</Link></li>
-            <li><Link href="/build/open-knowledge-format-generator/independent-web-developers" className="text-cyan-400 hover:text-cyan-300 underline mb-2 block">Open Knowledge Format Generator for Independent Web Developers</Link></li>
-            <li><Link href="/build/okf-architecture-exporter/mobile-app-developers" className="text-cyan-400 hover:text-cyan-300 underline mb-2 block">OKF Architecture Exporter for Mobile App Developers</Link></li>
-            <li><Link href="/build/okf-bundle-builder/freelance-web-developers" className="text-cyan-400 hover:text-cyan-300 underline mb-2 block">OKF Bundle Builder for Freelance Web Developers</Link></li>
-            <li><Link href="/build/open-knowledge-format-generator/commercial-software-developers" className="text-cyan-400 hover:text-cyan-300 underline mb-2 block">Open Knowledge Format Generator for Commercial Software Developers</Link></li>
-            <li><Link href="/build/okf-architecture-exporter/independent-app-developers" className="text-cyan-400 hover:text-cyan-300 underline mb-2 block">OKF Architecture Exporter for Independent App Developers</Link></li>
-            <li><Link href="/build/okf-bundle-builder/boutique-game-developers" className="text-cyan-400 hover:text-cyan-300 underline mb-2 block">OKF Bundle Builder for Boutique Game Developers</Link></li>
+            <li><Link href="/build/okf-bundle-builder/nextjs-developers" className="text-zinc-300 hover:text-zinc-300 underline mb-2 block">OKF Bundle Builder for Next.js Developers</Link></li>
+            <li><Link href="/build/open-knowledge-format-generator/python-backends" className="text-zinc-300 hover:text-zinc-300 underline mb-2 block">Open Knowledge Format Generator for Python Backends</Link></li>
+            <li><Link href="/build/okf-architecture-exporter/b2b-saas-founders" className="text-zinc-300 hover:text-zinc-300 underline mb-2 block">OKF Architecture Exporter for B2B SaaS Founders</Link></li>
+            <li><Link href="/build/okf-bundle-builder/indie-hackers" className="text-zinc-300 hover:text-zinc-300 underline mb-2 block">OKF Bundle Builder for Indie Hackers</Link></li>
+            <li><Link href="/build/open-knowledge-format-generator/independent-web-developers" className="text-zinc-300 hover:text-zinc-300 underline mb-2 block">Open Knowledge Format Generator for Independent Web Developers</Link></li>
+            <li><Link href="/build/okf-architecture-exporter/mobile-app-developers" className="text-zinc-300 hover:text-zinc-300 underline mb-2 block">OKF Architecture Exporter for Mobile App Developers</Link></li>
+            <li><Link href="/build/okf-bundle-builder/freelance-web-developers" className="text-zinc-300 hover:text-zinc-300 underline mb-2 block">OKF Bundle Builder for Freelance Web Developers</Link></li>
+            <li><Link href="/build/open-knowledge-format-generator/commercial-software-developers" className="text-zinc-300 hover:text-zinc-300 underline mb-2 block">Open Knowledge Format Generator for Commercial Software Developers</Link></li>
+            <li><Link href="/build/okf-architecture-exporter/independent-app-developers" className="text-zinc-300 hover:text-zinc-300 underline mb-2 block">OKF Architecture Exporter for Independent App Developers</Link></li>
+            <li><Link href="/build/okf-bundle-builder/boutique-game-developers" className="text-zinc-300 hover:text-zinc-300 underline mb-2 block">OKF Bundle Builder for Boutique Game Developers</Link></li>
           </ul>
 
           <div className="not-prose mt-16 mb-8 flex justify-center">
             <Link 
               href="/"
-              className="inline-flex items-center justify-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-black px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:shadow-[0_0_40px_rgba(6,182,212,0.5)] hover:-translate-y-1"
+              className="inline-flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-800 text-black px-8 py-4 rounded-xl font-bold text-lg transition-all hover: hover:-translate-y-1"
             >
               <Zap className="w-5 h-5" />
               Generate your OKF Bundle Now ⚡

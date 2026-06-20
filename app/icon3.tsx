@@ -16,9 +16,9 @@ export default function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#06b6d4', // cyan-500
+          color: '#84cc16', // lime-500
           borderRadius: '128px',
-          border: '32px solid #164e63', // cyan-900 border
+          border: '32px solid #365314', // lime-900 border
         }}
       >
         ⚡

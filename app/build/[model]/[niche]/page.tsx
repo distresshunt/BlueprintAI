@@ -59,8 +59,8 @@ export default async function BuildModelNichePage({ params }: Props) {
         <div className="max-w-4xl mx-auto w-full flex flex-col items-center mt-4 sm:mt-8">
           <BlueprintGenerator initialIdea={`I want to ${whyPhrase}.`} />
           
-          <article className="mt-16 w-full max-w-3xl bg-slate-900/40 border border-cyan-900/30 shadow-[0_0_15px_rgba(6,182,212,0.1)] rounded-2xl p-8 sm:p-12 mb-16 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50"></div>
+          <article className="mt-16 w-full max-w-3xl bg-slate-900/40 border border-zinc-700 rounded-2xl p-8 sm:p-12 mb-16 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-zinc-800 to-transparent opacity-50"></div>
             <h2 className="text-2xl sm:text-3xl font-black text-white mb-6 leading-tight">
               Why {whyPhrase} in 2026?
             </h2>

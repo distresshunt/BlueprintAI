@@ -18,7 +18,7 @@ export function LiveCounterBanner() {
 
     fetchCount();
 
-    const isBot = /bot|googlebot|crawler|spider|robot|crawling|Lighthouse|Chrome-Lighthouse|HeadlessChrome/i.test(navigator.userAgent);
+    const isBot = typeof navigator !== 'undefined' && /bot|googlebot|crawler|spider|robot|crawling|Lighthouse|Chrome-Lighthouse|HeadlessChrome/i.test(navigator.userAgent);
     if (isBot) {
       return; // Skip WebSocket connection entirely for performance bots
     }
@@ -50,9 +50,9 @@ export function LiveCounterBanner() {
   }, []);
 
   return (
-    <div className="sticky top-0 w-full bg-cyan-950/30 border-b border-cyan-500/30 backdrop-blur-md py-2 z-50 flex justify-center items-center">
-      <span className="text-cyan-400 text-xs sm:text-sm font-mono uppercase tracking-widest font-semibold text-center px-4">
-        ⚡ SYSTEM ACTIVE: Over {count === null ? <span className="animate-pulse tracking-widest">...</span> : count} App Blueprints architected by Founders.
+    <div className="w-full bg-zinc-950 border-b border-zinc-800 text-center py-2 relative z-50">
+      <span className="text-zinc-300 text-xs sm:text-sm font-mono uppercase tracking-widest font-semibold text-center px-4">
+        ⚡ SYSTEM ACTIVE: Over {count === null ? <span className="animate-pulse tracking-widest">...</span> : count} LAUNCH CODES ARCHITECTED BY FOUNDERS.
       </span>
     </div>
   );

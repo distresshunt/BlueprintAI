@@ -13,10 +13,10 @@ export default function RefundPage() {
       {/* Header Navigation */}
       <header className="h-16 border-b border-slate-800 flex items-center justify-between px-4 sm:px-8 bg-[#0a0a0f] shrink-0">
         <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
-          <div className="w-8 h-8 bg-cyan-500 rounded flex items-center justify-center">
+          <div className="w-8 h-8 bg-zinc-800 rounded flex items-center justify-center">
             <Zap className="w-5 h-5 text-black" />
           </div>
-          <span className="text-xl font-bold tracking-tighter text-white uppercase">Blueprint<span className="text-cyan-400">AI</span></span>
+          <span className="text-xl font-bold tracking-tighter text-white uppercase">Blueprint<span className="text-zinc-300">AI</span></span>
         </Link>
         <div className="flex items-center gap-4">
           <Link 
@@ -32,8 +32,8 @@ export default function RefundPage() {
       <main className="flex-1 p-6 sm:p-12 overflow-y-auto">
         <div className="max-w-3xl mx-auto w-full bg-slate-900/30 border border-slate-800 rounded-2xl p-6 sm:p-10 shadow-2xl">
           <div className="flex items-center gap-2 mb-6">
-            <span className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_8px_#06b6d4]"></span>
-            <span className="text-[10px] uppercase tracking-widest font-mono text-cyan-500/80">BlueprintAI Billing Protocol</span>
+            <span className="w-2 h-2 rounded-full bg-zinc-800"></span>
+            <span className="text-[10px] uppercase tracking-widest font-mono text-zinc-300">BlueprintAI Billing Protocol</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-2">Refund Policy</h1>
@@ -47,7 +47,7 @@ export default function RefundPage() {
 
             <section>
               <h2 className="text-lg font-bold text-white mb-3 font-mono uppercase tracking-wider flex items-center gap-2">
-                <span className="text-cyan-400">01.</span> Digital Goods Delivery
+                <span className="text-zinc-300">01.</span> Digital Goods Delivery
               </h2>
               <p>
                 BlueprintAI provides instant access to digital assets, premium AI-generated launch files, technical specifications, and proprietary prompt templates. Because these assets are immediately accessible and downloadable upon payment, they are non-tangible, digital goods. Therefore, we maintain a strict <strong>no-refunds policy</strong>.
@@ -56,7 +56,7 @@ export default function RefundPage() {
 
             <section>
               <h2 className="text-lg font-bold text-white mb-3 font-mono uppercase tracking-wider flex items-center gap-2">
-                <span className="text-cyan-400">02.</span> Subscription Cancellations
+                <span className="text-zinc-300">02.</span> Subscription Cancellations
               </h2>
               <p>
                 You may cancel your recurring subscription at any time. When you cancel, you will continue to have access to premium features (including the Founder Tier) until the end of your current billing period. Once the period ends, your subscription will not renew, and your access to premium features will be restricted. We do not provide pro-rated refunds or credits for partial billing periods.
@@ -65,16 +65,16 @@ export default function RefundPage() {
 
             <section>
               <h2 className="text-lg font-bold text-white mb-3 font-mono uppercase tracking-wider flex items-center gap-2">
-                <span className="text-cyan-400">03.</span> Chargebacks and Disputes
+                <span className="text-zinc-300">03.</span> Chargebacks and Disputes
               </h2>
               <p>
-                We encourage you to contact support at <a href="mailto:support@blueprintagent.dev" className="text-cyan-400 hover:underline">support@blueprintagent.dev</a> to resolve any issues or cancel your subscription. Filing a chargeback or payment dispute for legitimate transactions will lead to immediate account suspension and deletion of generated blueprint history.
+                We encourage you to contact support at <a href="mailto:support@blueprintagent.dev" className="text-zinc-300 hover:underline">support@blueprintagent.dev</a> to resolve any issues or cancel your subscription. Filing a chargeback or payment dispute for legitimate transactions will lead to immediate account suspension and deletion of generated blueprint history.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-bold text-white mb-3 font-mono uppercase tracking-wider flex items-center gap-2">
-                <span className="text-cyan-400">04.</span> Exceptional Circumstances
+                <span className="text-zinc-300">04.</span> Exceptional Circumstances
               </h2>
               <p>
                 In the rare event that a system outage prevents you from accessing the platform or generating blueprints for more than 72 consecutive hours, you may request a service credit by emailing our support team with proof of the issue.

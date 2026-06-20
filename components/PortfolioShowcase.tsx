@@ -5,12 +5,12 @@ import Link from 'next/link';
 export function PortfolioShowcase() {
   return (
     <section className="w-full py-24 bg-[#050507] border-t border-slate-800/50 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.03)_0%,transparent_70%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(132,204,22,0.03)_0%,transparent_70%)]" />
       
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight uppercase mb-4">
-            BUILT WITH <span className="text-cyan-400">BLUEPRINTAI</span>
+            BUILT WITH <span className="text-zinc-300">LAUNCHCODES</span>
           </h2>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto">
             Explore real, production-ready platforms architected using our AI Tech Lead.
@@ -22,8 +22,8 @@ export function PortfolioShowcase() {
             const isPurple = app.theme.includes('purple');
             const isAmber = app.theme.includes('amber');
             const isEmerald = app.theme.includes('emerald');
-            const accentBorder = isPurple ? 'group-hover:border-purple-500/50' : isAmber ? 'group-hover:border-amber-500/50' : isEmerald ? 'group-hover:border-emerald-400/50' : 'group-hover:border-blue-500/50';
-            const accentText = isPurple ? 'text-purple-400' : isAmber ? 'text-amber-400' : isEmerald ? 'text-emerald-400' : 'text-blue-400';
+            const accentBorder = isPurple ? 'group-hover:border-purple-500/50' : isAmber ? 'group-hover:border-zinc-700' : isEmerald ? 'group-hover:border-emerald-400/50' : 'group-hover:border-blue-500/50';
+            const accentText = isPurple ? 'text-purple-400' : isAmber ? 'text-zinc-300' : isEmerald ? 'text-emerald-400' : 'text-blue-400';
 
             return (
               <div key={app.slug} className={`group flex flex-col bg-slate-900/40 border border-slate-800/50 ${accentBorder} rounded-2xl p-8 transition-all hover:shadow-xl`}>
@@ -46,11 +46,11 @@ export function PortfolioShowcase() {
 
         <div className="flex justify-center">
           <a 
-            href="mailto:support@blueprintagent.dev?subject=Portfolio Submission"
-            className="group flex items-center gap-3 px-8 py-4 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/50 text-white rounded-xl transition-all shadow-lg hover:shadow-[0_0_20px_rgba(6,182,212,0.2)]"
+            href="mailto:support@yourlaunchcodes.com?subject=Portfolio Submission"
+            className="group flex items-center gap-3 px-8 py-4 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-zinc-700 text-white rounded-xl transition-all shadow-lg hover:"
           >
             <span className="font-bold uppercase tracking-widest text-sm">Submit your project 🚀</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-cyan-400" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform text-zinc-300" />
           </a>
         </div>
       </div>

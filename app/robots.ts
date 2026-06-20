@@ -5,8 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/studio', '/api', '/sign-in', '/sign-up'],
+      disallow: ['/premium-vault', '/api', '/sign-in', '/sign-up'],
     },
-    sitemap: 'https://blueprintagent.dev/sitemap.xml',
+    sitemap: 'https://yourlaunchcodes.com/sitemap.xml',
   }
 }

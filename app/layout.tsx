@@ -3,6 +3,8 @@ import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import './globals.css'; // Global styles
 import { LiveCounterBanner } from '@/components/LiveCounterBanner';
+import { Navbar } from '@/components/Navbar';
+
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-sans',
@@ -16,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'BlueprintAI',
+  title: 'LaunchCodes | The AI Tech Lead for Founders',
   description: 'Generate a 6-Phase SaaS product MVP blueprint from your idea.',
 };
 
@@ -31,7 +33,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
               __html: JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "SoftwareApplication",
-                "name": "BlueprintAI",
+                "name": "LaunchCodes",
                 "applicationCategory": "DeveloperApplication",
                 "operatingSystem": "Web",
                 "offers": {
@@ -49,9 +51,12 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
             }}
           />
         </head>
-        <body className="bg-zinc-950 text-zinc-50 min-h-screen antialiased" suppressHydrationWarning>
-          <LiveCounterBanner />
-          {children}
+        <body className="bg-zinc-950 text-zinc-50 min-h-screen flex flex-col antialiased" suppressHydrationWarning>
+          <div className="flex flex-col min-h-screen">
+            <LiveCounterBanner />
+            <Navbar />
+            {children}
+          </div>
         </body>
       </html>
     </ClerkProvider>
