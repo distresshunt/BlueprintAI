@@ -87,8 +87,12 @@ export default function Home() {
             </motion.h1>
           </header>
 
-          <form onSubmit={handleInitialize} className="w-full relative group">
-            <div className="relative flex flex-col bg-black/20 backdrop-blur-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-2xl focus-within:border-amber-500/50 focus-within:shadow-[0_0_20px_rgba(245,158,11,0.2)] transition-all duration-500 p-4">
+          <form onSubmit={handleInitialize} className="w-full relative group z-10">
+            {/* Ambient Focus Glow */}
+            <div className="fixed inset-0 pointer-events-none transition-all duration-1000 ease-in-out opacity-0 group-focus-within:opacity-100 z-[-1]">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vh] bg-amber-500/5 blur-[200px] rounded-full"></div>
+            </div>
+            <div className="relative w-full max-w-4xl mx-auto bg-white/5 backdrop-blur-3xl border border-white/10 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] transition-all duration-700 hover:bg-white/10 focus-within:bg-white/10 focus-within:border-white/20 focus-within:shadow-[0_0_80px_rgba(255,255,255,0.05)] p-2">
               <textarea
                 ref={inputRef}
                 value={prompt}
@@ -100,7 +104,7 @@ export default function Home() {
                   }
                 }}
                 placeholder="What empire are we building today?"
-                className="w-full min-h-[160px] bg-transparent text-white font-semibold text-lg placeholder-zinc-400 outline-none resize-y break-words whitespace-pre-wrap pb-16 overflow-y-auto custom-scrollbar"
+                className="w-full bg-transparent border-none outline-none focus:ring-0 text-white text-xl placeholder:text-zinc-600 resize-none p-4 min-h-[160px]"
                 autoFocus
               />
               
@@ -114,10 +118,13 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={!prompt.trim()}
-                  className="shrink-0 bg-white text-black hover:bg-zinc-200 px-6 py-3 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 pointer-events-auto"
+                  className="absolute bottom-4 right-4 bg-white text-black font-bold px-6 py-3 rounded-2xl hover:bg-zinc-200 hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  <Zap className="w-4 h-4" />
-                  Initialize
+                  <span className="relative z-10 flex items-center gap-2">
+                    <Zap className="w-5 h-5" />
+                    Initialize
+                  </span>
+                  {/* removed marquee bg */}
                 </button>
               </div>
             </div>
@@ -145,7 +152,7 @@ export default function Home() {
                     inputRef.current.focus();
                   }
                 }}
-                className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white backdrop-blur-md transition-all duration-300 rounded-full text-sm"
+                className="bg-transparent border border-white/10 text-zinc-500 hover:text-white hover:bg-white/10 hover:border-white/20 rounded-full px-5 py-2 backdrop-blur-md transition-all cursor-pointer text-sm font-medium"
               >
                 {chip.label}
               </button>

@@ -126,7 +126,7 @@ export default function DashboardPage() {
         {error ? (
           <div className="text-red-500">Failed to load blueprints: {error}</div>
         ) : blueprints.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-24 px-4 bg-slate-900/40 border border-slate-800/60 rounded-3xl backdrop-blur-xl relative overflow-hidden">
+          <div className="flex flex-col items-center justify-center py-32 px-6 bg-white/5 rounded-3xl backdrop-blur-3xl relative overflow-hidden shadow-2xl">
             <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/5 via-transparent to-transparent opacity-50" />
             <div className="w-20 h-20 bg-slate-900 rounded-3xl flex items-center justify-center mb-8 shadow-2xl border border-slate-700/50 relative z-10">
               <FolderOpen className="w-10 h-10 text-zinc-300 drop-" />
@@ -143,9 +143,9 @@ export default function DashboardPage() {
             </Link>
           </div>
         ) : (
-          <div className="w-full flex flex-col gap-6">
+          <div className="w-full flex flex-col gap-8">
             {/* Control Bar */}
-            <div className="flex flex-col sm:flex-row gap-4 p-4 bg-slate-900/50 border border-slate-800 rounded-xl shadow-lg">
+            <div className="flex flex-col sm:flex-row gap-4 p-6 bg-white/5 rounded-2xl backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
               <div className="relative flex-1">
                 <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input 
@@ -153,14 +153,14 @@ export default function DashboardPage() {
                   placeholder="Search blueprints..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg pl-10 pr-4 py-2.5 focus:outline-none focus:border-zinc-700 focus:ring-1 focus:ring-zinc-500 transition-all placeholder:text-slate-500"
+                  className="w-full bg-black/20 text-white rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:bg-white/5 transition-all placeholder:text-slate-500 backdrop-blur-md"
                 />
               </div>
               <div className="flex gap-4">
                 <select 
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
-                  className="bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:border-zinc-700 focus:ring-1 focus:ring-zinc-500 transition-all cursor-pointer font-medium"
+                  className="bg-black/20 text-white rounded-xl px-4 py-3 focus:outline-none focus:bg-white/5 transition-all cursor-pointer font-medium backdrop-blur-md"
                 >
                   <option value="All">All Blueprints</option>
                   <option value="Unlocked">Unlocked Only</option>
@@ -169,7 +169,7 @@ export default function DashboardPage() {
                 <select 
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value)}
-                  className="bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:border-zinc-700 focus:ring-1 focus:ring-zinc-500 transition-all cursor-pointer font-medium"
+                  className="bg-black/20 text-white rounded-xl px-4 py-3 focus:outline-none focus:bg-white/5 transition-all cursor-pointer font-medium backdrop-blur-md"
                 >
                   <option value="Newest">Newest First</option>
                   <option value="Oldest">Oldest First</option>
@@ -178,7 +178,7 @@ export default function DashboardPage() {
             </div>
 
             {filteredAndSortedBlueprints.length === 0 ? (
-              <div className="py-20 text-center text-slate-500 bg-slate-900/20 rounded-xl border border-slate-800/50 border-dashed">
+              <div className="py-24 text-center text-slate-500 bg-white/5 rounded-2xl backdrop-blur-xl">
                 No blueprints found matching your search.
               </div>
             ) : (
@@ -188,7 +188,7 @@ export default function DashboardPage() {
                   const href = isUnlocked ? `/studio?id=${bp.id}` : `/?id=${bp.id}`;
 
                   return (
-                    <Link key={bp.id} href={href} className="group relative bg-slate-900/50 border border-slate-800 hover:border-zinc-700 rounded-xl p-6 transition-all hover:-translate-y-1 hover: flex flex-col h-full overflow-hidden">
+                    <Link key={bp.id} href={href} className="group relative bg-white/5 hover:bg-white/10 rounded-2xl p-8 backdrop-blur-2xl transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex flex-col h-full overflow-hidden">
                       <div className="flex justify-between items-start mb-4 relative z-20">
                         <div className="flex-1">
                           <div className="text-xs font-mono text-slate-500 mb-2">
@@ -217,11 +217,11 @@ export default function DashboardPage() {
                       </div>
 
                       {isUnlocked && (
-                        <div className="mt-4 pt-4 border-t border-slate-800/50 flex flex-col gap-2 relative z-30" onClick={(e) => e.preventDefault()}>
+                        <div className="mt-6 pt-6 border-t border-white/5 flex flex-col gap-3 relative z-30" onClick={(e) => e.preventDefault()}>
                           <div className="text-[10px] uppercase font-mono tracking-widest text-slate-500 flex items-center justify-between">
                             <span>A2A Sync ID</span>
                           </div>
-                          <div className="flex items-center justify-between bg-slate-950/80 border border-slate-800 rounded p-1.5 pl-3 group/copy hover:border-zinc-700 transition-colors">
+                          <div className="flex items-center justify-between bg-black/40 rounded-xl p-2 pl-4 group/copy hover:bg-black/60 transition-colors backdrop-blur-md">
                             <code className="text-[10px] font-mono text-zinc-300 truncate mr-2">npx launchcodes-cli@latest init --id {bp.id}</code>
                             <button
                               onClick={(e) => {
