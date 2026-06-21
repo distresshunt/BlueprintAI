@@ -175,8 +175,7 @@ export async function POST(req: NextRequest) {
   }
   const { blueprintMarkdown = "" } = body;
 
-  const aiGemini = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-  const aiVertexGlobal = new GoogleGenAI({ vertexai: { project: process.env.GOOGLE_CLOUD_PROJECT_ID as string, location: 'global' } });
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
@@ -202,12 +201,12 @@ export async function POST(req: NextRequest) {
         let executionMemory = "";
 
         // PHASE 1: Architect
-        sendLog("> [@Architect] Activated (publishers/anthropic/models/claude-opus-4-8)...");
+        sendLog("> [@Architect] Activated (gemini-1.5-flash)...");
         const architectMessages = [
           { role: "user", parts: [{ text: `Blueprint:\n${blueprintMarkdown}` }] }
         ];
         const { phaseSummary: architectSummary } = await runAgentLoop({
-          model: "publishers/anthropic/models/claude-opus-4-8",
+          model: "gemini-1.5-flash",
           systemPrompt: "You are the Architect. Focus: Next.js folder scaffolding and strict architectural rules. NEVER generate a .clinerules or .cursorrules file. Your primary architectural output MUST be a Google Open Knowledge Format (OKF) Bundle. You must generate a standardized OKF v0.1 directory structure (e.g., /knowledge-bundle/index.md, /knowledge-bundle/database.md) using strict YAML frontmatter. Use the `write_file` tool to physically create this OKF folder structure in the E2B sandbox before handing the context over to @DB_Admin. Use `execute_terminal_command` and `install_dependencies` to initialize the project architecture, install required packages, and create necessary folders. DO NOT write specific UI code yet. When done, call `finish_phase` with a summary of what you did.",
           messages: architectMessages,
           sandbox,
@@ -215,18 +214,18 @@ export async function POST(req: NextRequest) {
           agentName: "@Architect",
           controller,
           encoder,
-          ai: aiVertexGlobal
+          ai: ai
         });
         
         executionMemory += `Architect Actions:\n${architectSummary}\n\n`;
 
         // PHASE 2: DB Admin
-        sendLog("> [@DB_Admin] Activated (gemini-3.1-pro-preview)...");
+        sendLog("> [@DB_Admin] Activated (gemini-1.5-flash)...");
         const dbAdminMessages = [
           { role: "user", parts: [{ text: `Blueprint:\n${blueprintMarkdown}\n\nExecution Memory so far:\n${executionMemory}` }] }
         ];
         const { phaseSummary: dbSummary } = await runAgentLoop({
-          model: "gemini-3.1-pro-preview",
+          model: "gemini-1.5-flash",
           systemPrompt: "You are the DB Admin. Focus: Supabase SQL schemas and RLS policies. Use `write_file` to set up schema.sql, database configurations, and any backend data fetching logic. Do not build the frontend UI. When done, call `finish_phase` with a summary of your actions.",
           messages: dbAdminMessages,
           sandbox,
@@ -234,18 +233,18 @@ export async function POST(req: NextRequest) {
           agentName: "@DB_Admin",
           controller,
           encoder,
-          ai: aiGemini
+          ai: ai
         });
         
         executionMemory += `DB Admin Actions:\n${dbSummary}\n\n`;
 
         // PHASE 3: Frontend Dev
-        sendLog("> [@Frontend_Dev] Activated (publishers/xai/models/grok-4.3)...");
+        sendLog("> [@Frontend_Dev] Activated (gemini-1.5-flash)...");
         const frontendMessages = [
           { role: "user", parts: [{ text: `Blueprint:\n${blueprintMarkdown}\n\nExecution Memory so far:\n${executionMemory}` }] }
         ];
         const { phaseSummary: frontendSummary, url: devUrl } = await runAgentLoop({
-          model: "publishers/xai/models/grok-4.3",
+          model: "gemini-1.5-flash",
           systemPrompt: "You are the Frontend Developer agent. Focus: Uncensored, bleeding-edge React 19/Tailwind UI component generation. Attached is the UI architecture. Strictly adhere to modern Next.js App Router and Tailwind CSS standards. Use `write_file` to write the UI components based on the blueprint and memory. Finally, use `start_dev_server` to launch the app. Then call `finish_phase` with a summary.",
           messages: frontendMessages,
           sandbox,
@@ -253,7 +252,7 @@ export async function POST(req: NextRequest) {
           agentName: "@Frontend_Dev",
           controller,
           encoder,
-          ai: aiVertexGlobal
+          ai: ai
         });
 
         if (devUrl) {

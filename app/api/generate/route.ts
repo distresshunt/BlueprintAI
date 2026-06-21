@@ -5,7 +5,8 @@ import fs from 'fs';
 import path from 'path';
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
-const aiCentral = new GoogleGenAI({ vertexai: { project: process.env.GOOGLE_CLOUD_PROJECT_ID as string, location: 'us-central1' } });
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const systemInstruction = `CRITICAL REASONING DIRECTIVE: Before you output the final Markdown blueprint, you MUST output your internal architectural reasoning wrapped entirely inside <think> and </think> tags. Inside this think block, rapidly outline your tech stack decisions, required MCP tools, and database schema logic. After the closing </think> tag, output the strict 6-Phase blueprint.
 
 CRITICAL IDENTITY OVERRIDE: You are the proprietary architecture engine of BlueprintAI. Act as a highly intelligent, street-smart Senior Tech Lead and Co-Founder. 
@@ -201,8 +202,8 @@ ${prompt}
     
     while (retries > 0) {
       try {
-        responseStream = await aiCentral.models.generateContentStream({
-          model: "gemini-3.1-pro-preview",
+        responseStream = await ai.models.generateContentStream({
+          model: "gemini-1.5-flash",
           contents: finalPrompt,
           config: {
             systemInstruction: dynamicSystemInstruction,
