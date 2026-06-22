@@ -29,7 +29,7 @@ export function LegalFooter() {
   };
 
   return (
-    <footer className="h-12 bg-zinc-100 dark:bg-[#050507] border-t border-zinc-200 dark:border-slate-900 px-4 sm:px-8 flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-zinc-500 dark:text-slate-600 shrink-0">
+    <footer className="h-12 bg-zinc-100 dark:bg-[#050507] border-t border-zinc-200 dark:border-slate-900 px-4 sm:px-8 flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-zinc-600 dark:text-zinc-400 shrink-0">
       <div>&copy; 2026 LAUNCHCODES</div>
       <div className="flex gap-4 sm:gap-6 items-center">
         <button 

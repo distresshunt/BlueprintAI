@@ -18,6 +18,7 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <Link 
             href="/" 
+            aria-label="Home"
             onClick={(e) => {
               if (window.location.pathname === '/' && !window.location.search) {
                 e.preventDefault();

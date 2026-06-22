@@ -137,6 +137,7 @@ export default function Home() {
               <div className="absolute bottom-4 right-4 left-4 flex justify-between items-center pointer-events-none">
                 <button
                   type="button"
+                  aria-label="Use microphone"
                   className="text-zinc-500 hover:text-amber-500 p-2 rounded-full hover:bg-zinc-800/50 transition-colors pointer-events-auto"
                 >
                   <Mic className="w-5 h-5" />
@@ -170,6 +171,7 @@ export default function Home() {
               {canScrollLeft && (
                 <button
                   type="button"
+                  aria-label="Scroll left"
                   onClick={() => scrollCarousel(-300)}
                   className="absolute left-0 top-1/2 -translate-y-1/2 z-50 p-2 rounded-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 shadow-lg text-zinc-900 dark:text-white hover:scale-110 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all"
                 >
@@ -213,6 +215,7 @@ export default function Home() {
               {canScrollRight && (
                 <button
                   type="button"
+                  aria-label="Scroll right"
                   onClick={() => scrollCarousel(300)}
                   className="absolute right-0 top-1/2 -translate-y-1/2 z-50 p-2 rounded-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 shadow-lg text-zinc-900 dark:text-white hover:scale-110 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all"
                 >
