@@ -28,6 +28,12 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     <ClerkProvider>
       <html lang="en" className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
         <head>
+          {/* Preconnect to critical third-party origins to reduce network dependency tree */}
+          <link rel="preconnect" href="https://qwdqnxzyaizpqislfzxx.supabase.co" />
+          <link rel="dns-prefetch" href="https://qwdqnxzyaizpqislfzxx.supabase.co" />
+          <link rel="preconnect" href="https://clerk.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link rel="preconnect" href="https://cloudflare-static.email-decode.min.js" />
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
